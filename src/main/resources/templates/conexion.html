@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Prueba de conexión</title>
+</head>
+
+<body>
+
+    <h1>Prueba de conexión con Oracle</h1>
+
+    <div th:if="${conexionExitosa}">
+        <p>La conexión con Oracle fue exitosa.</p>
+
+        <p>
+            Usuario conectado:
+            <strong th:text="${usuario}"></strong>
+        </p>
+    </div>
+
+    <div th:unless="${conexionExitosa}">
+        <p>No fue posible conectarse con Oracle.</p>
+
+        <p th:text="${error}"></p>
+    </div>
+
+    <a href="/">Volver al inicio</a>
+
+</body>
+
+</html>
