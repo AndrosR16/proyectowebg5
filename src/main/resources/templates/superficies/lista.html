@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Superficies</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2>Superficies de Cancha</h2>
+
+        <a th:href="@{/superficies/nuevo}"
+           class="btn btn-success">
+            Nueva Superficie
+        </a>
+
+    </div>
+
+    <table class="table table-bordered table-hover">
+
+        <thead class="table-dark">
+
+        <tr>
+            <th>ID</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th width="180">Acciones</th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr th:each="superficie : ${superficies}">
+
+            <td th:text="${superficie.idSuperficie}"></td>
+
+            <td th:text="${superficie.descripcion}"></td>
+
+            <td>
+
+                <span th:if="${superficie.idEstado==1}">
+                    Activo
+                </span>
+
+                <span th:if="${superficie.idEstado==2}">
+                    Inactivo
+                </span>
+
+            </td>
+
+            <td>
+
+                <a class="btn btn-warning btn-sm"
+                   th:href="@{/superficies/editar/{id}(id=${superficie.idSuperficie})}">
+                    Editar
+                </a>
+
+                <a class="btn btn-danger btn-sm"
+                   th:href="@{/superficies/eliminar/{id}(id=${superficie.idSuperficie})}"
+                   onclick="return confirm('¿Desea eliminar la superficie?');">
+                    Eliminar
+                </a>
+
+            </td>
+
+        </tr>
+
+        </tbody>
+
+    </table>
+
+    <a href="/"
+       class="btn btn-secondary">
+        Regresar
+    </a>
+
+</div>
+
+</body>
+</html>

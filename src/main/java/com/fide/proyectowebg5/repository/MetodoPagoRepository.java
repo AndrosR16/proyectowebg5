@@ -9,26 +9,26 @@ import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.fide.proyectowebg5.model.Estado;
+import com.fide.proyectowebg5.model.MetodoPago;
 
 import oracle.jdbc.OracleTypes;
 
 @Repository
-public class EstadoRepository {
+public class MetodoPagoRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public EstadoRepository(JdbcTemplate jdbcTemplate) {
+    public MetodoPagoRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<Estado> listar() {
+    public List<MetodoPago> listar() {
 
         return jdbcTemplate.execute(
                 (Connection connection) -> {
 
                     CallableStatement procedimiento = connection.prepareCall(
-                            "{call FIDE_PROYECTO_PCK.FIDE_ESTADO_LISTAR_SP(?)}"
+                            "{call FIDE_PROYECTO_PCK.FIDE_METODO_PAGO_LISTAR_SP(?)}"
                     );
 
                     procedimiento.registerOutParameter(
@@ -40,7 +40,7 @@ public class EstadoRepository {
                 },
                 (CallableStatement procedimiento) -> {
 
-                    List<Estado> estados = new ArrayList<>();
+                    List<MetodoPago> metodosPago = new ArrayList<>();
 
                     procedimiento.execute();
 
@@ -49,59 +49,71 @@ public class EstadoRepository {
 
                         while (resultado.next()) {
 
-                            Estado estado = new Estado();
+                            MetodoPago metodoPago = new MetodoPago();
 
-                            estado.setIdEstado(
-                                    resultado.getLong("ID_ESTADO")
+                            metodoPago.setIdMetodoPago(
+                                    resultado.getLong("ID_METODO_PAGO")
                             );
 
-                            estado.setDescripcion(
+                            metodoPago.setNombreMetodo(
+                                    resultado.getString("NOMBRE_METODO")
+                            );
+
+                            metodoPago.setDescripcion(
                                     resultado.getString("DESCRIPCION")
                             );
 
-                            estados.add(estado);
+                            metodoPago.setIdEstado(
+                                    resultado.getLong("ID_ESTADO")
+                            );
+
+                            metodosPago.add(metodoPago);
                         }
                     }
 
-                    return estados;
+                    return metodosPago;
                 }
         );
     }
 
-    public Estado buscarPorId(Long id) {
+    public MetodoPago buscarPorId(Long id) {
 
         return listar()
                 .stream()
-                .filter(estado -> estado.getIdEstado().equals(id))
+                .filter(metodo -> metodo.getIdMetodoPago().equals(id))
                 .findFirst()
                 .orElse(null);
     }
 
-    public void insertar(Estado estado) {
+    public void insertar(MetodoPago metodoPago) {
 
         jdbcTemplate.update(connection -> {
 
             CallableStatement procedimiento = connection.prepareCall(
-                    "{call FIDE_PROYECTO_PCK.FIDE_ESTADO_INSERT_SP(?,?)}"
+                    "{call FIDE_PROYECTO_PCK.FIDE_METODO_PAGO_INSERT_SP(?,?,?,?)}"
             );
 
-            procedimiento.setLong(1, estado.getIdEstado());
-            procedimiento.setString(2, estado.getDescripcion());
+            procedimiento.setLong(1, metodoPago.getIdMetodoPago());
+            procedimiento.setString(2, metodoPago.getNombreMetodo());
+            procedimiento.setString(3, metodoPago.getDescripcion());
+            procedimiento.setLong(4, metodoPago.getIdEstado());
 
             return procedimiento;
         });
     }
 
-    public void actualizar(Estado estado) {
+    public void actualizar(MetodoPago metodoPago) {
 
         jdbcTemplate.update(connection -> {
 
             CallableStatement procedimiento = connection.prepareCall(
-                    "{call FIDE_PROYECTO_PCK.FIDE_ESTADO_UPDATE_SP(?,?)}"
+                    "{call FIDE_PROYECTO_PCK.FIDE_METODO_PAGO_UPDATE_SP(?,?,?,?)}"
             );
 
-            procedimiento.setLong(1, estado.getIdEstado());
-            procedimiento.setString(2, estado.getDescripcion());
+            procedimiento.setLong(1, metodoPago.getIdMetodoPago());
+            procedimiento.setString(2, metodoPago.getNombreMetodo());
+            procedimiento.setString(3, metodoPago.getDescripcion());
+            procedimiento.setLong(4, metodoPago.getIdEstado());
 
             return procedimiento;
         });
@@ -112,7 +124,7 @@ public class EstadoRepository {
         jdbcTemplate.update(connection -> {
 
             CallableStatement procedimiento = connection.prepareCall(
-                    "{call FIDE_PROYECTO_PCK.FIDE_ESTADO_DELETE_SP(?)}"
+                    "{call FIDE_PROYECTO_PCK.FIDE_METODO_PAGO_DELETE_SP(?)}"
             );
 
             procedimiento.setLong(1, id);

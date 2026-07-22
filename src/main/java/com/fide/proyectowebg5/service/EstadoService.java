@@ -19,4 +19,21 @@ public class EstadoService {
     public List<Estado> listar() {
         return estadoRepository.listar();
     }
+
+    public Estado buscarPorId(Long id) {
+        return estadoRepository.buscarPorId(id);
+    }
+
+    public void insertar(Estado estado) {
+        estadoRepository.insertar(estado);
+    }
+
+    public void actualizar(Estado estado) {
+        estadoRepository.actualizar(estado);
+    }
+
+    public void eliminar(Long id) {
+        estadoRepository.eliminar(id);
+    }
+
 }

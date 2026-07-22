@@ -25,6 +25,7 @@ public class SuperficieCanchaRepository {
     public List<SuperficieCancha> listar() {
 
         return jdbcTemplate.execute(
+
                 (Connection connection) -> {
 
                     CallableStatement procedimiento = connection.prepareCall(
@@ -38,6 +39,7 @@ public class SuperficieCanchaRepository {
 
                     return procedimiento;
                 },
+
                 (CallableStatement procedimiento) -> {
 
                     List<SuperficieCancha> superficies = new ArrayList<>();
@@ -49,8 +51,7 @@ public class SuperficieCanchaRepository {
 
                         while (resultado.next()) {
 
-                            SuperficieCancha superficie =
-                                    new SuperficieCancha();
+                            SuperficieCancha superficie = new SuperficieCancha();
 
                             superficie.setIdSuperficie(
                                     resultado.getLong("ID_SUPERFICIE")
@@ -58,6 +59,10 @@ public class SuperficieCanchaRepository {
 
                             superficie.setDescripcion(
                                     resultado.getString("DESCRIPCION")
+                            );
+
+                            superficie.setIdEstado(
+                                    resultado.getLong("ID_ESTADO")
                             );
 
                             superficies.add(superficie);
@@ -68,4 +73,70 @@ public class SuperficieCanchaRepository {
                 }
         );
     }
+
+    public SuperficieCancha buscarPorId(Long id) {
+
+        return listar()
+                .stream()
+                .filter(s -> s.getIdSuperficie().equals(id))
+                .findFirst()
+                .orElse(null);
+
+    }
+
+    public void insertar(SuperficieCancha superficie) {
+
+        jdbcTemplate.update(
+
+                connection -> {
+
+                    CallableStatement procedimiento = connection.prepareCall(
+                            "{call FIDE_PROYECTO_PCK.FIDE_SUPERFICIE_CANCHA_INSERT_SP(?,?,?)}"
+                    );
+
+                    procedimiento.setLong(1, superficie.getIdSuperficie());
+                    procedimiento.setString(2, superficie.getDescripcion());
+                    procedimiento.setLong(3, superficie.getIdEstado());
+
+                    return procedimiento;
+                }
+        );
+    }
+
+    public void actualizar(SuperficieCancha superficie) {
+
+        jdbcTemplate.update(
+
+                connection -> {
+
+                    CallableStatement procedimiento = connection.prepareCall(
+                            "{call FIDE_PROYECTO_PCK.FIDE_SUPERFICIE_CANCHA_UPDATE_SP(?,?,?)}"
+                    );
+
+                    procedimiento.setLong(1, superficie.getIdSuperficie());
+                    procedimiento.setString(2, superficie.getDescripcion());
+                    procedimiento.setLong(3, superficie.getIdEstado());
+
+                    return procedimiento;
+                }
+        );
+    }
+
+    public void eliminar(Long id) {
+
+        jdbcTemplate.update(
+
+                connection -> {
+
+                    CallableStatement procedimiento = connection.prepareCall(
+                            "{call FIDE_PROYECTO_PCK.FIDE_SUPERFICIE_CANCHA_DELETE_SP(?)}"
+                    );
+
+                    procedimiento.setLong(1, id);
+
+                    return procedimiento;
+                }
+        );
+    }
+
 }

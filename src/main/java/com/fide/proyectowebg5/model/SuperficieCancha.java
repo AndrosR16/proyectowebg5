@@ -4,6 +4,7 @@ public class SuperficieCancha {
 
     private Long idSuperficie;
     private String descripcion;
+    private Long idEstado;
 
     public SuperficieCancha() {
     }
@@ -22,5 +23,13 @@ public class SuperficieCancha {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public Long getIdEstado() {
+        return idEstado;
+    }
+
+    public void setIdEstado(Long idEstado) {
+        this.idEstado = idEstado;
     }
 }
