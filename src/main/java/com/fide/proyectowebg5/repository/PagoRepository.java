@@ -28,9 +28,10 @@ public class PagoRepository {
         return jdbcTemplate.execute(
                 (Connection connection) -> {
 
-                    CallableStatement procedimiento = connection.prepareCall(
-                            "{call FIDE_PROYECTO_PCK.FIDE_PAGO_LISTAR_SP(?)}"
-                    );
+                    CallableStatement procedimiento =
+                            connection.prepareCall(
+                                    "{call FIDE_PROYECTO_PCK.FIDE_PAGO_LISTAR_SP(?)}"
+                            );
 
                     procedimiento.registerOutParameter(
                             1,
@@ -68,8 +69,16 @@ public class PagoRepository {
                                     resultado.getLong("ID_METODO_PAGO")
                             );
 
+                            pago.setNombreMetodo(
+                                    resultado.getString("NOMBRE_METODO")
+                            );
+
                             pago.setIdEstado(
                                     resultado.getLong("ID_ESTADO")
+                            );
+
+                            pago.setNombreEstado(
+                                    resultado.getString("NOMBRE_ESTADO")
                             );
 
                             pagos.add(pago);
@@ -92,103 +101,158 @@ public class PagoRepository {
 
     public void insertar(Pago pago) {
 
-        jdbcTemplate.update((Connection connection) -> {
+        jdbcTemplate.update(
+                (Connection connection) -> {
 
-            CallableStatement procedimiento = connection.prepareCall(
-                    "{call FIDE_PROYECTO_PCK.FIDE_PAGO_INSERT_SP(?,?,?,?,?)}"
-            );
+                    CallableStatement procedimiento =
+                            connection.prepareCall(
+                                    "{call FIDE_PROYECTO_PCK.FIDE_PAGO_INSERT_SP(?,?,?,?,?)}"
+                            );
 
-            procedimiento.setLong(1, pago.getIdPago());
-            procedimiento.setLong(2, pago.getIdReserva());
-            procedimiento.setBigDecimal(3, pago.getMonto());
-            procedimiento.setLong(4, pago.getIdMetodoPago());
-            procedimiento.setLong(5, pago.getIdEstado());
+                    procedimiento.setLong(
+                            1,
+                            pago.getIdPago()
+                    );
 
-            return procedimiento;
-        });
+                    procedimiento.setLong(
+                            2,
+                            pago.getIdReserva()
+                    );
+
+                    procedimiento.setBigDecimal(
+                            3,
+                            pago.getMonto()
+                    );
+
+                    procedimiento.setLong(
+                            4,
+                            pago.getIdMetodoPago()
+                    );
+
+                    procedimiento.setLong(
+                            5,
+                            pago.getIdEstado()
+                    );
+
+                    return procedimiento;
+                }
+        );
     }
 
-    public void insertarConFactura(Pago pago, Factura factura) {
+    public void insertarConFactura(
+            Pago pago,
+            Factura factura) {
 
-        jdbcTemplate.update((Connection connection) -> {
+        jdbcTemplate.update(
+                (Connection connection) -> {
 
-            CallableStatement procedimiento = connection.prepareCall(
-                    "{call FIDE_PROYECTO_PCK.FIDE_PAGO_FACTURA_INSERT_SP(?,?,?,?,?,?,?,?)}"
-            );
+                    CallableStatement procedimiento =
+                            connection.prepareCall(
+                                    "{call FIDE_PROYECTO_PCK.FIDE_PAGO_FACTURA_INSERT_SP(?,?,?,?,?,?,?,?)}"
+                            );
 
-            procedimiento.setLong(
-                    1,
-                    pago.getIdPago()
-            );
+                    procedimiento.setLong(
+                            1,
+                            pago.getIdPago()
+                    );
 
-            procedimiento.setLong(
-                    2,
-                    pago.getIdReserva()
-            );
+                    procedimiento.setLong(
+                            2,
+                            pago.getIdReserva()
+                    );
 
-            procedimiento.setBigDecimal(
-                    3,
-                    pago.getMonto()
-            );
+                    procedimiento.setBigDecimal(
+                            3,
+                            pago.getMonto()
+                    );
 
-            procedimiento.setLong(
-                    4,
-                    pago.getIdMetodoPago()
-            );
+                    procedimiento.setLong(
+                            4,
+                            pago.getIdMetodoPago()
+                    );
 
-            procedimiento.setLong(
-                    5,
-                    pago.getIdEstado()
-            );
+                    procedimiento.setLong(
+                            5,
+                            pago.getIdEstado()
+                    );
 
-            procedimiento.setLong(
-                    6,
-                    factura.getIdFactura()
-            );
+                    procedimiento.setLong(
+                            6,
+                            factura.getIdFactura()
+                    );
 
-            procedimiento.setString(
-                    7,
-                    factura.getNumeroFactura()
-            );
+                    procedimiento.setString(
+                            7,
+                            factura.getNumeroFactura()
+                    );
 
-            procedimiento.setLong(
-                    8,
-                    factura.getIdEstado()
-            );
+                    procedimiento.setLong(
+                            8,
+                            factura.getIdEstado()
+                    );
 
-            return procedimiento;
-        });
+                    return procedimiento;
+                }
+        );
     }
 
     public void actualizar(Pago pago) {
 
-        jdbcTemplate.update((Connection connection) -> {
+        jdbcTemplate.update(
+                (Connection connection) -> {
 
-            CallableStatement procedimiento = connection.prepareCall(
-                    "{call FIDE_PROYECTO_PCK.FIDE_PAGO_UPDATE_SP(?,?,?,?,?)}"
-            );
+                    CallableStatement procedimiento =
+                            connection.prepareCall(
+                                    "{call FIDE_PROYECTO_PCK.FIDE_PAGO_UPDATE_SP(?,?,?,?,?)}"
+                            );
 
-            procedimiento.setLong(1, pago.getIdPago());
-            procedimiento.setLong(2, pago.getIdReserva());
-            procedimiento.setBigDecimal(3, pago.getMonto());
-            procedimiento.setLong(4, pago.getIdMetodoPago());
-            procedimiento.setLong(5, pago.getIdEstado());
+                    procedimiento.setLong(
+                            1,
+                            pago.getIdPago()
+                    );
 
-            return procedimiento;
-        });
+                    procedimiento.setLong(
+                            2,
+                            pago.getIdReserva()
+                    );
+
+                    procedimiento.setBigDecimal(
+                            3,
+                            pago.getMonto()
+                    );
+
+                    procedimiento.setLong(
+                            4,
+                            pago.getIdMetodoPago()
+                    );
+
+                    procedimiento.setLong(
+                            5,
+                            pago.getIdEstado()
+                    );
+
+                    return procedimiento;
+                }
+        );
     }
 
     public void eliminar(Long id) {
 
-        jdbcTemplate.update((Connection connection) -> {
+        jdbcTemplate.update(
+                (Connection connection) -> {
 
-            CallableStatement procedimiento = connection.prepareCall(
-                    "{call FIDE_PROYECTO_PCK.FIDE_PAGO_DELETE_SP(?)}"
-            );
+                    CallableStatement procedimiento =
+                            connection.prepareCall(
+                                    "{call FIDE_PROYECTO_PCK.FIDE_PAGO_DELETE_SP(?)}"
+                            );
 
-            procedimiento.setLong(1, id);
+                    procedimiento.setLong(
+                            1,
+                            id
+                    );
 
-            return procedimiento;
-        });
+                    return procedimiento;
+                }
+        );
     }
 }

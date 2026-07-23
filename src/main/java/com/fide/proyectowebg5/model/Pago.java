@@ -8,7 +8,9 @@ public class Pago {
     private Long idReserva;
     private BigDecimal monto;
     private Long idMetodoPago;
+    private String nombreMetodo;
     private Long idEstado;
+    private String nombreEstado;
 
     public Pago() {
     }
@@ -45,11 +47,27 @@ public class Pago {
         this.idMetodoPago = idMetodoPago;
     }
 
+    public String getNombreMetodo() {
+        return nombreMetodo;
+    }
+
+    public void setNombreMetodo(String nombreMetodo) {
+        this.nombreMetodo = nombreMetodo;
+    }
+
     public Long getIdEstado() {
         return idEstado;
     }
 
     public void setIdEstado(Long idEstado) {
         this.idEstado = idEstado;
+    }
+
+    public String getNombreEstado() {
+        return nombreEstado;
+    }
+
+    public void setNombreEstado(String nombreEstado) {
+        this.nombreEstado = nombreEstado;
     }
 }

@@ -14,128 +14,120 @@
 
 <body>
 
-<div class="container py-5">
+    <div class="container mt-5">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <div>
-            <h1>Pagos</h1>
+            <div>
+                <h1>Pagos</h1>
+                <p class="text-muted">
+                    Lista de pagos registrados en el sistema.
+                </p>
+            </div>
 
-            <p class="text-muted mb-0">
-                Administración de pagos registrados.
-            </p>
+            <a th:href="@{/pagos/nuevo}"
+               class="btn btn-primary">
+                Nuevo pago
+            </a>
+
         </div>
 
-        <a th:href="@{/pagos/nuevo}"
-           class="btn btn-primary">
-            Nuevo pago
-        </a>
+        <div class="card shadow-sm">
 
-    </div>
+            <div class="card-body">
 
-    <div class="card shadow-sm">
+                <div class="table-responsive">
 
-        <div class="card-body">
+                    <table class="table table-striped table-hover align-middle">
 
-            <div class="table-responsive">
+                        <thead class="table-dark">
 
-                <table class="table table-striped table-hover align-middle">
+                            <tr>
+                                <th>ID pago</th>
+                                <th>ID reserva</th>
+                                <th>Monto</th>
+                                <th>Método de pago</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
 
-                    <thead class="table-dark">
+                        </thead>
 
-                    <tr>
-                        <th>ID</th>
-                        <th>Reserva</th>
-                        <th>Monto</th>
-                        <th>Método de pago</th>
-                        <th>Estado</th>
-                        <th class="text-center">Acciones</th>
-                    </tr>
+                        <tbody>
 
-                    </thead>
+                            <tr th:each="pago : ${pagos}">
 
-                    <tbody>
+                                <td th:text="${pago.idPago}">
+                                    1
+                                </td>
 
-                    <tr th:each="pago : ${pagos}">
+                                <td th:text="${pago.idReserva}">
+                                    1
+                                </td>
 
-                        <td th:text="${pago.idPago}">
-                            1
-                        </td>
+                                <td th:text="${pago.monto}">
+                                    15000
+                                </td>
 
-                        <td th:text="${pago.idReserva}">
-                            1
-                        </td>
+                                <td th:text="${pago.nombreMetodo}">
+                                    Efectivo
+                                </td>
 
-                        <td th:text="${'₡ ' + #numbers.formatDecimal(pago.monto, 1, 2)}">
-                            ₡ 10000.00
-                        </td>
+                                <td th:text="${pago.nombreEstado}">
+                                    Finalizado
+                                </td>
 
-                        <td>
+                                <td>
 
-                            <span th:each="metodo : ${metodosPago}"
-                                  th:if="${metodo.idMetodoPago == pago.idMetodoPago}"
-                                  th:text="${metodo.nombreMetodo}">
-                                Efectivo
-                            </span>
+                                    <a th:href="@{/pagos/editar/{id}(id=${pago.idPago})}"
+                                       class="btn btn-warning btn-sm">
+                                        Editar
+                                    </a>
 
-                        </td>
+                                    <a th:href="@{/pagos/eliminar/{id}(id=${pago.idPago})}"
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('¿Está seguro de eliminar este pago?')">
+                                        Eliminar
+                                    </a>
 
-                        <td>
+                                </td>
 
-                            <span th:each="estado : ${estados}"
-                                  th:if="${estado.idEstado == pago.idEstado}"
-                                  th:text="${estado.descripcion}">
-                                Activo
-                            </span>
+                            </tr>
 
-                        </td>
+                            <tr th:if="${#lists.isEmpty(pagos)}">
 
-                        <td class="text-center">
+                                <td colspan="6"
+                                    class="text-center text-muted">
+                                    No hay pagos registrados.
+                                </td>
 
-                            <a th:href="@{/pagos/editar/{id}(id=${pago.idPago})}"
-                               class="btn btn-warning btn-sm">
-                                Editar
-                            </a>
+                            </tr>
 
-                        </td>
+                        </tbody>
 
-                    </tr>
+                    </table>
 
-                    <tr th:if="${#lists.isEmpty(pagos)}">
-
-                        <td colspan="6"
-                            class="text-center text-muted py-4">
-
-                            No hay pagos registrados.
-
-                        </td>
-
-                    </tr>
-
-                    </tbody>
-
-                </table>
+                </div>
 
             </div>
 
         </div>
 
+        <div class="mt-4">
+
+            <a th:href="@{/}"
+               class="btn btn-secondary">
+                Volver al inicio
+            </a>
+
+        </div>
+
     </div>
 
-    <div class="mt-4">
-
-        <a th:href="@{/}"
-           class="btn btn-secondary">
-            Volver al inicio
-        </a>
-
-    </div>
-
-</div>
-
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
 
 </body>
+
 </html>

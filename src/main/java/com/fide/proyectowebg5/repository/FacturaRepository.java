@@ -2,6 +2,7 @@ package com.fide.proyectowebg5.repository;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,12 +64,12 @@ public class FacturaRepository {
                                 resultado.getString("NUMERO_FACTURA")
                         );
 
-                        String fechaFactura =
-                                resultado.getString("FECHA_FACTURA");
+                        Date fechaFactura =
+                                resultado.getDate("FECHA_FACTURA");
 
                         if (fechaFactura != null) {
                             factura.setFechaFactura(
-                                    java.time.LocalDate.parse(fechaFactura)
+                                    fechaFactura.toLocalDate()
                             );
                         }
 
@@ -108,12 +109,12 @@ public class FacturaRepository {
                                 resultado.getString("HORA_FIN")
                         );
 
-                        String fechaReserva =
-                                resultado.getString("FECHA_RESERVA");
+                        Date fechaReserva =
+                                resultado.getDate("FECHA_RESERVA");
 
                         if (fechaReserva != null) {
                             factura.setFechaReserva(
-                                    java.time.LocalDate.parse(fechaReserva)
+                                    fechaReserva.toLocalDate()
                             );
                         }
 
