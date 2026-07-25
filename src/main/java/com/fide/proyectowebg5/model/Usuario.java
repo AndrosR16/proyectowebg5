@@ -6,6 +6,7 @@ public class Usuario {
     private String nombre;
     private String apellidoP;
     private String apellidoM;
+    private String contrasena;
     private String rol;
     private Long idEstado;
     private String nombreEstado;
@@ -45,6 +46,14 @@ public class Usuario {
         this.apellidoM = apellidoM;
     }
 
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
     public String getRol() {
         return rol;
     }
@@ -70,6 +79,13 @@ public class Usuario {
     }
 
     public String getNombreCompleto() {
-        return nombre + " " + apellidoP + " " + apellidoM;
+
+        String nombreCompleto = nombre + " " + apellidoP;
+
+        if (apellidoM != null && !apellidoM.isBlank()) {
+            nombreCompleto += " " + apellidoM;
+        }
+
+        return nombreCompleto;
     }
 }

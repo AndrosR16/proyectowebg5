@@ -3,6 +3,7 @@ package com.fide.proyectowebg5.repository;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,8 +94,168 @@ public class UsuarioRepository {
 
         return listar()
                 .stream()
-                .filter(usuario -> usuario.getIdUsuario().equals(id))
+                .filter(usuario ->
+                        usuario.getIdUsuario().equals(id)
+                )
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void guardar(Usuario usuario) {
+
+        jdbcTemplate.update(
+                (Connection connection) -> {
+
+                    CallableStatement procedimiento =
+                            connection.prepareCall(
+                                    "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_INSERT_SP(?, ?, ?, ?, ?, ?, ?)}"
+                            );
+
+                    procedimiento.setNull(
+                            1,
+                            Types.NUMERIC
+                    );
+
+                    procedimiento.setString(
+                            2,
+                            usuario.getNombre()
+                    );
+
+                    procedimiento.setString(
+                            3,
+                            usuario.getApellidoP()
+                    );
+
+                    if (usuario.getApellidoM() != null
+                            && !usuario.getApellidoM().isBlank()) {
+
+                        procedimiento.setString(
+                                4,
+                                usuario.getApellidoM()
+                        );
+
+                    } else {
+
+                        procedimiento.setNull(
+                                4,
+                                Types.VARCHAR
+                        );
+                    }
+
+                    procedimiento.setString(
+                            5,
+                            usuario.getContrasena()
+                    );
+
+                    procedimiento.setString(
+                            6,
+                            usuario.getRol()
+                    );
+
+                    procedimiento.setLong(
+                            7,
+                            usuario.getIdEstado()
+                    );
+
+                    return procedimiento;
+                }
+        );
+    }
+
+    public void actualizar(Usuario usuario) {
+
+        jdbcTemplate.update(
+                (Connection connection) -> {
+
+                    CallableStatement procedimiento =
+                            connection.prepareCall(
+                                    "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_UPDATE_SP(?, ?, ?, ?, ?, ?, ?)}"
+                            );
+
+                    procedimiento.setLong(
+                            1,
+                            usuario.getIdUsuario()
+                    );
+
+                    procedimiento.setString(
+                            2,
+                            usuario.getNombre()
+                    );
+
+                    procedimiento.setString(
+                            3,
+                            usuario.getApellidoP()
+                    );
+
+                    if (usuario.getApellidoM() != null
+                            && !usuario.getApellidoM().isBlank()) {
+
+                        procedimiento.setString(
+                                4,
+                                usuario.getApellidoM()
+                        );
+
+                    } else {
+
+                        procedimiento.setNull(
+                                4,
+                                Types.VARCHAR
+                        );
+                    }
+
+                    if (usuario.getContrasena() != null
+                            && !usuario.getContrasena().isBlank()) {
+
+                        procedimiento.setString(
+                                5,
+                                usuario.getContrasena()
+                        );
+
+                    } else {
+
+                        procedimiento.setNull(
+                                5,
+                                Types.VARCHAR
+                        );
+                    }
+
+                    procedimiento.setString(
+                            6,
+                            usuario.getRol()
+                    );
+
+                    procedimiento.setLong(
+                            7,
+                            usuario.getIdEstado()
+                    );
+
+                    return procedimiento;
+                }
+        );
+    }
+
+    public void inactivar(Long idUsuario) {
+
+        jdbcTemplate.update(
+                (Connection connection) -> {
+
+                    CallableStatement procedimiento =
+                            connection.prepareCall(
+                                    "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_DELETE_SP(?, ?)}"
+                            );
+
+                    procedimiento.setLong(
+                            1,
+                            idUsuario
+                    );
+
+                    procedimiento.setLong(
+                            2,
+                            2L
+                    );
+
+                    return procedimiento;
+                }
+        );
     }
 }

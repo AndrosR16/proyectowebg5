@@ -23,4 +23,16 @@ public class UsuarioService {
     public Usuario buscarPorId(Long id) {
         return usuarioRepository.buscarPorId(id);
     }
+
+    public void guardar(Usuario usuario) {
+        usuarioRepository.guardar(usuario);
+    }
+
+    public void actualizar(Usuario usuario) {
+        usuarioRepository.actualizar(usuario);
+    }
+
+    public void inactivar(Long id) {
+        usuarioRepository.inactivar(id);
+    }
 }
