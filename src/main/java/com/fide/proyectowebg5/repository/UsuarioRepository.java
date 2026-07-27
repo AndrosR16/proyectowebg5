@@ -287,4 +287,35 @@ public class UsuarioRepository {
 
         }
 
+        public boolean existeUsername(String username) {
+
+                return jdbcTemplate.execute(
+
+                                (Connection connection) -> {
+
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTOLBD_PCK.FIDE_USUARIO_BUSCAR_USERNAME_SP(?, ?)}");
+
+                                        procedimiento.setString(1, username);
+                                        procedimiento.registerOutParameter(2, OracleTypes.CURSOR);
+
+                                        return procedimiento;
+                                },
+
+                                (CallableStatement procedimiento) -> {
+
+                                        procedimiento.execute();
+
+                                        try (ResultSet resultado = (ResultSet) procedimiento.getObject(2)) {
+
+                                                return resultado.next();
+
+                                        }
+
+                                }
+
+                );
+
+        }
+
 }

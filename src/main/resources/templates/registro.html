@@ -2,6 +2,8 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <meta charset="UTF-8">
     <title>Fut5 | Registro</title>
 
@@ -67,26 +69,26 @@
 
     <div class="campo">
 
-        <label>Contraseña</label>
+    <label>Contraseña</label>
 
-        <div class="password-box">
+    <div class="password-box">
 
-            <input
-                    id="contrasena"
-                    type="password"
-                    name="contrasena"
-                    placeholder="Ingrese una contraseña"
-                    required>
+        <input
+                id="contrasena"
+                type="password"
+                name="contrasena"
+                placeholder="Ingrese una contraseña"
+                required>
 
-            <span id="togglePassword">
-                🙈
-            </span>
-
-        </div>
+        <span id="togglePassword" class="toggle-password">
+    <i class="fa-solid fa-eye-slash"></i>
+</span>
 
     </div>
 
-    <div class="campo">
+</div>
+
+<div class="campo">
 
     <label>Confirmar contraseña</label>
 
@@ -99,9 +101,13 @@
                 placeholder="Confirme la contraseña"
                 required>
 
+        <span id="toggleConfirmarPassword" class="toggle-password">
+    <i class="fa-solid fa-eye-slash"></i>
+</span>
     </div>
 
 </div>
+
 
 <button class="btn-login" type="submit">
     Crear cuenta
@@ -115,6 +121,12 @@
         Ya tengo una cuenta
     </a>
 
-</div>
+</div> <!-- login-card -->
+
+</div> <!-- overlay -->
+
+<script th:src="@{/js/login.js}"></script>
+
+</body>
 
 </html>

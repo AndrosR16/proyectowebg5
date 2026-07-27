@@ -23,39 +23,46 @@ public class RegistroController {
     }
 
     @PostMapping("/registro")
-public String registrarUsuario(
+    public String registrarUsuario(
 
-        @RequestParam String nombre,
-        @RequestParam String apellidoP,
-        @RequestParam(required = false) String apellidoM,
-        @RequestParam String username,
-        @RequestParam String contrasena,
-        @RequestParam String confirmarContrasena,
-        Model model) {
+            @RequestParam String nombre,
+            @RequestParam String apellidoP,
+            @RequestParam(required = false) String apellidoM,
+            @RequestParam String username,
+            @RequestParam String contrasena,
+            @RequestParam String confirmarContrasena,
+            Model model) {
 
-    // Validar que las contraseñas coincidan
-    if (!contrasena.equals(confirmarContrasena)) {
+        // Validar que las contraseñas coincidan
+        if (!contrasena.equals(confirmarContrasena)) {
 
-        model.addAttribute("error", "Las contraseñas no coinciden.");
+            model.addAttribute("error", "Las contraseñas no coinciden.");
 
-        return "registro";
+            return "registro";
+        }
+
+        if (usuarioService.existeUsername(username)) {
+
+            model.addAttribute("error", "Ese nombre de usuario ya está en uso.");
+
+            return "registro";
+        }
+
+        Usuario usuario = new Usuario();
+
+        usuario.setNombre(nombre);
+        usuario.setApellidoP(apellidoP);
+        usuario.setApellidoM(apellidoM);
+        usuario.setUsername(username);
+        usuario.setContrasena(contrasena);
+
+        // Valores automáticos
+        usuario.setRol("USUARIO");
+        usuario.setIdEstado(1L);
+
+        usuarioService.guardar(usuario);
+
+        return "redirect:/";
     }
-
-    Usuario usuario = new Usuario();
-
-    usuario.setNombre(nombre);
-    usuario.setApellidoP(apellidoP);
-    usuario.setApellidoM(apellidoM);
-    usuario.setUsername(username);
-    usuario.setContrasena(contrasena);
-
-    // Valores automáticos
-    usuario.setRol("USUARIO");
-    usuario.setIdEstado(1L);
-
-    usuarioService.guardar(usuario);
-
-    return "redirect:/";
-}
 
 }

@@ -40,4 +40,10 @@ public class UsuarioService {
         return usuarioRepository.login(username, contrasena);
     }
 
+    public boolean existeUsername(String username) {
+
+        return usuarioRepository.existeUsername(username);
+
+    }
+
 }
