@@ -11,12 +11,13 @@
 
 body{
 
-    height:100vh;
+    min-height:100vh;
 
     background-image:url("/img/estadio.png");
     background-size:cover;
     background-position:center;
     background-repeat:no-repeat;
+    background-attachment:fixed;
 
 }
 
@@ -27,7 +28,7 @@ body{
 .overlay{
 
     width:100%;
-    height:100vh;
+    min-height:100vh;
 
     background:rgba(0,0,0,.60);
 
@@ -58,6 +59,10 @@ body{
     box-shadow:0 0 30px rgba(0,0,0,.5);
 
     backdrop-filter:blur(8px);
+
+    max-height: 95vh;
+
+    overflow-y: auto;
 
 }
 
@@ -111,7 +116,7 @@ body{
 
 .campo{
 
-    margin-top:20px;
+    margin-top:15px;
 
     display:flex;
 
@@ -357,3 +362,26 @@ body{
 
 }
 
+/* Scroll */
+
+.login-card::-webkit-scrollbar{
+    width:8px;
+}
+
+.login-card::-webkit-scrollbar-track{
+    background:rgba(255,255,255,0.08);
+    border-radius:10px;
+}
+
+.login-card::-webkit-scrollbar-thumb{
+    background:#7ED957;
+    border-radius:10px;
+}
+
+.login-card::-webkit-scrollbar-thumb:hover{
+    background:#63c63d;
+}
+
+.registro-card{
+    max-height:95vh;
+}

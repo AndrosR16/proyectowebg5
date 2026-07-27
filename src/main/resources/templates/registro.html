@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Fut5 | Registro</title>
+
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+
+<body>
+
+<div class="overlay">
+
+   <div class="login-card registro-card">
+
+        <div class="logo">
+    <img th:src="@{/img/logo.png}" alt="Logo Fut5">
+</div>
+
+<h1 class="titulo">Crear Cuenta</h1>
+
+        <p class="subtitulo">
+            Completa los datos para crear tu cuenta.
+        </p>
+
+        <div class="mensaje-error" th:if="${error}">
+    <span th:text="${error}"></span>
+</div>
+
+    <form th:action="@{/registro}" method="post">
+
+    <div class="campo">
+        <label>Nombre</label>
+        <input
+                type="text"
+                name="nombre"
+                placeholder="Ingrese su nombre"
+                required>
+    </div>
+
+    <div class="campo">
+        <label>Apellido paterno</label>
+        <input
+                type="text"
+                name="apellidoP"
+                placeholder="Ingrese su apellido paterno"
+                required>
+    </div>
+
+    <div class="campo">
+        <label>Apellido materno</label>
+        <input
+                type="text"
+                name="apellidoM"
+                placeholder="Ingrese su apellido materno">
+    </div>
+
+    <div class="campo">
+        <label>Usuario</label>
+        <input
+                type="text"
+                name="username"
+                placeholder="Ingrese un usuario"
+                required>
+    </div>
+
+    <div class="campo">
+
+        <label>Contraseña</label>
+
+        <div class="password-box">
+
+            <input
+                    id="contrasena"
+                    type="password"
+                    name="contrasena"
+                    placeholder="Ingrese una contraseña"
+                    required>
+
+            <span id="togglePassword">
+                🙈
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="campo">
+
+    <label>Confirmar contraseña</label>
+
+    <div class="password-box">
+
+        <input
+                id="confirmarContrasena"
+                type="password"
+                name="confirmarContrasena"
+                placeholder="Confirme la contraseña"
+                required>
+
+    </div>
+
+</div>
+
+<button class="btn-login" type="submit">
+    Crear cuenta
+</button>
+
+</form>
+
+<div class="links">
+
+    <a th:href="@{/}">
+        Ya tengo una cuenta
+    </a>
+
+</div>
+
+</html>
