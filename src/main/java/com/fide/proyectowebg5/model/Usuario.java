@@ -10,6 +10,15 @@ public class Usuario {
     private String rol;
     private Long idEstado;
     private String nombreEstado;
+    private String username;
+
+    public String getUsername() {
+        return username;
+}
+
+    public void setUsername(String username) {
+        this.username = username;
+}
 
     public Usuario() {
     }

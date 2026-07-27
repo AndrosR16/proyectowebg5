@@ -35,4 +35,9 @@ public class UsuarioService {
     public void inactivar(Long id) {
         usuarioRepository.inactivar(id);
     }
+
+    public Usuario login(String username, String contrasena) {
+        return usuarioRepository.login(username, contrasena);
+    }
+
 }

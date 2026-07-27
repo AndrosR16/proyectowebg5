@@ -17,245 +17,274 @@ import oracle.jdbc.OracleTypes;
 @Repository
 public class UsuarioRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+        private final JdbcTemplate jdbcTemplate;
 
-    public UsuarioRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+        public UsuarioRepository(JdbcTemplate jdbcTemplate) {
+                this.jdbcTemplate = jdbcTemplate;
+        }
 
-    public List<Usuario> listar() {
+        public List<Usuario> listar() {
 
-        return jdbcTemplate.execute(
-                (Connection connection) -> {
+                return jdbcTemplate.execute(
+                                (Connection connection) -> {
 
-                    CallableStatement procedimiento =
-                            connection.prepareCall(
-                                    "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_LISTAR_SP(?)}"
-                            );
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_LISTAR_SP(?)}");
 
-                    procedimiento.registerOutParameter(
-                            1,
-                            OracleTypes.CURSOR
-                    );
+                                        procedimiento.registerOutParameter(
+                                                        1,
+                                                        OracleTypes.CURSOR);
 
-                    return procedimiento;
-                },
-                (CallableStatement procedimiento) -> {
+                                        return procedimiento;
+                                },
+                                (CallableStatement procedimiento) -> {
 
-                    List<Usuario> usuarios = new ArrayList<>();
+                                        List<Usuario> usuarios = new ArrayList<>();
 
-                    procedimiento.execute();
+                                        procedimiento.execute();
 
-                    try (ResultSet resultado =
-                                 (ResultSet) procedimiento.getObject(1)) {
+                                        try (ResultSet resultado = (ResultSet) procedimiento.getObject(1)) {
 
-                        while (resultado.next()) {
+                                                while (resultado.next()) {
 
-                            Usuario usuario = new Usuario();
+                                                        Usuario usuario = new Usuario();
 
-                            usuario.setIdUsuario(
-                                    resultado.getLong("ID_USUARIO")
-                            );
+                                                        usuario.setIdUsuario(
+                                                                        resultado.getLong("ID_USUARIO"));
 
-                            usuario.setNombre(
-                                    resultado.getString("NOMBRE")
-                            );
+                                                        usuario.setNombre(
+                                                                        resultado.getString("NOMBRE"));
 
-                            usuario.setApellidoP(
-                                    resultado.getString("APELLIDO_P")
-                            );
+                                                        usuario.setApellidoP(
+                                                                        resultado.getString("APELLIDO_P"));
 
-                            usuario.setApellidoM(
-                                    resultado.getString("APELLIDO_M")
-                            );
+                                                        usuario.setApellidoM(
+                                                                        resultado.getString("APELLIDO_M"));
 
-                            usuario.setRol(
-                                    resultado.getString("ROL")
-                            );
+                                                        usuario.setUsername(
+                                                                        resultado.getString("USERNAME"));
 
-                            usuario.setIdEstado(
-                                    resultado.getLong("ID_ESTADO")
-                            );
+                                                        usuario.setRol(
+                                                                        resultado.getString("ROL"));
 
-                            usuario.setNombreEstado(
-                                    resultado.getString("NOMBRE_ESTADO")
-                            );
+                                                        usuario.setIdEstado(
+                                                                        resultado.getLong("ID_ESTADO"));
 
-                            usuarios.add(usuario);
-                        }
-                    }
+                                                        usuario.setNombreEstado(
+                                                                        resultado.getString("NOMBRE_ESTADO"));
 
-                    return usuarios;
-                }
-        );
-    }
+                                                        usuarios.add(usuario);
+                                                }
+                                        }
 
-    public Usuario buscarPorId(Long id) {
+                                        return usuarios;
+                                });
+        }
 
-        return listar()
-                .stream()
-                .filter(usuario ->
-                        usuario.getIdUsuario().equals(id)
-                )
-                .findFirst()
-                .orElse(null);
-    }
+        public Usuario buscarPorId(Long id) {
 
-    public void guardar(Usuario usuario) {
+                return listar()
+                                .stream()
+                                .filter(usuario -> usuario.getIdUsuario().equals(id))
+                                .findFirst()
+                                .orElse(null);
+        }
 
-        jdbcTemplate.update(
-                (Connection connection) -> {
+        public void guardar(Usuario usuario) {
 
-                    CallableStatement procedimiento =
-                            connection.prepareCall(
-                                    "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_INSERT_SP(?, ?, ?, ?, ?, ?, ?)}"
-                            );
+                jdbcTemplate.update(
+                                (Connection connection) -> {
 
-                    procedimiento.setNull(
-                            1,
-                            Types.NUMERIC
-                    );
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_INSERT_SP(?, ?, ?, ?, ?, ?, ?, ?)}");
 
-                    procedimiento.setString(
-                            2,
-                            usuario.getNombre()
-                    );
+                                        procedimiento.setNull(
+                                                        1,
+                                                        Types.NUMERIC);
 
-                    procedimiento.setString(
-                            3,
-                            usuario.getApellidoP()
-                    );
+                                        procedimiento.setString(
+                                                        2,
+                                                        usuario.getNombre());
 
-                    if (usuario.getApellidoM() != null
-                            && !usuario.getApellidoM().isBlank()) {
+                                        procedimiento.setString(
+                                                        3,
+                                                        usuario.getApellidoP());
 
-                        procedimiento.setString(
-                                4,
-                                usuario.getApellidoM()
-                        );
+                                        if (usuario.getApellidoM() != null
+                                                        && !usuario.getApellidoM().isBlank()) {
 
-                    } else {
+                                                procedimiento.setString(
+                                                                4,
+                                                                usuario.getApellidoM());
 
-                        procedimiento.setNull(
-                                4,
-                                Types.VARCHAR
-                        );
-                    }
+                                        } else {
 
-                    procedimiento.setString(
-                            5,
-                            usuario.getContrasena()
-                    );
+                                                procedimiento.setNull(
+                                                                4,
+                                                                Types.VARCHAR);
+                                        }
 
-                    procedimiento.setString(
-                            6,
-                            usuario.getRol()
-                    );
+                                        procedimiento.setString(
+                                                        5,
+                                                        usuario.getUsername());
 
-                    procedimiento.setLong(
-                            7,
-                            usuario.getIdEstado()
-                    );
+                                        procedimiento.setString(
+                                                        6,
+                                                        usuario.getContrasena());
 
-                    return procedimiento;
-                }
-        );
-    }
+                                        procedimiento.setString(
+                                                        7,
+                                                        usuario.getRol());
 
-    public void actualizar(Usuario usuario) {
+                                        procedimiento.setLong(
+                                                        8,
+                                                        usuario.getIdEstado());
 
-        jdbcTemplate.update(
-                (Connection connection) -> {
+                                        return procedimiento;
+                                });
+        }
 
-                    CallableStatement procedimiento =
-                            connection.prepareCall(
-                                    "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_UPDATE_SP(?, ?, ?, ?, ?, ?, ?)}"
-                            );
+        public void actualizar(Usuario usuario) {
 
-                    procedimiento.setLong(
-                            1,
-                            usuario.getIdUsuario()
-                    );
+                jdbcTemplate.update(
+                                (Connection connection) -> {
 
-                    procedimiento.setString(
-                            2,
-                            usuario.getNombre()
-                    );
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_UPDATE_SP(?, ?, ?, ?, ?, ?, ?, ?)}");
 
-                    procedimiento.setString(
-                            3,
-                            usuario.getApellidoP()
-                    );
+                                        procedimiento.setLong(
+                                                        1,
+                                                        usuario.getIdUsuario());
 
-                    if (usuario.getApellidoM() != null
-                            && !usuario.getApellidoM().isBlank()) {
+                                        procedimiento.setString(
+                                                        2,
+                                                        usuario.getNombre());
 
-                        procedimiento.setString(
-                                4,
-                                usuario.getApellidoM()
-                        );
+                                        procedimiento.setString(
+                                                        3,
+                                                        usuario.getApellidoP());
 
-                    } else {
+                                        if (usuario.getApellidoM() != null
+                                                        && !usuario.getApellidoM().isBlank()) {
 
-                        procedimiento.setNull(
-                                4,
-                                Types.VARCHAR
-                        );
-                    }
+                                                procedimiento.setString(
+                                                                4,
+                                                                usuario.getApellidoM());
 
-                    if (usuario.getContrasena() != null
-                            && !usuario.getContrasena().isBlank()) {
+                                        } else {
 
-                        procedimiento.setString(
-                                5,
-                                usuario.getContrasena()
-                        );
+                                                procedimiento.setNull(
+                                                                4,
+                                                                Types.VARCHAR);
+                                        }
 
-                    } else {
+                                        procedimiento.setString(
+                                                        5,
+                                                        usuario.getUsername());
 
-                        procedimiento.setNull(
-                                5,
-                                Types.VARCHAR
-                        );
-                    }
+                                        if (usuario.getContrasena() != null
+                                                        && !usuario.getContrasena().isBlank()) {
 
-                    procedimiento.setString(
-                            6,
-                            usuario.getRol()
-                    );
+                                                procedimiento.setString(
+                                                                6,
+                                                                usuario.getContrasena());
 
-                    procedimiento.setLong(
-                            7,
-                            usuario.getIdEstado()
-                    );
+                                        } else {
 
-                    return procedimiento;
-                }
-        );
-    }
+                                                procedimiento.setNull(
+                                                                6,
+                                                                Types.VARCHAR);
+                                        }
 
-    public void inactivar(Long idUsuario) {
+                                        procedimiento.setString(
+                                                        7,
+                                                        usuario.getRol());
 
-        jdbcTemplate.update(
-                (Connection connection) -> {
+                                        procedimiento.setLong(
+                                                        8,
+                                                        usuario.getIdEstado());
 
-                    CallableStatement procedimiento =
-                            connection.prepareCall(
-                                    "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_DELETE_SP(?, ?)}"
-                            );
+                                        return procedimiento;
+                                });
+        }
 
-                    procedimiento.setLong(
-                            1,
-                            idUsuario
-                    );
+        public void inactivar(Long idUsuario) {
 
-                    procedimiento.setLong(
-                            2,
-                            2L
-                    );
+                jdbcTemplate.update(
+                                (Connection connection) -> {
 
-                    return procedimiento;
-                }
-        );
-    }
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_DELETE_SP(?, ?)}");
+
+                                        procedimiento.setLong(
+                                                        1,
+                                                        idUsuario);
+
+                                        procedimiento.setLong(
+                                                        2,
+                                                        2L);
+
+                                        return procedimiento;
+                                });
+        }
+
+        public Usuario login(String username, String contrasena) {
+
+                return jdbcTemplate.execute(
+
+                                (Connection connection) -> {
+
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_VALIDAR_LOGIN_SP(?, ?, ?)}");
+
+                                        procedimiento.setString(1, username);
+                                        procedimiento.setString(2, contrasena);
+                                        procedimiento.registerOutParameter(3, OracleTypes.CURSOR);
+
+                                        return procedimiento;
+                                },
+
+                                (CallableStatement procedimiento) -> {
+
+                                        procedimiento.execute();
+
+                                        try (ResultSet resultado = (ResultSet) procedimiento.getObject(3)) {
+
+                                                if (resultado.next()) {
+
+                                                        Usuario usuario = new Usuario();
+
+                                                        usuario.setIdUsuario(
+                                                                        resultado.getLong("ID_USUARIO"));
+
+                                                        usuario.setUsername(
+                                                                        resultado.getString("USERNAME"));
+
+                                                        usuario.setNombre(
+                                                                        resultado.getString("NOMBRE"));
+
+                                                        usuario.setApellidoP(
+                                                                        resultado.getString("APELLIDO_P"));
+
+                                                        usuario.setApellidoM(
+                                                                        resultado.getString("APELLIDO_M"));
+
+                                                        usuario.setRol(
+                                                                        resultado.getString("ROL"));
+
+                                                        usuario.setIdEstado(
+                                                                        resultado.getLong("ID_ESTADO"));
+
+                                                        return usuario;
+                                                }
+
+                                                return null;
+                                        }
+
+                                }
+
+                );
+
+        }
+
 }
