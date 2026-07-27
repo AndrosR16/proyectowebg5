@@ -1,29 +1,94 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Iniciar Sesión</title>
+    <title>Fut5 | Iniciar Sesión</title>
+
+    <link rel="stylesheet" th:href="@{/css/login.css}">
 </head>
 
 <body>
 
-    <h1>Fut5</h1>
+<div class="overlay">
 
-    <h2>Iniciar Sesión</h2>
+    <div class="login-card">
 
-    <form th:action="@{/login}" method="post">
+        <div class="logo">
+    <img th:src="@{/img/logo.png}" alt="Logo Fut5">
+</div>
 
-        <label>Usuario</label><br>
-        <input type="text" name="username"><br><br>
+<h1 class="titulo">Bienvenido</h1>
 
-        <label>Contraseña</label><br>
-        <input type="password" name="contrasena"><br><br>
+        <h2>Bienvenido</h2>
 
-        <button type="submit">
-            Ingresar
-        </button>
+        <p class="subtitulo">
+            Inicia sesión para administrar tus reservas.
+        </p>
 
-    </form>
+        <div class="mensaje-error" th:if="${error}">
+    <span th:text="${error}"></span>
+</div>
+
+        <form th:action="@{/login}" method="post">
+
+            <div class="campo">
+
+                <label>Usuario</label>
+
+                <input
+                        type="text"
+                        name="username"
+                        placeholder="Ingrese su usuario"
+                        required>
+
+            </div>
+
+           <div class="campo">
+
+    <label>Contraseña</label>
+
+    <div class="password-box">
+
+    <input
+        id="contrasena"
+        type="password"
+        name="contrasena"
+        placeholder="Ingrese su contraseña"
+        required>
+
+    <span id="togglePassword">
+        🙈
+    </span>
+
+</div>
+
+</div>
+
+            <button class="btn-login" type="submit">
+                Ingresar
+            </button>
+
+        </form>
+
+        <div class="links">
+
+            <a href="#">
+                ¿Olvidó su contraseña?
+            </a>
+
+            <a href="#">
+                Crear cuenta
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script th:src="@{/js/login.js}"></script>
 
 </body>
+
 </html>

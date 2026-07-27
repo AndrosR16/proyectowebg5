@@ -117,7 +117,7 @@
 
         <div class="collapse navbar-collapse" id="menuPrincipal">
 
-            <div class="navbar-nav ms-auto">
+            <div class="navbar-nav">
 
                 <a class="nav-link" th:href="@{/usuarios}">
                     Usuarios
@@ -154,6 +154,18 @@
                 <a class="nav-link" th:href="@{/facturas}">
                     Facturas
                 </a>
+
+                <div class="ms-auto d-flex align-items-center">
+
+    <span class="text-white fw-bold me-3">
+        👋Hola, <span th:text="${session.usuario.nombre}"></span>
+    </span>
+
+    <a class="btn btn-outline-light btn-sm" th:href="@{/logout}">
+        Cerrar sesión
+    </a>
+
+</div>
 
             </div>
 
