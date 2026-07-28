@@ -1,0 +1,122 @@
+/*=========================
+      DASHBOARD
+=========================*/
+
+body{
+
+    min-height:100vh;
+
+    background:
+        linear-gradient(
+            rgba(20,35,45,.82),
+            rgba(20,35,45,.82)
+        ),
+        url('https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=1600&q=80');
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+
+    color:#ffffff;
+
+}
+
+.hero{
+
+    min-height:calc(100vh - 70px);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:40px 20px;
+
+}
+
+.hero-contenido{
+
+    width:100%;
+
+    max-width:1100px;
+
+    text-align:center;
+
+}
+
+.hero-titulo{
+
+    font-size:3.2rem;
+
+    font-weight:700;
+
+    margin-bottom:40px;
+
+}
+
+.tarjeta-opcion{
+
+    height:100%;
+
+    background:rgba(255,255,255,.96);
+
+    color:#212529;
+
+    border:none;
+
+    border-radius:14px;
+
+    padding:28px;
+
+    transition:.2s;
+
+}
+
+.tarjeta-opcion:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.tarjeta-opcion h3{
+
+    font-size:1.25rem;
+
+    font-weight:700;
+
+}
+
+.tarjeta-opcion p{
+
+    color:#6c757d;
+
+    min-height:72px;
+
+}
+
+.btn-principal{
+
+    background:#198754;
+
+    border-color:#198754;
+
+}
+
+.btn-principal:hover{
+
+    background:#157347;
+
+    border-color:#146c43;
+
+}
+
+@media (max-width:768px){
+
+    .hero-titulo{
+
+        font-size:2.2rem;
+
+    }
+
+}

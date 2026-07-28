@@ -256,7 +256,7 @@ body{
 
 .logo img{
 
-    width:120px;
+    width: 250px;
 
     transition:.3s;
 
@@ -428,20 +428,47 @@ body{
     max-height:95vh;
 }
 
-.logo-navbar{
 
-    width:60px !important;
-    height:60px !important;
 
-    max-width:60px !important;
-    max-height:60px !important;
+/*=========================
+        OFFCANVAS
+=========================*/
 
-    object-fit:contain;
-    flex-shrink:0;
+.offcanvas{
+
+    background:#101820 !important;
+
+    color:white !important;
 
 }
 
-.navbar-brand{
-    margin-right:0;
+.offcanvas-header{
+
+    background:#101820 !important;
+
+    border-bottom:1px solid #2b3945 !important;
+
 }
+
+.offcanvas-body{
+
+    background:#101820 !important;
+
+}
+
+.offcanvas-title{
+
+    color:#7ED957 !important;
+
+    font-weight:bold;
+
+}
+
+.btn-close{
+
+    filter:invert(1);
+
+}
+
+
 

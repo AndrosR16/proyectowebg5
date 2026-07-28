@@ -1,0 +1,223 @@
+/*=========================
+        OFFCANVAS
+=========================*/
+
+.offcanvas{
+
+    background:#101820 !important;
+    color:white !important;
+
+    overflow-y:auto;
+    overflow-x:hidden;
+
+}
+
+.offcanvas-header{
+
+    background:#101820;
+    border-bottom:1px solid #283845;
+
+    position:sticky;
+    top:0;
+
+    z-index:10;
+
+}
+
+.offcanvas-body{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+    padding-bottom:20px;
+
+    padding-right:8px;
+
+}
+
+.btn-close{
+
+    filter:invert(1);
+
+}
+/*=========================
+      MENÚ LATERAL
+=========================*/
+
+.menu-lateral{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.menu-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:16px 20px;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:10px;
+
+    transition:.25s;
+
+}
+
+.menu-item i{
+
+    width:25px;
+
+    color:#7ED957;
+
+    font-size:20px;
+
+}
+
+.menu-item:hover{
+
+    background:#1C2B36;
+
+    color:#7ED957;
+
+    transform:translateX(8px);
+
+}
+
+.menu-item:hover i{
+
+    color:#7ED957;
+
+}
+
+/*=========================
+      SECCIONES
+=========================*/
+
+.menu-seccion{
+
+    color:#ffffff;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+    letter-spacing:3px;
+
+    margin:20px 20px 12px;
+
+}
+
+.menu-divisor{
+
+    border:none;
+
+    border-top:1px solid rgba(255,255,255,.18);
+
+    margin:22px 15px;
+
+}
+.offcanvas{
+
+    background:#101820 !important;
+
+    color:white;
+
+    overflow:hidden;
+
+}
+
+.offcanvas-body{
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+    padding-right:8px;
+
+}
+
+.offcanvas-body{
+
+    height:100%;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+}
+
+/*=========================
+      SCROLL OFFCANVAS
+=========================*/
+
+.offcanvas-body::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+.offcanvas-body::-webkit-scrollbar-track{
+
+    background:rgba(255,255,255,.08);
+
+    border-radius:10px;
+
+}
+
+.offcanvas-body::-webkit-scrollbar-thumb{
+
+    background:#7ED957;
+
+    border-radius:10px;
+
+}
+
+.offcanvas-body::-webkit-scrollbar-thumb:hover{
+
+    background:#63c63d;
+
+}
+
+/*=========================
+      CERRAR SESIÓN
+=========================*/
+
+.menu-item:last-child{
+
+    color:#ff6b6b;
+
+}
+
+.menu-item:last-child i{
+
+    color:#ff6b6b;
+
+}
+
+.menu-item:last-child:hover{
+
+    background:rgba(255,107,107,.15);
+
+    color:#ff8c8c;
+
+}
+
+.menu-item:last-child:hover i{
+
+    color:#ff8c8c;
+
+}
