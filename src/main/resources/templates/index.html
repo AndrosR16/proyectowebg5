@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     <title>Sistema de Gestión de Canchas</title>
 
@@ -95,85 +97,135 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+<nav class="navbar navbar-dark shadow-sm">
 
-    <div class="container">
+    <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
 
-        <a class="navbar-brand fw-bold" th:href="@{/}">
-            Gestión de Canchas G5
-        </a>
+        <!-- IZQUIERDA -->
+        <div class="d-flex align-items-center">
 
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#menuPrincipal"
-            aria-controls="menuPrincipal"
-            aria-expanded="false"
-            aria-label="Mostrar menú">
+            <img th:src="@{/img/logo.png}"
+     alt="Logo"
+     width="60"
+     height="60"
+     style="width:60px;height:60px;max-width:60px;max-height:60px;">
 
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <a class="navbar-brand fw-bold me-4 mb-0"
+               th:href="@{/}">
+                Gestión de Canchas G5
+            </a>
 
-        <div class="collapse navbar-collapse" id="menuPrincipal">
+            <button class="btn btn-dark px-3"
+        type="button"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#menuLateral">
 
-            <div class="navbar-nav">
+    <i class="fa-solid fa-bars me-2"></i>
+    Menú
 
-                <a class="nav-link" th:href="@{/usuarios}">
-                    Usuarios
-                </a>
+</button>
 
-                <a class="nav-link" th:href="@{/canchas}">
-                    Canchas
-                </a>
+        </div>
 
-                <a class="nav-link" th:href="@{/horarios}">
-                    Horarios
-                </a>
+        <!-- DERECHA -->
+        <div class="d-flex align-items-center">
 
-                <a class="nav-link" th:href="@{/reservas}">
-                    Reservas
-                </a>
+            <span class="text-white fw-bold me-3">
+                👋 Hola,
+                <span th:text="${session.usuario.nombre}"></span>
+            </span>
 
-                <a class="nav-link" th:href="@{/superficies}">
-                    Superficies
-                </a>
-
-                <a class="nav-link" th:href="@{/estados}">
-                    Estados
-                </a>
-
-                <a class="nav-link" th:href="@{/metodos-pago}">
-                    Métodos de pago
-                </a>
-
-                <a class="nav-link" th:href="@{/pagos}">
-                    Pagos
-                </a>
-
-                <a class="nav-link" th:href="@{/facturas}">
-                    Facturas
-                </a>
-
-                <div class="ms-auto d-flex align-items-center">
-
-    <span class="text-white fw-bold me-3">
-        👋Hola, <span th:text="${session.usuario.nombre}"></span>
-    </span>
-
-    <a class="btn btn-outline-light btn-sm" th:href="@{/logout}">
-        Cerrar sesión
-    </a>
-
-</div>
-
-            </div>
+            <a class="btn btn-outline-light btn-sm"
+               th:href="@{/logout}">
+                Cerrar sesión
+            </a>
 
         </div>
 
     </div>
 
 </nav>
+
+<div class="offcanvas offcanvas-start"
+     tabindex="-1"
+     id="menuLateral">
+
+    <div class="offcanvas-header">
+
+        <h5 class="offcanvas-title">
+            Gestión de Canchas G5
+        </h5>
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="offcanvas">
+        </button>
+
+    </div>
+
+    <div class="offcanvas-body">
+
+        <div class="list-group list-group-flush">
+
+            <a class="list-group-item list-group-item-action"
+               th:href="@{/usuarios}">
+                <i class="fa-solid fa-users me-2"></i>
+                Usuarios
+            </a>
+
+            <a class="list-group-item list-group-item-action"
+               th:href="@{/canchas}">
+                <i class="fa-solid fa-futbol me-2"></i>
+                Canchas
+            </a>
+
+            <a class="list-group-item list-group-item-action"
+               th:href="@{/horarios}">
+                <i class="fa-solid fa-clock me-2"></i>
+                Horarios
+            </a>
+
+            <a class="list-group-item list-group-item-action"
+               th:href="@{/reservas}">
+                <i class="fa-solid fa-calendar-check me-2"></i>
+                Reservas
+            </a>
+
+            <a class="list-group-item list-group-item-action"
+               th:href="@{/superficies}">
+                <i class="fa-solid fa-layer-group me-2"></i>
+                Superficies
+            </a>
+
+            <a class="list-group-item list-group-item-action"
+               th:href="@{/estados}">
+                <i class="fa-solid fa-circle-check me-2"></i>
+                Estados
+            </a>
+
+            <a class="list-group-item list-group-item-action"
+               th:href="@{/metodos-pago}">
+                <i class="fa-solid fa-credit-card me-2"></i>
+                Métodos de pago
+            </a>
+
+            <a class="list-group-item list-group-item-action"
+               th:href="@{/pagos}">
+                <i class="fa-solid fa-money-bill-wave me-2"></i>
+                Pagos
+            </a>
+
+            <a class="list-group-item list-group-item-action"
+               th:href="@{/facturas}">
+                <i class="fa-solid fa-file-invoice-dollar me-2"></i>
+                Facturas
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
 
 <main class="hero">
 

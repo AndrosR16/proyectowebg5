@@ -6,6 +6,8 @@
     <title>Fut5 | Iniciar Sesión</title>
 
     <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 
 <body>
@@ -51,14 +53,14 @@
     <div class="password-box">
 
     <input
-        id="contrasena"
-        type="password"
-        name="contrasena"
-        placeholder="Ingrese su contraseña"
-        required>
+            id="contrasena"
+            type="password"
+            name="contrasena"
+            placeholder="Ingrese su contraseña"
+            required>
 
-    <span id="togglePassword">
-        🙈
+    <span id="togglePassword" class="toggle-password">
+        <i class="fa-solid fa-eye-slash"></i>
     </span>
 
 </div>

@@ -29,7 +29,7 @@ public class UsuarioRepository {
                                 (Connection connection) -> {
 
                                         CallableStatement procedimiento = connection.prepareCall(
-                                                        "{call FIDE_PROYECTOLBD_PCK.FIDE_USUARIO_LISTAR_SP(?)}");
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_LISTAR_SP(?)}");
 
                                         procedimiento.registerOutParameter(
                                                         1,
@@ -96,7 +96,7 @@ public class UsuarioRepository {
                                 (Connection connection) -> {
 
                                         CallableStatement procedimiento = connection.prepareCall(
-                                                        "{call FIDE_PROYECTOLBD_PCK.FIDE_USUARIO_INSERT_SP(?, ?, ?, ?, ?, ?, ?, ?)}");
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_INSERT_SP(?, ?, ?, ?, ?, ?, ?, ?)}");
 
                                         procedimiento.setNull(
                                                         1,
@@ -150,7 +150,7 @@ public class UsuarioRepository {
                                 (Connection connection) -> {
 
                                         CallableStatement procedimiento = connection.prepareCall(
-                                                        "{call FIDE_PROYECTOLBD_PCK.FIDE_USUARIO_UPDATE_SP(?, ?, ?, ?, ?, ?, ?, ?)}");
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_UPDATE_SP(?, ?, ?, ?, ?, ?, ?, ?)}");
 
                                         procedimiento.setLong(
                                                         1,
@@ -214,7 +214,7 @@ public class UsuarioRepository {
                                 (Connection connection) -> {
 
                                         CallableStatement procedimiento = connection.prepareCall(
-                                                        "{call FIDE_PROYECTOLBD_PCK.FIDE_USUARIO_DELETE_SP(?, ?)}");
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_DELETE_SP(?, ?)}");
 
                                         procedimiento.setLong(
                                                         1,
@@ -235,7 +235,7 @@ public class UsuarioRepository {
                                 (Connection connection) -> {
 
                                         CallableStatement procedimiento = connection.prepareCall(
-                                                        "{call FIDE_PROYECTOLBD_PCK.FIDE_VALIDAR_LOGIN_SP(?, ?, ?)}");
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_VALIDAR_LOGIN_SP(?, ?, ?)}");
 
                                         procedimiento.setString(1, username);
                                         procedimiento.setString(2, contrasena);
@@ -294,7 +294,7 @@ public class UsuarioRepository {
                                 (Connection connection) -> {
 
                                         CallableStatement procedimiento = connection.prepareCall(
-                                                        "{call FIDE_PROYECTOLBD_PCK.FIDE_USUARIO_BUSCAR_USERNAME_SP(?, ?)}");
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_BUSCAR_USERNAME_SP(?, ?)}");
 
                                         procedimiento.setString(1, username);
                                         procedimiento.registerOutParameter(2, OracleTypes.CURSOR);
