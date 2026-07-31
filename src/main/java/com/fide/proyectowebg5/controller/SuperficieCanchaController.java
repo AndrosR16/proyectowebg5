@@ -1,12 +1,16 @@
 package com.fide.proyectowebg5.controller;
 
-import com.fide.proyectowebg5.model.Estado;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.fide.proyectowebg5.model.SuperficieCancha;
 import com.fide.proyectowebg5.service.EstadoService;
 import com.fide.proyectowebg5.service.SuperficieCanchaService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/superficies")
