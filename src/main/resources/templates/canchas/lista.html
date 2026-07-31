@@ -5,130 +5,230 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Listado de canchas</title>
+    <title>Canchas - Gestión de Canchas</title>
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/offcanvas.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/modulos.css}">
+
+    <style>
+        .cancha-icono {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: rgba(25, 135, 84, 0.22);
+            color: #69ca8d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .cancha-nombre strong {
+            display: block;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .cancha-nombre span {
+            color: #98a4ae;
+            font-size: 0.78rem;
+        }
+
+        .precio {
+            color: #71d395;
+            font-weight: 700;
+        }
+    </style>
 </head>
 
-<body class="bg-light">
+<body>
 
-    <main class="container py-5">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/menu :: menu}"></div>
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
+<main class="pagina-modulo">
+
+    <section class="encabezado-modulo">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
             <div>
-                <h1>Listado de canchas</h1>
-                <p class="text-muted">
-                    Información obtenida desde Oracle mediante procedimientos almacenados.
+                <h1>
+                    <i class="fa-solid fa-futbol me-2"></i>
+                    Canchas
+                </h1>
+
+                <p>
+                    Administración de canchas, capacidades, precios y superficies.
                 </p>
             </div>
 
-            <a
-                th:href="@{/canchas/nueva}"
-                class="btn btn-primary">
-
+            <a th:href="@{/canchas/nueva}"
+               class="btn btn-nuevo">
+                <i class="fa-solid fa-plus me-2"></i>
                 Nueva cancha
             </a>
-        </div>
-
-        <div class="card shadow-sm">
-
-            <div class="card-body">
-
-                <div class="table-responsive">
-
-                    <table class="table table-hover align-middle">
-
-                        <thead class="table-dark">
-
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Capacidad</th>
-                                <th>Precio por hora</th>
-                                <th>Superficie</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            <tr th:each="cancha : ${canchas}">
-
-                                <td th:text="${cancha.idCancha}"></td>
-
-                                <td th:text="${cancha.nombreCancha}"></td>
-
-                                <td th:text="${cancha.capacidad}"></td>
-
-                                <td th:text="${cancha.precioHora}"></td>
-
-                                <td th:text="${cancha.superficie}"></td>
-
-                                <td th:text="${cancha.estado}"></td>
-
-                                <td>
-
-                                    <a
-                                        th:href="@{/canchas/editar/{id}(id=${cancha.idCancha})}"
-                                        class="btn btn-warning btn-sm">
-
-                                        Editar
-                                    </a>
-
-                                    <form
-                                        th:action="@{/canchas/eliminar/{id}(id=${cancha.idCancha})}"
-                                        method="post"
-                                        class="d-inline">
-
-                                        <button
-                                            type="submit"
-                                            class="btn btn-danger btn-sm"
-                                            onclick="return confirm('¿Desea inactivar esta cancha?')">
-
-                                            Inactivar
-                                        </button>
-
-                                    </form>
-
-                                </td>
-
-                            </tr>
-
-                            <tr th:if="${#lists.isEmpty(canchas)}">
-
-                                <td colspan="7" class="text-center text-muted">
-
-                                    No hay canchas registradas.
-
-                                </td>
-
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
 
         </div>
 
-        <div class="mt-4">
+    </section>
 
-            <a th:href="@{/}" class="btn btn-secondary">
-                Volver al inicio
-            </a>
+    <section class="panel-tabla">
+
+        <div class="panel-superior">
+
+            <h2>
+                <i class="fa-solid fa-list me-2 text-success"></i>
+                Canchas registradas
+            </h2>
+
+            <span class="total-registros">
+                <i class="fa-solid fa-database me-1"></i>
+                Total:
+                <strong th:text="${#lists.size(canchas)}">0</strong>
+            </span>
 
         </div>
 
-    </main>
+        <div class="table-responsive">
+
+            <table class="table tabla-modulo align-middle">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cancha</th>
+                        <th>Capacidad</th>
+                        <th>Precio por hora</th>
+                        <th>Superficie</th>
+                        <th>Estado</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr th:each="cancha : ${canchas}">
+
+                        <td>
+                            <span class="text-secondary">
+                                #<span th:text="${cancha.idCancha}">1</span>
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div class="cancha-icono">
+                                    <i class="fa-solid fa-futbol"></i>
+                                </div>
+
+                                <div class="cancha-nombre">
+                                    <strong th:text="${cancha.nombreCancha}">
+                                        Cancha
+                                    </strong>
+
+                                    <span>
+                                        Instalación deportiva
+                                    </span>
+                                </div>
+
+                            </div>
+                        </td>
+
+                        <td>
+                            <i class="fa-solid fa-users me-2 text-secondary"></i>
+                            <span th:text="${cancha.capacidad}">0</span>
+                        </td>
+
+                        <td>
+                            <span class="precio">
+                                ₡<span th:text="${cancha.precioHora}">0</span>
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge-secundario">
+                                <i class="fa-solid fa-layer-group"></i>
+                                <span th:text="${cancha.superficie}">
+                                    Superficie
+                                </span>
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge-estado">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span th:text="${cancha.estado}">
+                                    Activo
+                                </span>
+                            </span>
+                        </td>
+
+                        <td class="text-center">
+
+                            <a th:href="@{/canchas/editar/{id}(id=${cancha.idCancha})}"
+                               class="btn-accion btn-editar"
+                               title="Editar cancha">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+
+                            <form th:action="@{/canchas/eliminar/{id}(id=${cancha.idCancha})}"
+                                  method="post"
+                                  class="d-inline">
+
+                                <button type="submit"
+                                        class="btn-accion btn-inactivar"
+                                        title="Inactivar cancha"
+                                        onclick="return confirm('¿Desea inactivar esta cancha?')">
+                                    <i class="fa-solid fa-ban"></i>
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(canchas)}">
+
+                        <td colspan="7"
+                            class="sin-registros">
+
+                            <i class="fa-solid fa-futbol"></i>
+                            No hay canchas registradas.
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <a th:href="@{/}"
+       class="volver-dashboard">
+
+        <i class="fa-solid fa-arrow-left"></i>
+        Volver al panel principal
+
+    </a>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
-
 </html>

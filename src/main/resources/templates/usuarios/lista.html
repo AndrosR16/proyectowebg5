@@ -2,140 +2,784 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Usuarios</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <title>Usuarios - Gestión de Canchas</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Estilos generales -->
+    <link rel="stylesheet"
+          th:href="@{/css/navbar.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/offcanvas.css}">
+
+    <link rel="stylesheet"
+          th:href="@{/css/dashboard.css}">
+
+    <style>
+
+        .pagina-modulo {
+            width: 100%;
+            max-width: 1400px;
+            margin: auto;
+            padding: 35px 30px 50px;
+        }
+
+        .encabezado-modulo {
+            background: rgba(13, 22, 32, 0.92);
+            border-radius: 18px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.20);
+            backdrop-filter: blur(8px);
+        }
+
+        .encabezado-modulo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .encabezado-modulo p {
+            margin: 0;
+            color: #b8c1c9;
+        }
+
+        .btn-nuevo {
+            background-color: #198754;
+            border-color: #198754;
+            color: white;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 10px 18px;
+        }
+
+        .btn-nuevo:hover {
+            background-color: #157347;
+            border-color: #157347;
+            color: white;
+        }
+
+        .panel-tabla {
+            background: rgba(18, 28, 39, 0.94);
+            border-radius: 18px;
+            padding: 24px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.20);
+        }
+
+        .panel-superior {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+        }
+
+        .panel-superior h2 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .total-registros {
+            color: #9ea8b1;
+            font-size: 0.88rem;
+        }
+
+        .tabla-usuarios {
+            margin-bottom: 0;
+            color: white;
+        }
+
+        .tabla-usuarios thead th {
+            background-color: rgba(8, 17, 27, 0.95);
+            color: #dfe6eb;
+            border: none;
+            padding: 15px 14px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .tabla-usuarios tbody td {
+            background-color: rgba(255, 255, 255, 0.035);
+            color: #e9eef2;
+            border-color: rgba(255, 255, 255, 0.07);
+            padding: 15px 14px;
+            vertical-align: middle;
+        }
+
+        .tabla-usuarios tbody tr:hover td {
+            background-color: rgba(255, 255, 255, 0.075);
+        }
+
+        .usuario-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: rgba(25, 135, 84, 0.22);
+            color: #69ca8d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .usuario-info strong {
+            color: #ffffff;
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .usuario-info span {
+            color: #98a4ae;
+            font-size: 0.78rem;
+        }
+
+        .badge-rol {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(13, 110, 253, 0.17);
+            color: #7eb0ff;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 0.77rem;
+            font-weight: 600;
+        }
+
+        .estado-activo {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(25, 135, 84, 0.20);
+            color: #71d395;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 0.77rem;
+            font-weight: 600;
+        }
+
+        .estado-inactivo {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(108, 117, 125, 0.20);
+            color: #b4bcc2;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 0.77rem;
+            font-weight: 600;
+        }
+
+        .btn-accion {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2px;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-editar {
+            background: rgba(255, 193, 7, 0.18);
+            color: #ffd667;
+        }
+
+        .btn-editar:hover {
+            background: rgba(255, 193, 7, 0.30);
+            color: #ffe08a;
+        }
+
+        .btn-inactivar {
+            background: rgba(220, 53, 69, 0.18);
+            color: #ff7b88;
+        }
+
+        .btn-inactivar:hover {
+            background: rgba(220, 53, 69, 0.30);
+            color: #ff9da7;
+        }
+
+        .sin-registros {
+            color: #9ea8b1 !important;
+            padding: 45px !important;
+            text-align: center;
+        }
+
+        .sin-registros i {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .volver-dashboard {
+            color: #b6c0c8;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-top: 20px;
+        }
+
+        .volver-dashboard:hover {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+
+            .pagina-modulo {
+                padding: 25px 15px;
+            }
+
+            .encabezado-modulo {
+                text-align: center;
+            }
+
+            .encabezado-modulo .d-flex {
+                justify-content: center !important;
+            }
+
+        }
+
+    </style>
+
 </head>
 
-<body class="bg-light">
+<body>
 
-    <div class="container py-5">
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
+<!-- NAVBAR -->
 
-            <div>
-                <h1 class="mb-1">Usuarios</h1>
-                <p class="text-muted mb-0">
-                    Administración de usuarios registrados
-                </p>
+<nav class="navbar navbar-dark shadow-sm">
+
+    <div class="container-fluid px-4">
+
+        <div class="row w-100 align-items-center">
+
+            <!-- IZQUIERDA -->
+            <div class="col-4 d-flex justify-content-start">
+
+                <button class="btn text-white fw-semibold"
+                        type="button"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#menuLateral">
+
+                    <i class="fa-solid fa-bars me-2"></i>
+                    Menú
+
+                </button>
+
             </div>
 
-            <a th:href="@{/usuarios/nuevo}"
-               class="btn btn-primary">
-                Nuevo usuario
+
+            <!-- CENTRO -->
+            <div class="col-4 d-flex justify-content-center align-items-center">
+
+                <img th:src="@{/img/logo.png}"
+                     alt="Logo"
+                     width="60"
+                     height="60"
+                     style="width:60px; height:60px; object-fit:contain;"
+                     class="me-2">
+
+                <a class="navbar-brand fw-bold mb-0"
+                   th:href="@{/}">
+                    Gestión de Canchas G5
+                </a>
+
+            </div>
+
+
+            <!-- DERECHA -->
+            <div class="col-4 d-flex justify-content-end align-items-center">
+
+                <span class="text-white fw-bold me-3">
+
+                    👋 Hola,
+
+                    <span th:text="${session.usuario.nombre}">
+                        Usuario
+                    </span>
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- MENÚ LATERAL -->
+
+<div class="offcanvas offcanvas-start"
+     tabindex="-1"
+     id="menuLateral">
+
+    <div class="offcanvas-header">
+
+        <div class="d-flex align-items-center">
+
+            <img th:src="@{/img/logo.png}"
+                 width="40"
+                 height="40"
+                 class="me-2">
+
+            <h5 class="offcanvas-title mb-0">
+                Gestión de Canchas G5
+            </h5>
+
+        </div>
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="offcanvas">
+        </button>
+
+    </div>
+
+
+    <div class="offcanvas-body">
+
+        <div class="menu-lateral">
+
+
+            <div class="menu-seccion">
+                Administración
+            </div>
+
+
+            <a class="menu-item"
+               th:href="@{/usuarios}">
+
+                <i class="fa-solid fa-users"></i>
+                <span>Usuarios</span>
+
             </a>
-        </div>
 
-        <div class="card shadow-sm">
 
-            <div class="card-body">
+            <a class="menu-item"
+               th:href="@{/canchas}">
 
-                <div class="table-responsive">
+                <i class="fa-solid fa-futbol"></i>
+                <span>Canchas</span>
 
-                    <table class="table table-striped table-hover align-middle">
+            </a>
 
-                        <thead class="table-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre completo</th>
-                                <th>Rol</th>
-                                <th>Estado</th>
-                                <th class="text-center">Acciones</th>
-                            </tr>
-                        </thead>
 
-                        <tbody>
+            <a class="menu-item"
+               th:href="@{/horarios}">
 
-                            <tr th:each="usuario : ${usuarios}">
+                <i class="fa-solid fa-clock"></i>
+                <span>Horarios</span>
 
-                                <td th:text="${usuario.idUsuario}">
-                                    1
-                                </td>
+            </a>
 
-                                <td th:text="${usuario.nombreCompleto}">
-                                    Nombre completo
-                                </td>
 
-                                <td th:text="${usuario.rol}">
-                                    Cliente
-                                </td>
+            <a class="menu-item"
+               th:href="@{/reservas}">
 
-                                <td>
-                                    <span
-                                        th:if="${usuario.idEstado == 1}"
-                                        class="badge text-bg-success"
-                                        th:text="${usuario.nombreEstado}">
-                                        Activo
-                                    </span>
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>Reservas</span>
 
-                                    <span
-                                        th:unless="${usuario.idEstado == 1}"
-                                        class="badge text-bg-secondary"
-                                        th:text="${usuario.nombreEstado}">
-                                        Inactivo
-                                    </span>
-                                </td>
+            </a>
 
-                                <td class="text-center">
 
-                                    <a
-                                        th:href="@{/usuarios/editar/{id}(id=${usuario.idUsuario})}"
-                                        class="btn btn-warning btn-sm">
-                                        Editar
-                                    </a>
+            <hr class="menu-divisor">
 
-                                    <a
-                                        th:if="${usuario.idEstado == 1}"
-                                        th:href="@{/usuarios/inactivar/{id}(id=${usuario.idUsuario})}"
-                                        class="btn btn-danger btn-sm"
-                                        onclick="return confirm('¿Desea inactivar este usuario?');">
-                                        Inactivar
-                                    </a>
 
-                                </td>
-
-                            </tr>
-
-                            <tr th:if="${#lists.isEmpty(usuarios)}">
-
-                                <td colspan="5"
-                                    class="text-center text-muted py-4">
-
-                                    No hay usuarios registrados.
-
-                                </td>
-
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
+            <div class="menu-seccion">
+                Configuración
             </div>
 
-        </div>
 
-        <div class="mt-4">
+            <a class="menu-item"
+               th:href="@{/superficies}">
 
-            <a th:href="@{/}"
-               class="btn btn-outline-secondary">
-                Volver al inicio
+                <i class="fa-solid fa-layer-group"></i>
+                <span>Superficies</span>
+
+            </a>
+
+
+            <a class="menu-item"
+               th:href="@{/estados}">
+
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Estados</span>
+
+            </a>
+
+
+            <a class="menu-item"
+               th:href="@{/metodos-pago}">
+
+                <i class="fa-solid fa-credit-card"></i>
+                <span>Métodos de pago</span>
+
+            </a>
+
+
+            <hr class="menu-divisor">
+
+
+            <div class="menu-seccion">
+                Finanzas
+            </div>
+
+
+            <a class="menu-item"
+               th:href="@{/pagos}">
+
+                <i class="fa-solid fa-money-bill-wave"></i>
+                <span>Pagos</span>
+
+            </a>
+
+
+            <a class="menu-item"
+               th:href="@{/facturas}">
+
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                <span>Facturas</span>
+
+            </a>
+
+
+            <hr class="menu-divisor">
+
+
+            <div class="menu-seccion">
+                Cuenta
+            </div>
+
+
+            <a class="menu-item"
+               th:href="@{/logout}">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Cerrar sesión</span>
+
             </a>
 
         </div>
 
     </div>
 
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-    </script>
+</div>
+
+
+<!-- CONTENIDO -->
+
+<main class="pagina-modulo">
+
+
+    <!-- ENCABEZADO -->
+
+    <section class="encabezado-modulo">
+
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+            <div>
+
+                <h1>
+
+                    <i class="fa-solid fa-users me-2"></i>
+                    Usuarios
+
+                </h1>
+
+                <p>
+                    Administración de usuarios registrados,
+                    roles y estados del sistema.
+                </p>
+
+            </div>
+
+
+            <a th:href="@{/usuarios/nuevo}"
+               class="btn btn-nuevo">
+
+                <i class="fa-solid fa-user-plus me-2"></i>
+
+                Nuevo usuario
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- TABLA -->
+
+    <section class="panel-tabla">
+
+
+        <div class="panel-superior">
+
+            <h2>
+
+                <i class="fa-solid fa-list me-2 text-success"></i>
+
+                Usuarios registrados
+
+            </h2>
+
+
+            <span class="total-registros">
+
+                <i class="fa-solid fa-database me-1"></i>
+
+                Total:
+
+                <strong th:text="${#lists.size(usuarios)}">
+                    0
+                </strong>
+
+            </span>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table tabla-usuarios align-middle">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Usuario</th>
+
+                        <th>Nombre completo</th>
+
+                        <th>Rol</th>
+
+                        <th>Estado</th>
+
+                        <th class="text-center">
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <tr th:each="usuario : ${usuarios}">
+
+
+                        <!-- ID -->
+
+                        <td>
+
+                            <span class="text-secondary">
+
+                                #
+
+                                <span th:text="${usuario.idUsuario}">
+                                    1
+                                </span>
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- USERNAME -->
+
+                        <td>
+
+                            <div class="d-flex align-items-center gap-3">
+
+                                <div class="usuario-avatar">
+
+                                    <i class="fa-solid fa-user"></i>
+
+                                </div>
+
+
+                                <div class="usuario-info">
+
+                                    <strong th:text="${usuario.username}">
+                                        usuario
+                                    </strong>
+
+                                    <span>
+                                        Cuenta del sistema
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- NOMBRE -->
+
+                        <td th:text="${usuario.nombreCompleto}">
+
+                            Nombre completo
+
+                        </td>
+
+
+                        <!-- ROL -->
+
+                        <td>
+
+                            <span class="badge-rol">
+
+                                <i class="fa-solid fa-shield-halved"></i>
+
+                                <span th:text="${usuario.rol}">
+                                    USUARIO
+                                </span>
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- ESTADO -->
+
+                        <td>
+
+
+                            <span th:if="${usuario.idEstado == 1}"
+                                  class="estado-activo">
+
+                                <i class="fa-solid fa-circle-check"></i>
+
+                                <span th:text="${usuario.nombreEstado}">
+                                    Activo
+                                </span>
+
+                            </span>
+
+
+                            <span th:unless="${usuario.idEstado == 1}"
+                                  class="estado-inactivo">
+
+                                <i class="fa-solid fa-circle-xmark"></i>
+
+                                <span th:text="${usuario.nombreEstado}">
+                                    Inactivo
+                                </span>
+
+                            </span>
+
+
+                        </td>
+
+
+                        <!-- ACCIONES -->
+
+                        <td class="text-center">
+
+
+                            <a th:href="@{/usuarios/editar/{id}(id=${usuario.idUsuario})}"
+                               class="btn-accion btn-editar"
+                               title="Editar usuario">
+
+                                <i class="fa-solid fa-pen"></i>
+
+                            </a>
+
+
+                            <a th:if="${usuario.idEstado == 1}"
+                               th:href="@{/usuarios/inactivar/{id}(id=${usuario.idUsuario})}"
+                               class="btn-accion btn-inactivar"
+                               title="Inactivar usuario"
+                               onclick="return confirm('¿Desea inactivar este usuario?');">
+
+                                <i class="fa-solid fa-user-slash"></i>
+
+                            </a>
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                    <!-- SIN USUARIOS -->
+
+                    <tr th:if="${#lists.isEmpty(usuarios)}">
+
+                        <td colspan="6"
+                            class="sin-registros">
+
+                            <i class="fa-solid fa-users-slash"></i>
+
+                            No hay usuarios registrados.
+
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- VOLVER -->
+
+    <a th:href="@{/}"
+       class="volver-dashboard">
+
+        <i class="fa-solid fa-arrow-left"></i>
+
+        Volver al panel principal
+
+    </a>
+
+
+</main>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
 
 </body>
+
 </html>

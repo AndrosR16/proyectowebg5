@@ -9,177 +9,223 @@
         Factura
     </title>
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/offcanvas.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/modulos.css}">
 </head>
 
 <body>
 
-<div class="container py-5">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/menu :: menu}"></div>
 
-    <div class="row justify-content-center">
+<main class="pagina-formulario">
 
-        <div class="col-md-8 col-lg-6">
+    <section class="encabezado-formulario">
 
-            <div class="card shadow-sm">
+        <h1>
+            <i class="fa-solid fa-file-invoice-dollar me-2"></i>
 
-                <div class="card-header bg-dark text-white">
+            <span th:text="${factura.idFactura == null
+                    ? 'Nueva factura'
+                    : 'Editar factura'}">
+                Nueva factura
+            </span>
+        </h1>
 
-                    <h2 class="h4 mb-0"
-                        th:text="${factura.idFactura == null ? 'Nueva factura' : 'Editar factura'}">
-                        Factura
-                    </h2>
+        <p th:if="${factura.idFactura == null}">
+            Registrá una nueva factura asociada a un pago del sistema.
+        </p>
+
+        <p th:if="${factura.idFactura != null}">
+            Modificá la información de la factura seleccionada.
+        </p>
+
+    </section>
+
+    <section class="panel-formulario">
+
+        <div class="titulo-seccion">
+            <i class="fa-solid fa-receipt"></i>
+            Información de la factura
+        </div>
+
+        <form th:action="${factura.idFactura == null
+                        ? '/facturas/guardar'
+                        : '/facturas/actualizar'}"
+              th:object="${factura}"
+              method="post">
+
+            <div class="row">
+
+                <div class="col-md-6 mb-4">
+
+                    <label for="idFactura" class="form-label">
+                        ID de la factura
+                    </label>
+
+                    <input type="number"
+                           id="idFactura"
+                           class="form-control"
+                           th:field="*{idFactura}"
+                           th:readonly="${factura.idFactura != null}"
+                           min="1"
+                           required>
+
+                    <div class="form-text"
+                         th:if="${factura.idFactura == null}">
+                        El ID debe ser único.
+                    </div>
 
                 </div>
 
-                <div class="card-body">
+                <div class="col-md-6 mb-4">
 
-                    <form
-                        th:action="${factura.idFactura == null
-                            ? '/facturas/guardar'
-                            : '/facturas/actualizar'}"
-                        th:object="${factura}"
-                        method="post">
+                    <label for="numeroFactura" class="form-label">
+                        Número de factura
+                    </label>
 
-                        <div class="mb-3">
+                    <div class="input-group">
 
-                            <label for="idFactura"
-                                   class="form-label">
-                                ID de la factura
-                            </label>
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-hashtag"></i>
+                        </span>
 
-                            <input
-                                type="number"
-                                id="idFactura"
-                                class="form-control"
-                                th:field="*{idFactura}"
-                                th:readonly="${factura.idFactura != null}"
-                                min="1"
-                                required>
+                        <input type="text"
+                               id="numeroFactura"
+                               class="form-control"
+                               th:field="*{numeroFactura}"
+                               maxlength="50"
+                               placeholder="Ejemplo: FAC-001"
+                               required>
 
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label for="idPago"
-                                   class="form-label">
-                                Pago
-                            </label>
-
-                            <select
-                                id="idPago"
-                                class="form-select"
-                                th:field="*{idPago}"
-                                required>
-
-                                <option value="">
-                                    Seleccione un pago
-                                </option>
-
-                                <option
-                                    th:each="pago : ${pagos}"
-                                    th:value="${pago.idPago}"
-                                    th:text="${'Pago #' + pago.idPago + ' - ₡' + pago.monto}">
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label for="numeroFactura"
-                                   class="form-label">
-                                Número de factura
-                            </label>
-
-                            <input
-                                type="text"
-                                id="numeroFactura"
-                                class="form-control"
-                                th:field="*{numeroFactura}"
-                                maxlength="50"
-                                placeholder="Ejemplo: FAC-001"
-                                required>
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label for="fechaFactura"
-                                   class="form-label">
-                                Fecha de la factura
-                            </label>
-
-                            <input
-                                type="date"
-                                id="fechaFactura"
-                                class="form-control"
-                                th:field="*{fechaFactura}"
-                                required>
-
-                        </div>
-
-                        <div class="mb-3">
-
-                            <label for="idEstado"
-                                   class="form-label">
-                                Estado
-                            </label>
-
-                            <select
-                                id="idEstado"
-                                class="form-select"
-                                th:field="*{idEstado}"
-                                required>
-
-                                <option value="">
-                                    Seleccione un estado
-                                </option>
-
-                                <option
-                                    th:each="estado : ${estados}"
-                                    th:value="${estado.idEstado}"
-                                    th:text="${estado.descripcion}">
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                        <div class="d-flex justify-content-end gap-2">
-
-                            <a th:href="@{/facturas}"
-                               class="btn btn-secondary">
-                                Cancelar
-                            </a>
-
-                            <button type="submit"
-                                    class="btn btn-primary"
-                                    th:text="${factura.idFactura == null
-                                        ? 'Guardar'
-                                        : 'Actualizar'}">
-                                Guardar
-                            </button>
-
-                        </div>
-
-                    </form>
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+            <div class="row">
 
-    </div>
+                <div class="col-md-6 mb-4">
 
-</div>
+                    <label for="idPago" class="form-label">
+                        Pago asociado
+                    </label>
 
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
+                    <select id="idPago"
+                            class="form-select"
+                            th:field="*{idPago}"
+                            required>
+
+                        <option value="">
+                            Seleccione un pago
+                        </option>
+
+                        <option th:each="pago : ${pagos}"
+                                th:value="${pago.idPago}"
+                                th:text="${'Pago #' + pago.idPago + ' - ₡' + pago.monto}">
+                        </option>
+
+                    </select>
+
+                    <div class="form-text">
+                        Seleccioná el pago relacionado con esta factura.
+                    </div>
+
+                </div>
+
+                <div class="col-md-6 mb-4">
+
+                    <label for="fechaFactura" class="form-label">
+                        Fecha de la factura
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </span>
+
+                        <input type="date"
+                               id="fechaFactura"
+                               class="form-control"
+                               th:field="*{fechaFactura}"
+                               required>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="mb-4">
+
+                <label for="idEstado" class="form-label">
+                    Estado
+                </label>
+
+                <select id="idEstado"
+                        class="form-select"
+                        th:field="*{idEstado}"
+                        required>
+
+                    <option value="">
+                        Seleccione un estado
+                    </option>
+
+                    <option th:each="estado : ${estados}"
+                            th:value="${estado.idEstado}"
+                            th:text="${estado.descripcion}">
+                    </option>
+
+                </select>
+
+                <div class="form-text">
+                    Seleccioná el estado actual de la factura.
+                </div>
+
+            </div>
+
+            <div class="acciones-formulario">
+
+                <a th:href="@{/facturas}"
+                   class="btn btn-cancelar">
+
+                    <i class="fa-solid fa-xmark me-2"></i>
+                    Cancelar
+
+                </a>
+
+                <button type="submit"
+                        class="btn btn-guardar">
+
+                    <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                    <span th:text="${factura.idFactura == null
+                            ? 'Guardar factura'
+                            : 'Actualizar factura'}">
+                        Guardar factura
+                    </span>
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

@@ -7,177 +7,223 @@
 
     <title th:text="${titulo}">Formulario de usuario</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/offcanvas.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/modulos.css}">
 </head>
 
-<body class="bg-light">
+<body>
 
-    <div class="container py-5">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/menu :: menu}"></div>
 
-        <div class="row justify-content-center">
+<main class="pagina-formulario">
 
-            <div class="col-lg-8">
+    <section class="encabezado-formulario">
 
-                <div class="card shadow-sm">
+        <h1>
+            <i class="fa-solid fa-user-gear me-2"></i>
 
-                    <div class="card-header bg-dark text-white">
+            <span th:text="${titulo}">
+                Formulario de usuario
+            </span>
+        </h1>
 
-                        <h1 class="h4 mb-0" th:text="${titulo}">
-                            Formulario de usuario
-                        </h1>
+        <p th:if="${usuario.idUsuario == null}">
+            Registrá un nuevo usuario en el sistema.
+        </p>
 
-                    </div>
+        <p th:if="${usuario.idUsuario != null}">
+            Modificá la información del usuario seleccionado.
+        </p>
 
-                    <div class="card-body">
+    </section>
 
-                        <form th:object="${usuario}" th:action="${usuario.idUsuario == null}
-                                ? @{/usuarios/guardar}
-                                : @{/usuarios/actualizar}" method="post">
+    <section class="panel-formulario">
 
-                            <input type="hidden" th:field="*{idUsuario}">
+        <div class="titulo-seccion">
+            <i class="fa-solid fa-id-card"></i>
+            Información del usuario
+        </div>
 
-                            <div class="row">
+        <form th:object="${usuario}"
+              th:action="${usuario.idUsuario == null}
+                    ? @{/usuarios/guardar}
+                    : @{/usuarios/actualizar}"
+              method="post">
 
-                                <div class="col-md-6 mb-3">
+            <input type="hidden" th:field="*{idUsuario}">
 
-                                    <label for="nombre" class="form-label">
-                                        Nombre
-                                    </label>
+            <div class="row">
 
-                                    <input type="text" id="nombre" th:field="*{nombre}" class="form-control"
-                                        maxlength="100" required>
+                <div class="col-md-6 mb-4">
 
-                                </div>
+                    <label for="nombre" class="form-label">
+                        Nombre
+                    </label>
 
-                                <div class="col-md-6 mb-3">
+                    <input type="text"
+                           id="nombre"
+                           th:field="*{nombre}"
+                           class="form-control"
+                           maxlength="100"
+                           required>
 
-                                    <label for="apellidoP" class="form-label">
-                                        Primer apellido
-                                    </label>
+                </div>
 
-                                    <input type="text" id="apellidoP" th:field="*{apellidoP}" class="form-control"
-                                        maxlength="100" required>
+                <div class="col-md-6 mb-4">
 
-                                </div>
+                    <label for="apellidoP" class="form-label">
+                        Primer apellido
+                    </label>
 
-                            </div>
+                    <input type="text"
+                           id="apellidoP"
+                           th:field="*{apellidoP}"
+                           class="form-control"
+                           maxlength="100"
+                           required>
 
-                            <div class="row">
+                </div>
 
-                                <div class="col-md-6 mb-3">
+            </div>
 
-                                    <label for="apellidoM" class="form-label">
-                                        Segundo apellido
-                                    </label>
+            <div class="row">
 
-                                    <input type="text" id="apellidoM" th:field="*{apellidoM}" class="form-control"
-                                        maxlength="100">
+                <div class="col-md-6 mb-4">
 
-                                </div>
+                    <label for="apellidoM" class="form-label">
+                        Segundo apellido
+                    </label>
 
-                                <div class="col-md-6 mb-3">
+                    <input type="text"
+                           id="apellidoM"
+                           th:field="*{apellidoM}"
+                           class="form-control"
+                           maxlength="100">
 
-                                    <label for="contrasena" class="form-label">
-                                        Contraseña
-                                    </label>
+                </div>
 
-                                    <input type="password" id="contrasena" th:field="*{contrasena}" class="form-control"
-                                        maxlength="100" th:required="${usuario.idUsuario == null}">
+                <div class="col-md-6 mb-4">
 
-                                    <div class="form-text" th:if="${usuario.idUsuario != null}">
-                                        Escriba una contraseña únicamente si desea cambiarla.
-                                    </div>
+                    <label for="contrasena" class="form-label">
+                        Contraseña
+                    </label>
 
-                                </div>
+                    <input type="password"
+                           id="contrasena"
+                           th:field="*{contrasena}"
+                           class="form-control"
+                           maxlength="100"
+                           th:required="${usuario.idUsuario == null}">
 
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-md-6 mb-3">
-
-                                    <label for="rol" class="form-label">
-                                        Rol
-                                    </label>
-
-                                    <select id="rol" th:field="*{rol}" class="form-select" required>
-
-                                        <option value="">
-                                            Seleccione un rol
-                                        </option>
-
-                                        <option value="Administrador">
-                                            Administrador
-                                        </option>
-
-                                        <option value="Cliente">
-                                            Cliente
-                                        </option>
-
-                                        <option value="Empleado">
-                                            Empleado
-                                        </option>
-
-                                    </select>
-
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-
-                                    <label for="idEstado" class="form-label">
-                                        Estado
-                                    </label>
-
-                                    <select id="idEstado" th:field="*{idEstado}" class="form-select" required>
-
-                                        <option value="">
-                                            Seleccione un estado
-                                        </option>
-
-                                        <option th:each="estado : ${estados}" th:value="${estado.idEstado}"
-                                            th:text="${estado.descripcion}">
-                                            Activo
-                                        </option>
-
-                                    </select>
-
-                                </div>
-
-                            </div>
-
-                            <div class="d-flex justify-content-end gap-2 mt-3">
-
-                                <a th:href="@{/usuarios}" class="btn btn-outline-secondary">
-                                    Cancelar
-                                </a>
-
-                                <button type="submit" class="btn btn-primary">
-
-                                    <span th:text="${usuario.idUsuario == null}
-                                            ? 'Guardar usuario'
-                                            : 'Actualizar usuario'">
-                                        Guardar
-                                    </span>
-
-                                </button>
-
-                            </div>
-
-                        </form>
-
+                    <div class="form-text"
+                         th:if="${usuario.idUsuario != null}">
+                        Dejá este campo vacío si no querés cambiar la contraseña.
                     </div>
 
                 </div>
 
             </div>
 
-        </div>
+            <div class="row">
 
-    </div>
+                <div class="col-md-6 mb-4">
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-    </script>
+                    <label for="rol" class="form-label">
+                        Rol
+                    </label>
+
+                    <select id="rol"
+                            th:field="*{rol}"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Seleccione un rol
+                        </option>
+
+                        <option value="Administrador">
+                            Administrador
+                        </option>
+
+                        <option value="Cliente">
+                            Cliente
+                        </option>
+
+                        <option value="Empleado">
+                            Empleado
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-6 mb-4">
+
+                    <label for="idEstado" class="form-label">
+                        Estado
+                    </label>
+
+                    <select id="idEstado"
+                            th:field="*{idEstado}"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Seleccione un estado
+                        </option>
+
+                        <option th:each="estado : ${estados}"
+                                th:value="${estado.idEstado}"
+                                th:text="${estado.descripcion}">
+                            Activo
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="acciones-formulario">
+
+                <a th:href="@{/usuarios}"
+                   class="btn btn-cancelar">
+
+                    <i class="fa-solid fa-xmark me-2"></i>
+                    Cancelar
+                </a>
+
+                <button type="submit"
+                        class="btn btn-guardar">
+
+                    <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                    <span th:text="${usuario.idUsuario == null}
+                            ? 'Guardar usuario'
+                            : 'Actualizar usuario'">
+                        Guardar usuario
+                    </span>
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
-
 </html>

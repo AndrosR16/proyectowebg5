@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Sistema de Gestión de Canchas</title>
+    <title>Panel principal - Gestión de Canchas</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet"
@@ -18,7 +18,7 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-    <!-- Estilos -->
+    <!-- Estilos existentes -->
     <link rel="stylesheet"
           th:href="@{/css/navbar.css}">
 
@@ -28,9 +28,281 @@
     <link rel="stylesheet"
           th:href="@{/css/dashboard.css}">
 
-</head>
+    <style>
 
-    <title>Sistema de Gestión de Canchas</title>
+        .dashboard-principal {
+            width: 100%;
+            max-width: 1400px;
+            margin: auto;
+            padding: 35px 30px 50px;
+        }
+
+        .dashboard-bienvenida {
+            background: rgba(13, 22, 32, 0.90);
+            border-radius: 18px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(8px);
+        }
+
+        .dashboard-bienvenida h1 {
+            color: #ffffff;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .dashboard-bienvenida p {
+            color: #c8d0d7;
+            margin: 0;
+        }
+
+        .dashboard-fecha {
+            color: #9ea8b1;
+            font-size: 0.9rem;
+        }
+
+        .stat-card {
+            background: rgba(18, 28, 39, 0.94);
+            border-radius: 16px;
+            padding: 22px;
+            height: 100%;
+            color: #ffffff;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+        }
+
+        .stat-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .stat-icono {
+            width: 48px;
+            height: 48px;
+            border-radius: 13px;
+            background: rgba(25, 135, 84, 0.22);
+            color: #59b97c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+        }
+
+        .stat-label {
+            color: #b8c1c9;
+            font-size: 0.88rem;
+            margin-bottom: 4px;
+        }
+
+        .stat-valor {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stat-detalle {
+            color: #9ea8b1;
+            font-size: 0.83rem;
+            margin-top: 8px;
+        }
+
+        .panel-dashboard {
+            background: rgba(18, 28, 39, 0.94);
+            border-radius: 18px;
+            padding: 24px;
+            color: #ffffff;
+            height: 100%;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+        }
+
+        .panel-titulo {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .panel-titulo h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .panel-titulo i {
+            color: #59b97c;
+        }
+
+        .ranking-item,
+        .reserva-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .ranking-item:last-child,
+        .reserva-item:last-child {
+            border-bottom: none;
+        }
+
+        .ranking-posicion {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: rgba(25, 135, 84, 0.18);
+            color: #65c889;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .ranking-info {
+            flex: 1;
+        }
+
+        .ranking-info strong {
+            display: block;
+            font-size: 0.94rem;
+        }
+
+        .ranking-info span {
+            color: #9ea8b1;
+            font-size: 0.82rem;
+        }
+
+        .ranking-cantidad {
+            color: #d9e2e8;
+            font-weight: 600;
+            font-size: 0.88rem;
+        }
+
+        .reserva-fecha {
+            min-width: 60px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 8px 7px;
+        }
+
+        .reserva-fecha strong {
+            display: block;
+            font-size: 1rem;
+        }
+
+        .reserva-fecha span {
+            font-size: 0.74rem;
+            color: #9ea8b1;
+        }
+
+        .reserva-info {
+            flex: 1;
+        }
+
+        .reserva-info strong {
+            display: block;
+            font-size: 0.92rem;
+        }
+
+        .reserva-info span {
+            display: block;
+            color: #9ea8b1;
+            font-size: 0.80rem;
+        }
+
+        .estado-reserva {
+            font-size: 0.74rem;
+            padding: 5px 9px;
+            border-radius: 999px;
+            background: rgba(25, 135, 84, 0.18);
+            color: #72d292;
+            white-space: nowrap;
+        }
+
+        .grafica-contenedor {
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .grafica {
+            height: 230px;
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
+            padding: 15px 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .barra-dia {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            height: 100%;
+        }
+
+        .barra {
+            width: 38px;
+            min-height: 10px;
+            border-radius: 8px 8px 3px 3px;
+            background: linear-gradient(
+                180deg,
+                #5dbb7f,
+                #198754
+            );
+            transition: transform 0.2s ease;
+        }
+
+        .barra:hover {
+            transform: translateY(-4px);
+        }
+
+        .barra-valor {
+            font-size: 0.78rem;
+            color: #d8e0e6;
+            margin-bottom: 6px;
+        }
+
+        .barra-dia span {
+            margin-top: 8px;
+            color: #9ea8b1;
+            font-size: 0.78rem;
+        }
+
+        .sin-datos {
+            color: #9ea8b1;
+            text-align: center;
+            padding: 35px 0;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 992px) {
+
+            .dashboard-principal {
+                padding: 25px 15px;
+            }
+
+            .dashboard-bienvenida {
+                text-align: center;
+            }
+
+            .grafica {
+                gap: 10px;
+            }
+
+            .barra {
+                width: 28px;
+            }
+        }
+
+    </style>
 
 </head>
 
@@ -42,22 +314,20 @@
 
         <div class="row w-100 align-items-center">
 
-            <!-- IZQUIERDA -->
             <div class="col-4 d-flex justify-content-start">
 
-               <button class="btn text-white fw-semibold"
-        type="button"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#menuLateral">
+                <button class="btn text-white fw-semibold"
+                        type="button"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#menuLateral">
 
-    <i class="fa-solid fa-bars me-2"></i>
-    Menú
+                    <i class="fa-solid fa-bars me-2"></i>
+                    Menú
 
-</button>
+                </button>
 
             </div>
 
-            <!-- CENTRO -->
             <div class="col-4 d-flex justify-content-center align-items-center">
 
                 <img th:src="@{/img/logo.png}"
@@ -74,15 +344,14 @@
 
             </div>
 
-            <!-- DERECHA -->
             <div class="col-4 d-flex justify-content-end align-items-center">
 
                 <span class="text-white fw-bold me-3">
                     👋 Hola,
-                    <span th:text="${session.usuario.nombre}"></span>
+                    <span th:text="${session.usuario.nombre}">
+                        Usuario
+                    </span>
                 </span>
-
-               
 
             </div>
 
@@ -91,6 +360,9 @@
     </div>
 
 </nav>
+
+
+<!-- MENÚ LATERAL -->
 
 <div class="offcanvas offcanvas-start"
      tabindex="-1"
@@ -118,7 +390,6 @@
 
     </div>
 
-    <!-- AQUÍ EMPIEZA EL OFFCANVAS-BODY -->
     <div class="offcanvas-body">
 
         <div class="menu-lateral">
@@ -186,153 +457,530 @@
 
             <hr class="menu-divisor">
 
-<div class="menu-seccion">
-    Cuenta
-</div>
+            <div class="menu-seccion">
+                Cuenta
+            </div>
 
-<a class="menu-item" th:href="@{/logout}">
-    <i class="fa-solid fa-right-from-bracket"></i>
-    <span>Cerrar sesión</span>
-</a>
-
-           
+            <a class="menu-item" th:href="@{/logout}">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Cerrar sesión</span>
+            </a>
 
         </div>
 
     </div>
-    <!-- AQUÍ TERMINA EL OFFCANVAS-BODY -->
 
 </div>
 
-<main class="hero">
 
-    <div class="hero-contenido">
+<!-- DASHBOARD -->
 
-        <h1 class="hero-titulo">
-            Sistema de Gestión de Canchas
-        </h1>
+<main class="dashboard-principal">
 
-        <div class="row g-4 justify-content-center">
 
-            <div class="col-md-6 col-lg-3">
+    <!-- BIENVENIDA -->
 
-                <div class="tarjeta-opcion shadow">
+    <section class="dashboard-bienvenida shadow">
 
-                    <h3>Usuarios</h3>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
 
-                    <p>
-                        Administrá los usuarios registrados,
-                        sus datos personales, roles y estados.
-                    </p>
+            <div>
 
-                    <a
-                        th:href="@{/usuarios}"
-                        class="btn btn-principal text-white">
+                <h1>
+                    Bienvenido,
+                    <span th:text="${session.usuario.nombre}">
+                        Usuario
+                    </span>
+                    ⚽
+                </h1>
 
-                        Ver usuarios
-                    </a>
-
-                </div>
+                <p>
+                    Resumen general del sistema de gestión de canchas.
+                </p>
 
             </div>
 
-            <div class="col-md-6 col-lg-3">
+            <div class="dashboard-fecha">
 
-                <div class="tarjeta-opcion shadow">
+                <i class="fa-regular fa-calendar me-2"></i>
 
-                    <h3>Canchas</h3>
-
-                    <p>
-                        Administrá las canchas, precios, capacidades,
-                        superficies y estados disponibles.
-                    </p>
-
-                    <a
-                        th:href="@{/canchas}"
-                        class="btn btn-principal text-white">
-
-                        Ver canchas
-                    </a>
-
-                </div>
+                <span>
+                    Panel administrativo
+                </span>
 
             </div>
 
-            <div class="col-md-6 col-lg-3">
+        </div>
 
-                <div class="tarjeta-opcion shadow">
+    </section>
 
-                    <h3>Reservas</h3>
 
-                    <p>
-                        Registrá reservas seleccionando el usuario,
-                        el horario, la fecha y el estado.
-                    </p>
+    <!-- INDICADORES -->
 
-                    <a
-                        th:href="@{/reservas}"
-                        class="btn btn-principal text-white">
+    <section class="row g-4 mb-4">
 
-                        Ver reservas
-                    </a>
 
-                </div>
+        <!-- USUARIOS -->
 
-            </div>
+        <div class="col-md-6 col-xl-3">
 
-            <div class="col-md-6 col-lg-3">
+            <div class="stat-card">
 
-                <div class="tarjeta-opcion shadow">
+                <div class="stat-card-top">
 
-                    <h3>Pagos</h3>
+                    <div>
 
-                    <p>
-                        Registrá los pagos asociados a las reservas
-                        y generá su factura automáticamente.
-                    </p>
+                        <div class="stat-label">
+                            Usuarios activos
+                        </div>
 
-                    <a
-                        th:href="@{/pagos}"
-                        class="btn btn-principal text-white">
+                        <div class="stat-valor"
+                             th:text="${totalUsuarios != null ? totalUsuarios : 0}">
+                            0
+                        </div>
 
-                        Ir a pagos
-                    </a>
+                    </div>
+
+                    <div class="stat-icono">
+
+                        <i class="fa-solid fa-users"></i>
+
+                    </div>
 
                 </div>
 
-            </div>
-
-            <div class="col-md-6 col-lg-3">
-
-                <div class="tarjeta-opcion shadow">
-
-                    <h3>Facturas</h3>
-
-                    <p>
-                        Consultá las facturas generadas y utilizá
-                        la opción de impresión del comprobante.
-                    </p>
-
-                    <a
-                        th:href="@{/facturas}"
-                        class="btn btn-principal text-white">
-
-                        Ver facturas
-                    </a>
-
+                <div class="stat-detalle">
+                    Usuarios habilitados en el sistema
                 </div>
 
             </div>
 
         </div>
 
-    </div>
+
+        <!-- CANCHAS -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="stat-card">
+
+                <div class="stat-card-top">
+
+                    <div>
+
+                        <div class="stat-label">
+                            Canchas disponibles
+                        </div>
+
+                        <div class="stat-valor"
+                             th:text="${totalCanchas != null ? totalCanchas : 0}">
+                            0
+                        </div>
+
+                    </div>
+
+                    <div class="stat-icono">
+
+                        <i class="fa-solid fa-futbol"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="stat-detalle">
+                    Canchas activas disponibles
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESERVAS -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="stat-card">
+
+                <div class="stat-card-top">
+
+                    <div>
+
+                        <div class="stat-label">
+                            Reservas
+                        </div>
+
+                        <div class="stat-valor"
+                             th:text="${totalReservas != null ? totalReservas : 0}">
+                            0
+                        </div>
+
+                    </div>
+
+                    <div class="stat-icono">
+
+                        <i class="fa-solid fa-calendar-check"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="stat-detalle">
+                    Reservas registradas
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- INGRESOS -->
+
+        <div class="col-md-6 col-xl-3">
+
+            <div class="stat-card">
+
+                <div class="stat-card-top">
+
+                    <div>
+
+                        <div class="stat-label">
+                            Ingresos registrados
+                        </div>
+
+                        <div class="stat-valor">
+
+                            ₡<span th:text="${totalIngresos != null ? totalIngresos : 0}">
+                                0
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="stat-icono">
+
+                        <i class="fa-solid fa-money-bill-trend-up"></i>
+
+                    </div>
+
+                </div>
+
+                <div class="stat-detalle">
+                    Total asociado a pagos
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- BLOQUE CENTRAL -->
+
+    <section class="row g-4 mb-4">
+
+
+        <!-- GRÁFICA DE RESERVAS -->
+
+        <div class="col-lg-7">
+
+            <div class="panel-dashboard">
+
+                <div class="panel-titulo">
+
+                    <h2>
+
+                        <i class="fa-solid fa-chart-column me-2"></i>
+
+                        Reservas por día
+
+                    </h2>
+
+                    <span class="text-secondary small">
+                        Semana actual
+                    </span>
+
+                </div>
+
+                <div class="grafica-contenedor">
+
+                    <div class="grafica">
+
+
+                        <div class="barra-dia">
+
+                            <div class="barra-valor"
+                                 th:text="${reservasLunes != null ? reservasLunes : 0}">
+                                0
+                            </div>
+
+                            <div class="barra"
+                                 th:style="'height:' + (${reservasLunes != null ? reservasLunes : 0} * 12 + 10) + 'px'">
+                            </div>
+
+                            <span>Lun</span>
+
+                        </div>
+
+
+                        <div class="barra-dia">
+
+                            <div class="barra-valor"
+                                 th:text="${reservasMartes != null ? reservasMartes : 0}">
+                                0
+                            </div>
+
+                            <div class="barra"
+                                 th:style="'height:' + (${reservasMartes != null ? reservasMartes : 0} * 12 + 10) + 'px'">
+                            </div>
+
+                            <span>Mar</span>
+
+                        </div>
+
+
+                        <div class="barra-dia">
+
+                            <div class="barra-valor"
+                                 th:text="${reservasMiercoles != null ? reservasMiercoles : 0}">
+                                0
+                            </div>
+
+                            <div class="barra"
+                                 th:style="'height:' + (${reservasMiercoles != null ? reservasMiercoles : 0} * 12 + 10) + 'px'">
+                            </div>
+
+                            <span>Mié</span>
+
+                        </div>
+
+
+                        <div class="barra-dia">
+
+                            <div class="barra-valor"
+                                 th:text="${reservasJueves != null ? reservasJueves : 0}">
+                                0
+                            </div>
+
+                            <div class="barra"
+                                 th:style="'height:' + (${reservasJueves != null ? reservasJueves : 0} * 12 + 10) + 'px'">
+                            </div>
+
+                            <span>Jue</span>
+
+                        </div>
+
+
+                        <div class="barra-dia">
+
+                            <div class="barra-valor"
+                                 th:text="${reservasViernes != null ? reservasViernes : 0}">
+                                0
+                            </div>
+
+                            <div class="barra"
+                                 th:style="'height:' + (${reservasViernes != null ? reservasViernes : 0} * 12 + 10) + 'px'">
+                            </div>
+
+                            <span>Vie</span>
+
+                        </div>
+
+
+                        <div class="barra-dia">
+
+                            <div class="barra-valor"
+                                 th:text="${reservasSabado != null ? reservasSabado : 0}">
+                                0
+                            </div>
+
+                            <div class="barra"
+                                 th:style="'height:' + (${reservasSabado != null ? reservasSabado : 0} * 12 + 10) + 'px'">
+                            </div>
+
+                            <span>Sáb</span>
+
+                        </div>
+
+
+                        <div class="barra-dia">
+
+                            <div class="barra-valor"
+                                 th:text="${reservasDomingo != null ? reservasDomingo : 0}">
+                                0
+                            </div>
+
+                            <div class="barra"
+                                 th:style="'height:' + (${reservasDomingo != null ? reservasDomingo : 0} * 12 + 10) + 'px'">
+                            </div>
+
+                            <span>Dom</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CANCHAS MÁS RESERVADAS -->
+
+        <div class="col-lg-5">
+
+            <div class="panel-dashboard">
+
+                <div class="panel-titulo">
+
+                    <h2>
+
+                        <i class="fa-solid fa-trophy me-2"></i>
+
+                        Canchas más reservadas
+
+                    </h2>
+
+                </div>
+
+
+                <div th:if="${canchasMasReservadas != null and !#lists.isEmpty(canchasMasReservadas)}">
+
+
+                    <div class="ranking-item"
+                         th:each="cancha, estado : ${canchasMasReservadas}">
+
+                        <div class="ranking-posicion"
+                             th:text="${estado.index + 1}">
+                            1
+                        </div>
+
+                        <div class="ranking-info">
+
+                            <strong th:text="${cancha.nombreCancha}">
+                                Cancha
+                            </strong>
+
+                            <span>
+                                Reservas registradas
+                            </span>
+
+                        </div>
+
+                        <div class="ranking-cantidad">
+
+                            <span th:text="${cancha.totalReservas}">
+                                0
+                            </span>
+
+                            reservas
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="sin-datos"
+                     th:if="${canchasMasReservadas == null or #lists.isEmpty(canchasMasReservadas)}">
+
+                    <i class="fa-regular fa-chart-bar d-block fs-3 mb-2"></i>
+
+                    Aún no hay datos para mostrar.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PRÓXIMAS RESERVAS -->
+
+    <section class="panel-dashboard">
+
+        <div class="panel-titulo">
+
+            <h2>
+
+                <i class="fa-solid fa-clock-rotate-left me-2"></i>
+
+                Próximas reservas
+
+            </h2>
+
+        </div>
+
+
+        <div th:if="${proximasReservas != null and !#lists.isEmpty(proximasReservas)}">
+
+
+            <div class="reserva-item"
+                 th:each="reserva : ${proximasReservas}">
+
+                <div class="reserva-fecha">
+
+                    <strong th:text="${reserva.dia}">
+                        30
+                    </strong>
+
+                    <span th:text="${reserva.mes}">
+                        JUL
+                    </span>
+
+                </div>
+
+                <div class="reserva-info">
+
+                    <strong th:text="${reserva.nombreCancha}">
+                        Cancha
+                    </strong>
+
+                    <span th:text="${reserva.horario}">
+                        6:00 PM - 7:00 PM
+                    </span>
+
+                    <span th:text="${reserva.nombreUsuario}">
+                        Usuario
+                    </span>
+
+                </div>
+
+                <div class="estado-reserva"
+                     th:text="${reserva.nombreEstado}">
+                    Activa
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="sin-datos"
+             th:if="${proximasReservas == null or #lists.isEmpty(proximasReservas)}">
+
+            <i class="fa-regular fa-calendar-xmark d-block fs-3 mb-2"></i>
+
+            No hay próximas reservas registradas.
+
+        </div>
+
+    </section>
 
 </main>
+
 
 <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
 </script>
 
 </body>
+
 </html>

@@ -1,77 +1,169 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Superficie</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title th:text="${superficie.idSuperficie == null ? 'Nueva superficie' : 'Editar superficie'}">
+        Superficie
+    </title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/offcanvas.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/modulos.css}">
 </head>
 
 <body>
 
-<div class="container mt-5">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/menu :: menu}"></div>
 
-    <h2 class="mb-4"
-        th:text="${superficie.idSuperficie == null} ? 'Nueva Superficie' : 'Editar Superficie'">
-    </h2>
+<main class="pagina-formulario">
 
-    <form th:action="${superficie.idSuperficie == null} ?
-                     @{/superficies/guardar} :
-                     @{/superficies/actualizar}"
-          th:object="${superficie}"
-          method="post">
+    <section class="encabezado-formulario">
 
-        <div class="mb-3">
+        <h1>
+            <i class="fa-solid fa-layer-group me-2"></i>
 
-            <label class="form-label">ID</label>
+            <span th:text="${superficie.idSuperficie == null ? 'Nueva superficie' : 'Editar superficie'}">
+                Nueva superficie
+            </span>
+        </h1>
 
-            <input type="number"
-                   class="form-control"
-                   th:field="*{idSuperficie}"
-                   required>
+        <p th:if="${superficie.idSuperficie == null}">
+            Registrá un nuevo tipo de superficie para las canchas.
+        </p>
 
+        <p th:if="${superficie.idSuperficie != null}">
+            Modificá la información de la superficie seleccionada.
+        </p>
+
+    </section>
+
+    <section class="panel-formulario">
+
+        <div class="titulo-seccion">
+            <i class="fa-solid fa-layer-group"></i>
+            Información de la superficie
         </div>
 
-        <div class="mb-3">
+        <form th:action="${superficie.idSuperficie == null}
+                        ? @{/superficies/guardar}
+                        : @{/superficies/actualizar}"
+              th:object="${superficie}"
+              method="post">
 
-            <label class="form-label">Descripción</label>
+            <div class="row">
 
-            <input type="text"
-                   class="form-control"
-                   th:field="*{descripcion}"
-                   required>
+                <div class="col-md-6 mb-4">
 
-        </div>
+                    <label for="idSuperficie" class="form-label">
+                        ID de superficie
+                    </label>
 
-        <div class="mb-4">
+                    <input type="number"
+                           id="idSuperficie"
+                           class="form-control"
+                           th:field="*{idSuperficie}"
+                           min="1"
+                           th:readonly="${superficie.idSuperficie != null}"
+                           required>
 
-            <label class="form-label">Estado</label>
+                    <div class="form-text"
+                         th:if="${superficie.idSuperficie == null}">
+                        El ID debe ser único.
+                    </div>
 
-            <select class="form-select"
-                    th:field="*{idEstado}">
+                </div>
 
-                <option th:each="estado : ${estados}"
-                        th:value="${estado.idEstado}"
-                        th:text="${estado.descripcion}">
-                </option>
+                <div class="col-md-6 mb-4">
 
-            </select>
+                    <label for="idEstado" class="form-label">
+                        Estado
+                    </label>
 
-        </div>
+                    <select id="idEstado"
+                            class="form-select"
+                            th:field="*{idEstado}"
+                            required>
 
-        <button type="submit"
-                class="btn btn-success">
-            Guardar
-        </button>
+                        <option value="">
+                            Seleccione un estado
+                        </option>
 
-        <a th:href="@{/superficies}"
-           class="btn btn-secondary">
-            Cancelar
-        </a>
+                        <option th:each="estado : ${estados}"
+                                th:value="${estado.idEstado}"
+                                th:text="${estado.descripcion}">
+                            Activo
+                        </option>
 
-    </form>
+                    </select>
 
-</div>
+                </div>
+
+            </div>
+
+            <div class="mb-4">
+
+                <label for="descripcion" class="form-label">
+                    Descripción
+                </label>
+
+                <input type="text"
+                       id="descripcion"
+                       class="form-control"
+                       th:field="*{descripcion}"
+                       maxlength="100"
+                       placeholder="Ejemplo: Césped natural"
+                       required>
+
+                <div class="form-text">
+                    Indicá el tipo de superficie de la cancha.
+                </div>
+
+            </div>
+
+            <div class="acciones-formulario">
+
+                <a th:href="@{/superficies}"
+                   class="btn btn-cancelar">
+
+                    <i class="fa-solid fa-xmark me-2"></i>
+                    Cancelar
+
+                </a>
+
+                <button type="submit"
+                        class="btn btn-guardar">
+
+                    <i class="fa-solid fa-floppy-disk me-2"></i>
+
+                    <span th:text="${superficie.idSuperficie == null
+                            ? 'Guardar superficie'
+                            : 'Actualizar superficie'}">
+                        Guardar superficie
+                    </span>
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>
