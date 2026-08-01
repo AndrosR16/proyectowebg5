@@ -68,6 +68,10 @@ public class ReservaRepository {
                                     resultado.getLong("ID_HORARIO")
                             );
 
+                            reserva.setNombreCancha(
+                                    resultado.getString("NOMBRE_CANCHA")
+                            );
+
                             reserva.setDescripcionHorario(
                                     resultado.getString("DESCRIPCION_HORARIO")
                             );
@@ -97,7 +101,9 @@ public class ReservaRepository {
 
         return listar()
                 .stream()
-                .filter(reserva -> reserva.getIdReserva().equals(id))
+                .filter(reserva ->
+                        reserva.getIdReserva().equals(id)
+                )
                 .findFirst()
                 .orElse(null);
     }
@@ -129,7 +135,9 @@ public class ReservaRepository {
 
                     procedimiento.setDate(
                             4,
-                            java.sql.Date.valueOf(reserva.getFechaReserva())
+                            java.sql.Date.valueOf(
+                                    reserva.getFechaReserva()
+                            )
                     );
 
                     procedimiento.setLong(
@@ -169,7 +177,9 @@ public class ReservaRepository {
 
                     procedimiento.setDate(
                             4,
-                            java.sql.Date.valueOf(reserva.getFechaReserva())
+                            java.sql.Date.valueOf(
+                                    reserva.getFechaReserva()
+                            )
                     );
 
                     procedimiento.setLong(
@@ -201,5 +211,4 @@ public class ReservaRepository {
                 }
         );
     }
-
 }

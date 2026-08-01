@@ -9,6 +9,7 @@ public class Reserva {
     private Long idHorario;
     private LocalDate fechaReserva;
     private Long idEstado;
+    private String nombreCancha;
 
     /*
      * Campos adicionales para mostrar información descriptiva
@@ -19,6 +20,14 @@ public class Reserva {
     private String nombreEstado;
 
     public Reserva() {
+    }
+
+    public String getNombreCancha() {
+    return nombreCancha;
+    }
+
+    public void setNombreCancha(String nombreCancha) {
+    this.nombreCancha = nombreCancha;
     }
 
     public Long getIdReserva() {

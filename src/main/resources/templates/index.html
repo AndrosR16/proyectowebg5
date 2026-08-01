@@ -10,15 +10,12 @@
 
     <title>Panel principal - Gestión de Canchas</title>
 
-    <!-- Bootstrap -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
-    <!-- Font Awesome -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-    <!-- Estilos existentes -->
     <link rel="stylesheet"
           th:href="@{/css/navbar.css}">
 
@@ -197,6 +194,7 @@
         .reserva-fecha span {
             font-size: 0.74rem;
             color: #9ea8b1;
+            text-transform: uppercase;
         }
 
         .reserva-info {
@@ -253,9 +251,9 @@
             min-height: 10px;
             border-radius: 8px 8px 3px 3px;
             background: linear-gradient(
-                180deg,
-                #5dbb7f,
-                #198754
+                    180deg,
+                    #5dbb7f,
+                    #198754
             );
             transition: transform 0.2s ease;
         }
@@ -308,177 +306,11 @@
 
 <body>
 
-<nav class="navbar navbar-dark shadow-sm">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <div class="container-fluid px-4">
-
-        <div class="row w-100 align-items-center">
-
-            <div class="col-4 d-flex justify-content-start">
-
-                <button class="btn text-white fw-semibold"
-                        type="button"
-                        data-bs-toggle="offcanvas"
-                        data-bs-target="#menuLateral">
-
-                    <i class="fa-solid fa-bars me-2"></i>
-                    Menú
-
-                </button>
-
-            </div>
-
-            <div class="col-4 d-flex justify-content-center align-items-center">
-
-                <img th:src="@{/img/logo.png}"
-                     alt="Logo"
-                     width="60"
-                     height="60"
-                     style="width:60px; height:60px; object-fit:contain;"
-                     class="me-2">
-
-                <a class="navbar-brand fw-bold mb-0"
-                   th:href="@{/}">
-                    Gestión de Canchas G5
-                </a>
-
-            </div>
-
-            <div class="col-4 d-flex justify-content-end align-items-center">
-
-                <span class="text-white fw-bold me-3">
-                    👋 Hola,
-                    <span th:text="${session.usuario.nombre}">
-                        Usuario
-                    </span>
-                </span>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</nav>
-
-
-<!-- MENÚ LATERAL -->
-
-<div class="offcanvas offcanvas-start"
-     tabindex="-1"
-     id="menuLateral">
-
-    <div class="offcanvas-header">
-
-        <div class="d-flex align-items-center">
-
-            <img th:src="@{/img/logo.png}"
-                 width="40"
-                 height="40"
-                 class="me-2">
-
-            <h5 class="offcanvas-title mb-0">
-                Gestión de Canchas G5
-            </h5>
-
-        </div>
-
-        <button type="button"
-                class="btn-close"
-                data-bs-dismiss="offcanvas">
-        </button>
-
-    </div>
-
-    <div class="offcanvas-body">
-
-        <div class="menu-lateral">
-
-            <div class="menu-seccion">
-                Administración
-            </div>
-
-            <a class="menu-item" th:href="@{/usuarios}">
-                <i class="fa-solid fa-users"></i>
-                <span>Usuarios</span>
-            </a>
-
-            <a class="menu-item" th:href="@{/canchas}">
-                <i class="fa-solid fa-futbol"></i>
-                <span>Canchas</span>
-            </a>
-
-            <a class="menu-item" th:href="@{/horarios}">
-                <i class="fa-solid fa-clock"></i>
-                <span>Horarios</span>
-            </a>
-
-            <a class="menu-item" th:href="@{/reservas}">
-                <i class="fa-solid fa-calendar-check"></i>
-                <span>Reservas</span>
-            </a>
-
-            <hr class="menu-divisor">
-
-            <div class="menu-seccion">
-                Configuración
-            </div>
-
-            <a class="menu-item" th:href="@{/superficies}">
-                <i class="fa-solid fa-layer-group"></i>
-                <span>Superficies</span>
-            </a>
-
-            <a class="menu-item" th:href="@{/estados}">
-                <i class="fa-solid fa-circle-check"></i>
-                <span>Estados</span>
-            </a>
-
-            <a class="menu-item" th:href="@{/metodos-pago}">
-                <i class="fa-solid fa-credit-card"></i>
-                <span>Métodos de pago</span>
-            </a>
-
-            <hr class="menu-divisor">
-
-            <div class="menu-seccion">
-                Finanzas
-            </div>
-
-            <a class="menu-item" th:href="@{/pagos}">
-                <i class="fa-solid fa-money-bill-wave"></i>
-                <span>Pagos</span>
-            </a>
-
-            <a class="menu-item" th:href="@{/facturas}">
-                <i class="fa-solid fa-file-invoice-dollar"></i>
-                <span>Facturas</span>
-            </a>
-
-            <hr class="menu-divisor">
-
-            <div class="menu-seccion">
-                Cuenta
-            </div>
-
-            <a class="menu-item" th:href="@{/logout}">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Cerrar sesión</span>
-            </a>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- DASHBOARD -->
+<div th:replace="~{fragments/menu :: menu}"></div>
 
 <main class="dashboard-principal">
-
-
-    <!-- BIENVENIDA -->
 
     <section class="dashboard-bienvenida shadow">
 
@@ -514,13 +346,7 @@
 
     </section>
 
-
-    <!-- INDICADORES -->
-
     <section class="row g-4 mb-4">
-
-
-        <!-- USUARIOS -->
 
         <div class="col-md-6 col-xl-3">
 
@@ -542,9 +368,7 @@
                     </div>
 
                     <div class="stat-icono">
-
                         <i class="fa-solid fa-users"></i>
-
                     </div>
 
                 </div>
@@ -556,9 +380,6 @@
             </div>
 
         </div>
-
-
-        <!-- CANCHAS -->
 
         <div class="col-md-6 col-xl-3">
 
@@ -580,9 +401,7 @@
                     </div>
 
                     <div class="stat-icono">
-
                         <i class="fa-solid fa-futbol"></i>
-
                     </div>
 
                 </div>
@@ -594,9 +413,6 @@
             </div>
 
         </div>
-
-
-        <!-- RESERVAS -->
 
         <div class="col-md-6 col-xl-3">
 
@@ -618,9 +434,7 @@
                     </div>
 
                     <div class="stat-icono">
-
                         <i class="fa-solid fa-calendar-check"></i>
-
                     </div>
 
                 </div>
@@ -633,9 +447,6 @@
 
         </div>
 
-
-        <!-- INGRESOS -->
-
         <div class="col-md-6 col-xl-3">
 
             <div class="stat-card">
@@ -645,7 +456,7 @@
                     <div>
 
                         <div class="stat-label">
-                            Ingresos registrados
+                            Ingresos del mes
                         </div>
 
                         <div class="stat-valor">
@@ -659,15 +470,13 @@
                     </div>
 
                     <div class="stat-icono">
-
                         <i class="fa-solid fa-money-bill-trend-up"></i>
-
                     </div>
 
                 </div>
 
                 <div class="stat-detalle">
-                    Total asociado a pagos
+                    Pagos facturados durante el mes actual
                 </div>
 
             </div>
@@ -676,13 +485,7 @@
 
     </section>
 
-
-    <!-- BLOQUE CENTRAL -->
-
     <section class="row g-4 mb-4">
-
-
-        <!-- GRÁFICA DE RESERVAS -->
 
         <div class="col-lg-7">
 
@@ -691,11 +494,8 @@
                 <div class="panel-titulo">
 
                     <h2>
-
                         <i class="fa-solid fa-chart-column me-2"></i>
-
                         Reservas por día
-
                     </h2>
 
                     <span class="text-secondary small">
@@ -707,7 +507,6 @@
                 <div class="grafica-contenedor">
 
                     <div class="grafica">
-
 
                         <div class="barra-dia">
 
@@ -724,7 +523,6 @@
 
                         </div>
 
-
                         <div class="barra-dia">
 
                             <div class="barra-valor"
@@ -739,7 +537,6 @@
                             <span>Mar</span>
 
                         </div>
-
 
                         <div class="barra-dia">
 
@@ -756,7 +553,6 @@
 
                         </div>
 
-
                         <div class="barra-dia">
 
                             <div class="barra-valor"
@@ -771,7 +567,6 @@
                             <span>Jue</span>
 
                         </div>
-
 
                         <div class="barra-dia">
 
@@ -788,7 +583,6 @@
 
                         </div>
 
-
                         <div class="barra-dia">
 
                             <div class="barra-valor"
@@ -803,7 +597,6 @@
                             <span>Sáb</span>
 
                         </div>
-
 
                         <div class="barra-dia">
 
@@ -828,9 +621,6 @@
 
         </div>
 
-
-        <!-- CANCHAS MÁS RESERVADAS -->
-
         <div class="col-lg-5">
 
             <div class="panel-dashboard">
@@ -838,18 +628,13 @@
                 <div class="panel-titulo">
 
                     <h2>
-
                         <i class="fa-solid fa-trophy me-2"></i>
-
                         Canchas más reservadas
-
                     </h2>
 
                 </div>
 
-
                 <div th:if="${canchasMasReservadas != null and !#lists.isEmpty(canchasMasReservadas)}">
-
 
                     <div class="ranking-item"
                          th:each="cancha, estado : ${canchasMasReservadas}">
@@ -885,7 +670,6 @@
 
                 </div>
 
-
                 <div class="sin-datos"
                      th:if="${canchasMasReservadas == null or #lists.isEmpty(canchasMasReservadas)}">
 
@@ -901,38 +685,30 @@
 
     </section>
 
-
-    <!-- PRÓXIMAS RESERVAS -->
-
     <section class="panel-dashboard">
 
         <div class="panel-titulo">
 
             <h2>
-
                 <i class="fa-solid fa-clock-rotate-left me-2"></i>
-
                 Próximas reservas
-
             </h2>
 
         </div>
 
-
         <div th:if="${proximasReservas != null and !#lists.isEmpty(proximasReservas)}">
-
 
             <div class="reserva-item"
                  th:each="reserva : ${proximasReservas}">
 
                 <div class="reserva-fecha">
 
-                    <strong th:text="${reserva.dia}">
-                        30
+                    <strong th:text="${#temporals.format(reserva.fechaReserva, 'dd')}">
+                        25
                     </strong>
 
-                    <span th:text="${reserva.mes}">
-                        JUL
+                    <span th:text="${#temporals.format(reserva.fechaReserva, 'MMM')}">
+                        SEP
                     </span>
 
                 </div>
@@ -943,25 +719,28 @@
                         Cancha
                     </strong>
 
-                    <span th:text="${reserva.horario}">
-                        6:00 PM - 7:00 PM
+                    <span th:text="${reserva.descripcionHorario}">
+                        Lunes 08:00 - 10:00
                     </span>
 
-                    <span th:text="${reserva.nombreUsuario}">
-                        Usuario
+                    <span>
+                        <i class="fa-solid fa-user me-1"></i>
+
+                        <span th:text="${reserva.nombreUsuario}">
+                            Usuario
+                        </span>
                     </span>
 
                 </div>
 
                 <div class="estado-reserva"
                      th:text="${reserva.nombreEstado}">
-                    Activa
+                    Activo
                 </div>
 
             </div>
 
         </div>
-
 
         <div class="sin-datos"
              th:if="${proximasReservas == null or #lists.isEmpty(proximasReservas)}">
@@ -976,9 +755,7 @@
 
 </main>
 
-
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
 </script>
 
 </body>
