@@ -17,8 +17,19 @@ public class ReservaService {
     }
 
     public List<Reserva> listar() {
-        return reservaRepository.listar();
+      return reservaRepository.listar();
     }
+
+    public List<Reserva> listarPorUsuario(Long idUsuario) {
+
+    return reservaRepository.listarPorUsuario(idUsuario);
+}
+
+public List<Reserva> proximasReservasUsuario(Long idUsuario){
+
+    return reservaRepository.proximasReservasUsuario(idUsuario);
+
+}
 
     public Reserva buscarPorId(Long id) {
         return reservaRepository.buscarPorId(id);
@@ -35,4 +46,6 @@ public class ReservaService {
     public void eliminar(Long id) {
         reservaRepository.eliminar(id);
     }
+
+    
 }

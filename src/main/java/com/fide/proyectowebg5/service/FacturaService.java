@@ -20,6 +20,11 @@ public class FacturaService {
         return facturaRepository.listar();
     }
 
+    public List<Factura> listarPorUsuario(String nombreCliente) {
+
+    return facturaRepository.listarPorUsuario(nombreCliente);
+}
+
     public Factura buscarPorId(Long idFactura) {
         return facturaRepository.buscarPorId(idFactura);
     }

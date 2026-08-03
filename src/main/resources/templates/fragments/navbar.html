@@ -33,12 +33,20 @@
 
                 <div class="col-4 d-flex justify-content-end align-items-center">
 
-                    <span class="text-white fw-bold me-3" th:if="${session.usuario != null}">
-                        👋 Hola,
-                        <span th:text="${session.usuario.nombre}">
-                            Usuario
-                        </span>
-                    </span>
+<span class="text-white fw-bold me-3" th:if="${session.usuario != null}">
+    👋 Hola,
+    <span th:text="${session.usuario.nombre}">
+        Usuario
+    </span>
+
+    <br>
+
+    ROL:
+    <span th:text="${session.usuario.rol}">
+        ROL
+    </span>
+
+</span>
 
                 </div>
 

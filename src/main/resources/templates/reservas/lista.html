@@ -221,7 +221,8 @@
 
                         <td class="text-center">
 
-                            <a th:href="@{/reservas/editar/{id}(id=${reserva.idReserva})}"
+                            <a th:if="${session.usuario != null and session.usuario.rol == 'ADMIN'}"
+                            th:href="@{/reservas/editar/{id}(id=${reserva.idReserva})}"
                                class="btn-accion btn-editar"
                                title="Editar reserva">
 
@@ -229,7 +230,8 @@
 
                             </a>
 
-                            <a th:href="@{/reservas/eliminar/{id}(id=${reserva.idReserva})}"
+                            <a th:if="${session.usuario != null and session.usuario.rol == 'ADMIN'}"
+                            th:href="@{/reservas/eliminar/{id}(id=${reserva.idReserva})}"
                                class="btn-accion btn-inactivar"
                                title="Inactivar reserva"
                                onclick="return confirm('¿Está seguro de inactivar esta reserva?');">

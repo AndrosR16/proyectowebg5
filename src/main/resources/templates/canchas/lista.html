@@ -71,7 +71,8 @@
                 </p>
             </div>
 
-            <a th:href="@{/canchas/nueva}"
+            <a th:if="${session.usuario.rol == 'ADMIN'}"
+               th:href="@{/canchas/nueva}"
                class="btn btn-nuevo">
                 <i class="fa-solid fa-plus me-2"></i>
                 Nueva cancha
@@ -110,7 +111,9 @@
                         <th>Precio por hora</th>
                         <th>Superficie</th>
                         <th>Estado</th>
-                        <th class="text-center">Acciones</th>
+                        <th th:if="${session.usuario.rol == 'ADMIN'}" class="text-center">
+                            Acciones
+                        </th>
                     </tr>
                 </thead>
 
@@ -175,26 +178,31 @@
 
                         <td class="text-center">
 
-                            <a th:href="@{/canchas/editar/{id}(id=${cancha.idCancha})}"
-                               class="btn-accion btn-editar"
-                               title="Editar cancha">
-                                <i class="fa-solid fa-pen"></i>
-                            </a>
+                        <td class="text-center">
 
-                            <form th:action="@{/canchas/eliminar/{id}(id=${cancha.idCancha})}"
-                                  method="post"
-                                  class="d-inline">
-
-                                <button type="submit"
-                                        class="btn-accion btn-inactivar"
-                                        title="Inactivar cancha"
+                            <td th:if="${session.usuario.rol == 'ADMIN'}" class="text-center">
+                            
+                                <a th:href="@{/canchas/editar/{id}(id=${cancha.idCancha})}" class="btn-accion btn-editar" title="Editar cancha">
+                            
+                                    <i class="fa-solid fa-pen"></i>
+                            
+                                </a>
+                            
+                            
+                                <form th:action="@{/canchas/eliminar/{id}(id=${cancha.idCancha})}" method="post" class="d-inline">
+                            
+                            
+                                    <button type="submit" class="btn-accion btn-inactivar" title="Inactivar cancha"
                                         onclick="return confirm('¿Desea inactivar esta cancha?')">
-                                    <i class="fa-solid fa-ban"></i>
-                                </button>
-
-                            </form>
-
-                        </td>
+                            
+                                        <i class="fa-solid fa-ban"></i>
+                            
+                                    </button>
+                            
+                            
+                                </form>
+                            
+                            </td>
 
                     </tr>
 

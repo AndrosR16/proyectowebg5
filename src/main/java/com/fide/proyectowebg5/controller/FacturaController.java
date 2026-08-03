@@ -11,9 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fide.proyectowebg5.model.Factura;
+import com.fide.proyectowebg5.model.Usuario;
 import com.fide.proyectowebg5.service.EstadoService;
 import com.fide.proyectowebg5.service.FacturaService;
 import com.fide.proyectowebg5.service.PagoService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/facturas")
@@ -33,16 +36,38 @@ public class FacturaController {
         this.estadoService = estadoService;
     }
 
-    @GetMapping
-    public String listar(Model model) {
+@GetMapping
+public String listar(
+        Model model,
+        HttpSession session) {
+
+    Usuario usuario =
+            (Usuario) session.getAttribute("usuario");
+
+    if (usuario == null) {
+        return "redirect:/";
+    }
+
+    if ("ADMIN".equals(usuario.getRol())) {
 
         model.addAttribute(
                 "facturas",
                 facturaService.listar()
         );
 
-        return "facturas/lista";
+    } else {
+
+        model.addAttribute(
+                "facturas",
+                facturaService.listarPorUsuario(
+                        usuario.getNombreCompleto()
+                )
+        );
+
     }
+
+    return "facturas/lista";
+}
 
     @GetMapping("/nuevo")
     public String nuevo(Model model) {

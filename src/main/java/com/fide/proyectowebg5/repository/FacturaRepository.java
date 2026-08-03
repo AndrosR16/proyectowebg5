@@ -128,6 +128,15 @@ public class FacturaRepository {
         );
     }
 
+    public List<Factura> listarPorUsuario(String nombreCliente) {
+
+    return listar()
+            .stream()
+            .filter(factura ->
+                    factura.getNombreCliente() != null
+                    && factura.getNombreCliente().equals(nombreCliente))
+            .toList();
+}
     public Factura buscarPorId(Long idFactura) {
 
         return listar()

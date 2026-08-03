@@ -11,12 +11,18 @@ import com.fide.proyectowebg5.model.Usuario;
 import com.fide.proyectowebg5.service.EstadoService;
 import com.fide.proyectowebg5.service.UsuarioService;
 
+import jakarta.servlet.http.HttpSession;
+
+
 @Controller
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
+
     private final UsuarioService usuarioService;
     private final EstadoService estadoService;
+
+
 
     public UsuarioController(
             UsuarioService usuarioService,
@@ -26,95 +32,215 @@ public class UsuarioController {
         this.estadoService = estadoService;
     }
 
+
+
+    private boolean esAdmin(HttpSession session){
+
+        Usuario usuario =
+                (Usuario) session.getAttribute("usuario");
+
+
+        return usuario != null &&
+                usuario.getRol().equals("ADMIN");
+    }
+
+
+
+
+
     @GetMapping
-    public String listar(Model model) {
+    public String listar(
+            Model model,
+            HttpSession session) {
+
+
+        if(!esAdmin(session)){
+            return "redirect:/";
+        }
+
 
         model.addAttribute(
                 "usuarios",
                 usuarioService.listar()
         );
 
+
         return "usuarios/lista";
     }
 
+
+
+
+
+
+
     @GetMapping("/nuevo")
-    public String nuevo(Model model) {
+    public String nuevo(
+            Model model,
+            HttpSession session) {
+
+
+        if(!esAdmin(session)){
+            return "redirect:/";
+        }
+
+
 
         Usuario usuario = new Usuario();
 
+
         usuario.setIdEstado(1L);
-        usuario.setRol("Cliente");
+        usuario.setRol("USUARIO");
+
+
 
         model.addAttribute(
                 "usuario",
                 usuario
         );
 
+
         model.addAttribute(
                 "estados",
                 estadoService.listar()
         );
+
 
         model.addAttribute(
                 "titulo",
                 "Nuevo usuario"
         );
 
+
         return "usuarios/formulario";
     }
 
+
+
+
+
+
+
     @PostMapping("/guardar")
-    public String guardar(Usuario usuario) {
+    public String guardar(
+            Usuario usuario,
+            HttpSession session) {
+
+
+        if(!esAdmin(session)){
+            return "redirect:/";
+        }
+
+
 
         usuarioService.guardar(usuario);
+
 
         return "redirect:/usuarios";
     }
 
+
+
+
+
+
+
     @GetMapping("/editar/{id}")
     public String editar(
             @PathVariable Long id,
-            Model model) {
+            Model model,
+            HttpSession session) {
+
+
+        if(!esAdmin(session)){
+            return "redirect:/";
+        }
+
+
 
         Usuario usuario =
                 usuarioService.buscarPorId(id);
 
+
+
         if (usuario == null) {
+
             return "redirect:/usuarios";
         }
+
+
 
         model.addAttribute(
                 "usuario",
                 usuario
         );
 
+
         model.addAttribute(
                 "estados",
                 estadoService.listar()
         );
+
 
         model.addAttribute(
                 "titulo",
                 "Editar usuario"
         );
 
+
+
         return "usuarios/formulario";
     }
 
+
+
+
+
+
+
+
     @PostMapping("/actualizar")
-    public String actualizar(Usuario usuario) {
+    public String actualizar(
+            Usuario usuario,
+            HttpSession session) {
+
+
+        if(!esAdmin(session)){
+            return "redirect:/";
+        }
+
+
 
         usuarioService.actualizar(usuario);
 
+
         return "redirect:/usuarios";
     }
+
+
+
+
+
+
+
 
     @GetMapping("/inactivar/{id}")
     public String inactivar(
-            @PathVariable Long id) {
+            @PathVariable Long id,
+            HttpSession session) {
+
+
+        if(!esAdmin(session)){
+            return "redirect:/";
+        }
+
+
 
         usuarioService.inactivar(id);
 
+
         return "redirect:/usuarios";
     }
+
+
 }

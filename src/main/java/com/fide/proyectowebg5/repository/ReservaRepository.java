@@ -3,6 +3,7 @@ package com.fide.proyectowebg5.repository;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,16 +98,39 @@ public class ReservaRepository {
         );
     }
 
-    public Reserva buscarPorId(Long id) {
+public List<Reserva> listarPorUsuario(Long idUsuario) {
 
-        return listar()
-                .stream()
-                .filter(reserva ->
-                        reserva.getIdReserva().equals(id)
-                )
-                .findFirst()
-                .orElse(null);
-    }
+    return listar()
+            .stream()
+            .filter(reserva ->
+                    reserva.getIdUsuario().equals(idUsuario))
+            .toList();
+}
+
+
+
+public Reserva buscarPorId(Long id) {
+
+    return listar()
+            .stream()
+            .filter(reserva ->
+                    reserva.getIdReserva().equals(id))
+            .findFirst()
+            .orElse(null);
+}
+
+public List<Reserva> proximasReservasUsuario(Long idUsuario){
+
+    return listar()
+            .stream()
+            .filter(reserva ->
+                    reserva.getIdUsuario().equals(idUsuario)
+                    &&
+                    !reserva.getFechaReserva().isBefore(LocalDate.now())
+            )
+            .toList();
+
+}
 
     public void insertar(Reserva reserva) {
 

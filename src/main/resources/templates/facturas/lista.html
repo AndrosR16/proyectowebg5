@@ -81,7 +81,8 @@
 
             </div>
 
-            <a th:href="@{/facturas/nuevo}"
+            <a th:if="${session.usuario != null and session.usuario.rol == 'ADMIN'}"
+            th:href="@{/facturas/nuevo}"
                class="btn btn-nuevo">
 
                 <i class="fa-solid fa-plus me-2"></i>
@@ -224,7 +225,8 @@
 
                             </a>
 
-                            <a th:href="@{/facturas/editar/{id}(id=${factura.idFactura})}"
+                            <a th:if="${session.usuario != null and session.usuario.rol == 'ADMIN'}"
+                            th:href="@{/facturas/editar/{id}(id=${factura.idFactura})}"
                                class="btn-accion btn-editar"
                                title="Editar factura">
 
@@ -232,7 +234,8 @@
 
                             </a>
 
-                            <a th:href="@{/facturas/eliminar/{id}(id=${factura.idFactura})}"
+                            <a th:if="${session.usuario != null and session.usuario.rol == 'ADMIN'}"
+                            th:href="@{/facturas/eliminar/{id}(id=${factura.idFactura})}"
                                class="btn-accion btn-inactivar"
                                title="Eliminar factura"
                                onclick="return confirm('¿Está seguro de eliminar esta factura?');">

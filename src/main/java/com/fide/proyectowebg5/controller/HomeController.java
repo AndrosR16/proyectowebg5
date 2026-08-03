@@ -12,37 +12,71 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fide.proyectowebg5.model.Usuario;
 import com.fide.proyectowebg5.service.DashboardService;
+import com.fide.proyectowebg5.service.ReservaService;
 import com.fide.proyectowebg5.service.UsuarioService;
+import com.fide.proyectowebg5.service.FacturaService;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class HomeController {
 
+
     private final UsuarioService usuarioService;
     private final DashboardService dashboardService;
+    private final ReservaService reservaService;
+private final FacturaService facturaService;
 
     public HomeController(
             UsuarioService usuarioService,
-            DashboardService dashboardService) {
+            DashboardService dashboardService,
+            ReservaService reservaService,
+            FacturaService facturaService) {
 
         this.usuarioService = usuarioService;
         this.dashboardService = dashboardService;
+        this.reservaService = reservaService;
+        this.facturaService = facturaService;
     }
+
+
 
     @GetMapping("/")
     public String mostrarInicio(
             HttpSession session,
             Model model) {
 
-        if (session.getAttribute("usuario") == null) {
+
+        Usuario usuario =
+                (Usuario) session.getAttribute("usuario");
+
+
+        if (usuario == null) {
+
             return "login";
+
         }
 
-        cargarDashboard(model);
+
+
+        if ("ADMIN".equals(usuario.getRol())) {
+
+            cargarDashboard(model);
+
+        } else {
+
+            cargarDashboardUsuario(model, usuario);
+
+        }
+
+
 
         return "index";
+
     }
+
+
+
 
     @PostMapping("/login")
     public String login(
@@ -51,60 +85,149 @@ public class HomeController {
             HttpSession session,
             Model model) {
 
+
         Usuario usuario =
                 usuarioService.login(username, contrasena);
 
+
+
         if (usuario == null) {
+
 
             model.addAttribute(
                     "error",
                     "Usuario o contraseña incorrectos."
             );
 
+
             return "login";
+
         }
 
-        session.setAttribute("usuario", usuario);
 
-        cargarDashboard(model);
+
+        session.setAttribute(
+                "usuario",
+                usuario
+        );
+
+
+
+
+        if ("ADMIN".equals(usuario.getRol())) {
+
+
+            cargarDashboard(model);
+
+
+        } else {
+
+
+            cargarDashboardUsuario(model, usuario);
+
+
+        }
+
+
 
         return "index";
+
     }
 
+
     @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    public String logout(
+            HttpSession session) {
+
 
         session.invalidate();
 
+
         return "redirect:/";
+
     }
 
+
+
+
+    private void cargarDashboardUsuario(
+            Model model,
+            Usuario usuario) {
+
+
+
+        int misReservas =
+
+                reservaService
+                .listarPorUsuario(usuario.getIdUsuario())
+                .size();
+
+                int misFacturas =
+            facturaService
+            .listarPorUsuario(usuario.getNombre())
+            .size();
+
+
+        model.addAttribute(
+                "misReservas",
+                misReservas
+                
+        );
+
+        model.addAttribute(
+                "misFacturas",
+                misFacturas
+        );
+
+model.addAttribute(
+    "proximasReservasUsuario",
+    reservaService.proximasReservasUsuario(usuario.getIdUsuario())
+);
+
+        
+
+    }
+
+
+
+
+
+
     private void cargarDashboard(Model model) {
+
 
         model.addAttribute(
                 "totalUsuarios",
                 dashboardService.totalUsuariosActivos()
         );
 
+
         model.addAttribute(
                 "totalCanchas",
                 dashboardService.totalCanchasActivas()
         );
+
 
         model.addAttribute(
                 "totalReservas",
                 dashboardService.totalReservas()
         );
 
+
         model.addAttribute(
                 "totalIngresos",
                 dashboardService.totalIngresos()
         );
 
+
+
         LocalDate hoy = LocalDate.now();
+
 
         LocalDate lunes =
                 hoy.with(DayOfWeek.MONDAY);
+
+
 
         model.addAttribute(
                 "reservasLunes",
@@ -113,12 +236,16 @@ public class HomeController {
                 )
         );
 
+
+
         model.addAttribute(
                 "reservasMartes",
                 dashboardService.contarReservasDia(
                         Date.valueOf(lunes.plusDays(1))
                 )
         );
+
+
 
         model.addAttribute(
                 "reservasMiercoles",
@@ -127,12 +254,16 @@ public class HomeController {
                 )
         );
 
+
+
         model.addAttribute(
                 "reservasJueves",
                 dashboardService.contarReservasDia(
                         Date.valueOf(lunes.plusDays(3))
                 )
         );
+
+
 
         model.addAttribute(
                 "reservasViernes",
@@ -141,12 +272,16 @@ public class HomeController {
                 )
         );
 
+
+
         model.addAttribute(
                 "reservasSabado",
                 dashboardService.contarReservasDia(
                         Date.valueOf(lunes.plusDays(5))
                 )
         );
+
+
 
         model.addAttribute(
                 "reservasDomingo",
@@ -155,14 +290,22 @@ public class HomeController {
                 )
         );
 
+
+
         model.addAttribute(
                 "canchasMasReservadas",
                 dashboardService.canchasMasReservadas()
         );
 
+
+
         model.addAttribute(
                 "proximasReservas",
                 dashboardService.proximasReservas()
         );
+
+
     }
+    
+
 }
