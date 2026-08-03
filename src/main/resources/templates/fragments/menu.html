@@ -8,9 +8,12 @@
      tabindex="-1"
      id="menuLateral">
 
+
     <div class="offcanvas-header">
 
+
         <div class="d-flex align-items-center">
+
 
             <img th:src="@{/img/logo.png}"
                  width="40"
@@ -18,100 +21,233 @@
                  alt="Logo"
                  class="me-2">
 
+
             <h5 class="offcanvas-title mb-0">
                 Gestión de Canchas G5
             </h5>
 
+
         </div>
+
+
 
         <button type="button"
                 class="btn-close"
                 data-bs-dismiss="offcanvas">
         </button>
 
+
     </div>
+
+
+
 
     <div class="offcanvas-body">
 
+
         <div class="menu-lateral">
 
-            <div class="menu-seccion">
-                Administración
+
+
+            <!-- ================= ADMIN ================= -->
+
+
+            <div th:if="${session.usuario != null and session.usuario.rol == 'ADMIN'}">
+
+
+
+                <div class="menu-seccion">
+                    Administración
+                </div>
+
+
+
+                <a class="menu-item" th:href="@{/usuarios}">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Usuarios</span>
+                </a>
+
+
+
+                <a class="menu-item" th:href="@{/canchas}">
+                    <i class="fa-solid fa-futbol"></i>
+                    <span>Canchas</span>
+                </a>
+
+
+
+                <a class="menu-item" th:href="@{/horarios}">
+                    <i class="fa-solid fa-clock"></i>
+                    <span>Horarios</span>
+                </a>
+
+
+
+                <a class="menu-item" th:href="@{/reservas}">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Reservas</span>
+                </a>
+
+
+
+                <hr class="menu-divisor">
+
+
+
+                <div class="menu-seccion">
+                    Configuración
+                </div>
+
+
+
+                <a class="menu-item" th:href="@{/superficies}">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>Superficies</span>
+                </a>
+
+
+
+                <a class="menu-item" th:href="@{/estados}">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Estados</span>
+                </a>
+
+
+
+                <a class="menu-item" th:href="@{/metodos-pago}">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <span>Métodos de pago</span>
+                </a>
+
+
+
+                <hr class="menu-divisor">
+
+
+
+                <div class="menu-seccion">
+                    Finanzas
+                </div>
+
+
+
+                <a class="menu-item" th:href="@{/pagos}">
+                    <i class="fa-solid fa-money-bill-wave"></i>
+                    <span>Pagos</span>
+                </a>
+
+
+
+                <a class="menu-item" th:href="@{/facturas}">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    <span>Facturas</span>
+                </a>
+
+
+
             </div>
 
-            <a class="menu-item" th:href="@{/usuarios}">
-                <i class="fa-solid fa-users"></i>
-                <span>Usuarios</span>
-            </a>
 
-            <a class="menu-item" th:href="@{/canchas}">
-                <i class="fa-solid fa-futbol"></i>
-                <span>Canchas</span>
-            </a>
 
-            <a class="menu-item" th:href="@{/horarios}">
-                <i class="fa-solid fa-clock"></i>
-                <span>Horarios</span>
-            </a>
 
-            <a class="menu-item" th:href="@{/reservas}">
-                <i class="fa-solid fa-calendar-check"></i>
-                <span>Reservas</span>
-            </a>
+
+
+
+            <!-- ================= USUARIO ================= -->
+
+
+
+            <div th:if="${session.usuario != null and session.usuario.rol == 'USUARIO'}">
+
+
+
+                <div class="menu-seccion">
+                    Inicio
+                </div>
+
+
+
+                <a class="menu-item" th:href="@{/}">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+
+
+
+
+
+                <div class="menu-seccion">
+                    Servicios
+                </div>
+
+
+
+
+
+                <a class="menu-item" th:href="@{/canchas}">
+                    <i class="fa-solid fa-futbol"></i>
+                    <span>Canchas</span>
+                </a>
+
+
+
+
+
+                <a class="menu-item" th:href="@{/reservas}">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Mis Reservas</span>
+                </a>
+
+
+
+
+
+                <a class="menu-item" th:href="@{/facturas}">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    <span>Historial de Facturas</span>
+                </a>
+
+
+
+            </div>
+
+
+
+
+
+
+
+            <!-- ================= CUENTA TODOS ================= -->
+
+
 
             <hr class="menu-divisor">
 
-            <div class="menu-seccion">
-                Configuración
-            </div>
 
-            <a class="menu-item" th:href="@{/superficies}">
-                <i class="fa-solid fa-layer-group"></i>
-                <span>Superficies</span>
-            </a>
-
-            <a class="menu-item" th:href="@{/estados}">
-                <i class="fa-solid fa-circle-check"></i>
-                <span>Estados</span>
-            </a>
-
-            <a class="menu-item" th:href="@{/metodos-pago}">
-                <i class="fa-solid fa-credit-card"></i>
-                <span>Métodos de pago</span>
-            </a>
-
-            <hr class="menu-divisor">
-
-            <div class="menu-seccion">
-                Finanzas
-            </div>
-
-            <a class="menu-item" th:href="@{/pagos}">
-                <i class="fa-solid fa-money-bill-wave"></i>
-                <span>Pagos</span>
-            </a>
-
-            <a class="menu-item" th:href="@{/facturas}">
-                <i class="fa-solid fa-file-invoice-dollar"></i>
-                <span>Facturas</span>
-            </a>
-
-            <hr class="menu-divisor">
 
             <div class="menu-seccion">
                 Cuenta
             </div>
+
+
 
             <a class="menu-item" th:href="@{/logout}">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>Cerrar sesión</span>
             </a>
 
+
+
+
         </div>
+
 
     </div>
 
+
 </div>
 
+
 </body>
+
 </html>
