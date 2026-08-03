@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${equipo.idEquipo == null ? 'Nuevo equipo' : 'Editar equipo'}">
+        Formulario Equipo
+    </title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/offcanvas.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/modulos.css}">
+
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/menu :: menu}"></div>
+
+<main class="pagina-formulario">
+
+<section class="encabezado-formulario">
+
+<h1>
+
+<i class="fa-solid fa-people-group me-2"></i>
+
+<span th:text="${equipo.idEquipo == null ? 'Nuevo equipo' : 'Editar equipo'}"></span>
+
+</h1>
+
+<p th:if="${equipo.idEquipo == null}">
+Registrar un nuevo equipo.
+</p>
+
+<p th:if="${equipo.idEquipo != null}">
+Modificar la información del equipo.
+</p>
+
+</section>
+
+<section class="panel-formulario">
+
+<div class="titulo-seccion">
+<i class="fa-solid fa-clipboard-list"></i>
+Información del equipo
+</div>
+
+<div th:if="${error}"
+class="alert alert-error"
+th:text="${error}">
+</div>
+
+<form
+th:action="@{/equipos/guardar}"
+th:object="${equipo}"
+method="post"
+novalidate>
+
+<div class="row">
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label">
+ID Equipo
+</label>
+
+<input
+type="number"
+th:field="*{idEquipo}"
+class="form-control"
+th:readonly="${equipo.idEquipo!=null}">
+
+<div class="invalid-feedback"
+th:errors="*{idEquipo}">
+</div>
+
+</div>
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label">
+Nombre del equipo
+</label>
+
+<input
+type="text"
+th:field="*{nombreEquipo}"
+class="form-control">
+
+<div class="invalid-feedback"
+th:errors="*{nombreEquipo}">
+</div>
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label">
+Usuario responsable
+</label>
+
+<select
+th:field="*{idUsuario}"
+class="form-select">
+
+<option value="">
+Seleccione un usuario
+</option>
+
+<option
+th:each="usuario:${usuarios}"
+th:value="${usuario.idUsuario}"
+th:text="${usuario.nombre+' '+usuario.apellidoP+' '+usuario.apellidoM}">
+</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label">
+Fecha de creación
+</label>
+
+<input
+type="date"
+th:field="*{fechaCreacion}"
+class="form-control">
+
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6 mb-4">
+
+<label class="form-label">
+Estado
+</label>
+
+<select
+th:field="*{idEstado}"
+class="form-select">
+
+<option value="">
+Seleccione un estado
+</option>
+
+<option
+th:each="estado:${estados}"
+th:value="${estado.idEstado}"
+th:text="${estado.descripcion}">
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="acciones-formulario">
+
+<a
+th:href="@{/equipos}"
+class="btn btn-cancelar">
+
+<i class="fa-solid fa-xmark me-2"></i>
+
+Cancelar
+
+</a>
+
+<button
+type="submit"
+class="btn btn-guardar">
+
+<i class="fa-solid fa-floppy-disk me-2"></i>
+
+<span th:text="${equipo.idEquipo==null?'Guardar equipo':'Guardar cambios'}">
+</span>
+
+</button>
+
+</div>
+
+</form>
+
+</section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

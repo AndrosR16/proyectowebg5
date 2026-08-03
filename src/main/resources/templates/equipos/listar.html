@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Equipos - Gestión de Equipos</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/offcanvas.css}">
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/modulos.css}">
+
+    <style>
+
+        .equipo-icono{
+            width:38px;
+            height:38px;
+            border-radius:10px;
+            background:rgba(25,135,84,.22);
+            color:#69ca8d;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            flex-shrink:0;
+        }
+
+        .equipo-nombre strong{
+            display:block;
+            color:white;
+            font-size:.9rem;
+        }
+
+        .equipo-nombre span{
+            color:#98a4ae;
+            font-size:.78rem;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<div th:replace="~{fragments/menu :: menu}"></div>
+
+<main class="pagina-modulo">
+
+<section class="encabezado-modulo">
+
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+<div>
+
+<h1>
+
+<i class="fa-solid fa-people-group me-2"></i>
+
+Equipos
+
+</h1>
+
+<p>
+
+Administración de equipos registrados.
+
+</p>
+
+</div>
+
+<a
+th:if="${session.usuario.rol=='ADMIN'}"
+th:href="@{/equipos/nuevo}"
+class="btn btn-nuevo">
+
+<i class="fa-solid fa-plus me-2"></i>
+
+Nuevo equipo
+
+</a>
+
+</div>
+
+</section>
+
+<section class="panel-tabla">
+
+<div class="panel-superior">
+
+<h2>
+
+<i class="fa-solid fa-list me-2 text-success"></i>
+
+Equipos registrados
+
+</h2>
+
+<span class="total-registros">
+
+<i class="fa-solid fa-database me-1"></i>
+
+Total:
+
+<strong th:text="${#lists.size(equipos)}">0</strong>
+
+</span>
+
+</div>
+
+<div class="table-responsive">
+
+<table class="table tabla-modulo align-middle">
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+
+<th>Equipo</th>
+
+<th>Responsable</th>
+
+<th>Fecha creación</th>
+
+<th th:if="${session.usuario.rol=='ADMIN'}"
+class="text-center">
+
+Acciones
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr th:each="equipo:${equipos}">
+
+<td>
+
+<span class="text-secondary">
+
+#<span th:text="${equipo.idEquipo}"></span>
+
+</span>
+
+</td>
+
+<td>
+
+<div class="d-flex align-items-center gap-3">
+
+<div class="equipo-icono">
+
+<i class="fa-solid fa-people-group"></i>
+
+</div>
+
+<div class="equipo-nombre">
+
+<strong th:text="${equipo.nombreEquipo}">
+</strong>
+
+<span>
+Equipo registrado
+</span>
+
+</div>
+
+</div>
+
+</td>
+
+<td>
+
+<i class="fa-solid fa-user me-2 text-secondary"></i>
+
+<span th:text="${equipo.nombre+' '+equipo.apellidoP+' '+equipo.apellidoM}">
+</span>
+
+</td>
+
+<td>
+
+<i class="fa-solid fa-calendar-days me-2 text-secondary"></i>
+
+<span th:text="${#temporals.format(equipo.fechaCreacion,'dd/MM/yyyy')}">
+</span>
+
+</td>
+
+<td th:if="${session.usuario.rol=='ADMIN'}"
+class="text-center">
+
+<a
+th:href="@{/equipos/editar/{id}(id=${equipo.idEquipo})}"
+class="btn-accion btn-editar"
+title="Editar">
+
+<i class="fa-solid fa-pen"></i>
+
+</a>
+
+<form
+th:action="@{/equipos/eliminar/{id}(id=${equipo.idEquipo})}"
+method="post"
+class="d-inline">
+
+<button
+type="submit"
+class="btn-accion btn-inactivar"
+title="Inactivar"
+onclick="return confirm('¿Desea inactivar este equipo?')">
+
+<i class="fa-solid fa-ban"></i>
+
+</button>
+
+</form>
+
+</td>
+
+</tr>
+
+<tr th:if="${#lists.isEmpty(equipos)}">
+
+<td colspan="5" class="sin-registros">
+
+<i class="fa-solid fa-people-group"></i>
+
+No hay equipos registrados.
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+<a
+th:href="@{/}"
+class="volver-dashboard">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Volver al panel principal
+
+</a>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
