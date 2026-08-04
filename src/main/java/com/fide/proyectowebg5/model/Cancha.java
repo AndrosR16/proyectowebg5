@@ -38,7 +38,6 @@ public class Cancha {
 
     private String superficie;
 
-    @NotNull(message = "Debe seleccionar un estado.")
     private Long idEstado;
 
     private String estado;

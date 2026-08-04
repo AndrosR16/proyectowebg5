@@ -65,32 +65,9 @@
               method="post"
               novalidate>
 
+            <input type="hidden" th:field="*{idCancha}">
+
             <div class="row">
-
-                <div class="col-md-6 mb-4">
-
-                    <label for="idCancha" class="form-label">
-                        ID de la cancha
-                    </label>
-
-                    <input type="number"
-                           id="idCancha"
-                           th:field="*{idCancha}"
-                           class="form-control"
-                           th:classappend="${#fields.hasErrors('idCancha')} ? ' is-invalid' : ''"
-                           min="1"
-                           th:readonly="${cancha.idCancha != null}">
-
-                    <div class="invalid-feedback"
-                         th:if="${#fields.hasErrors('idCancha')}"
-                         th:errors="*{idCancha}">
-                    </div>
-
-                    <div class="form-text">
-                        El ID debe ser único.
-                    </div>
-
-                </div>
 
                 <div class="col-md-6 mb-4">
 
@@ -112,10 +89,6 @@
 
                 </div>
 
-            </div>
-
-            <div class="row">
-
                 <div class="col-md-6 mb-4">
 
                     <label for="capacidad" class="form-label">
@@ -135,6 +108,10 @@
                     </div>
 
                 </div>
+
+            </div>
+
+            <div class="row">
 
                 <div class="col-md-6 mb-4">
 
@@ -165,10 +142,6 @@
 
                 </div>
 
-            </div>
-
-            <div class="row">
-
                 <div class="col-md-6 mb-4">
 
                     <label for="idSuperficie" class="form-label">
@@ -197,6 +170,10 @@
                     </div>
 
                 </div>
+
+            </div>
+
+            <div class="row" th:if="${cancha.idCancha != null}">
 
                 <div class="col-md-6 mb-4">
 

@@ -61,30 +61,11 @@
               th:object="${reserva}"
               method="post">
 
+            <input type="hidden" th:field="*{idReserva}">
+
             <div class="row">
 
-                <div class="col-md-6 mb-4">
-
-                    <label for="idReserva" class="form-label">
-                        ID de reserva
-                    </label>
-
-                    <input type="number"
-                           id="idReserva"
-                           th:field="*{idReserva}"
-                           class="form-control"
-                           min="1"
-                           th:readonly="${reserva.idReserva != null}"
-                           required>
-
-                    <div class="form-text"
-                         th:if="${reserva.idReserva == null}">
-                        El ID debe ser único.
-                    </div>
-
-                </div>
-
-                <div class="col-md-6 mb-4">
+                <div class="col-md-12 mb-4">
 
                     <label for="fechaReserva" class="form-label">
                         Fecha de reserva
@@ -102,62 +83,57 @@
 
             <div class="row">
 
-<div class="col-md-6 mb-4">
-
-
-    <!-- ADMIN -->
-    <div th:if="${session.usuario.rol == 'ADMIN'}">
-
-        <label for="idUsuario" class="form-label">
-            Usuario
-        </label>
-
-        <select id="idUsuario"
-                th:field="*{idUsuario}"
-                class="form-select"
-                required>
-
-            <option value="">
-                Seleccione un usuario
-            </option>
-
-            <option th:each="usuario : ${usuarios}"
-                    th:value="${usuario.idUsuario}"
-                    th:text="${usuario.nombreCompleto}">
-                Usuario
-            </option>
-
-        </select>
-
-    </div>
-
-
-
-
-    <!-- USUARIO NORMAL -->
-    <div th:if="${session.usuario.rol == 'USUARIO'}">
-
-        <label class="form-label">
-            Usuario
-        </label>
-
-
-        <input type="text"
-               class="form-control"
-               th:value="${session.usuario.nombreCompleto}"
-               readonly>
-
-
-        <input type="hidden"
-               th:field="*{idUsuario}"
-               th:value="${session.usuario.idUsuario}">
-
-    </div>
-
-
-</div>
-
                 <div class="col-md-6 mb-4">
+
+                    <!-- ADMIN -->
+                    <div th:if="${session.usuario.rol == 'ADMIN'}">
+
+                        <label for="idUsuario" class="form-label">
+                            Usuario
+                        </label>
+
+                        <select id="idUsuario"
+                                th:field="*{idUsuario}"
+                                class="form-select"
+                                required>
+
+                            <option value="">
+                                Seleccione un usuario
+                            </option>
+
+                            <option th:each="usuario : ${usuarios}"
+                                    th:value="${usuario.idUsuario}"
+                                    th:text="${usuario.nombreCompleto}">
+                                Usuario
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- USUARIO NORMAL -->
+                    <div th:if="${session.usuario.rol == 'USUARIO'}">
+
+                        <label class="form-label">
+                            Usuario
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               th:value="${session.usuario.nombreCompleto}"
+                               readonly>
+
+                        <input type="hidden"
+                               th:field="*{idUsuario}"
+                               th:value="${session.usuario.idUsuario}">
+
+                    </div>
+
+                </div>
+
+                <!-- SOLO AL EDITAR Y SOLO ADMIN -->
+                <div class="col-md-6 mb-4"
+                     th:if="${reserva.idReserva != null and session.usuario.rol == 'ADMIN'}">
 
                     <label for="idEstado" class="form-label">
                         Estado
@@ -165,17 +141,11 @@
 
                     <select id="idEstado"
                             th:field="*{idEstado}"
-                            class="form-select"
-                            required>
-
-                        <option value="">
-                            Seleccione un estado
-                        </option>
+                            class="form-select">
 
                         <option th:each="estado : ${estados}"
                                 th:value="${estado.idEstado}"
                                 th:text="${estado.descripcion}">
-                            Activo
                         </option>
 
                     </select>
@@ -202,7 +172,6 @@
                     <option th:each="horario : ${horarios}"
                             th:value="${horario.idHorario}"
                             th:text="${horario.cancha + ' - ' + horario.diaSemana + ' ' + horario.horaInicio + ' - ' + horario.horaFin}">
-                        Cancha Central - Lunes 08:00 - 10:00
                     </option>
 
                 </select>

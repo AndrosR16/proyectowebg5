@@ -88,89 +88,88 @@ public class HorarioController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(
-            @Valid Horario horario,
-            BindingResult bindingResult,
-            Model model,
-            RedirectAttributes redirectAttributes
-    ) {
+public String guardar(
+        @Valid Horario horario,
+        BindingResult bindingResult,
+        Model model,
+        RedirectAttributes redirectAttributes
+) {
 
-        if (bindingResult.hasErrors()) {
+    if (bindingResult.hasErrors()) {
 
-            cargarCatalogos(model);
+        cargarCatalogos(model);
 
-            return "horarios/formulario";
-        }
-
-        try {
-
-            boolean nuevo =
-                    horarioService.buscarPorId(
-                            horario.getIdHorario()
-                    ) == null;
-
-            horarioService.guardar(horario);
-
-            redirectAttributes.addFlashAttribute(
-                    "mensaje",
-                    nuevo
-                            ? "Horario registrado correctamente."
-                            : "Horario actualizado correctamente."
-            );
-
-            return "redirect:/horarios";
-
-        } catch (Exception ex) {
-
-            cargarCatalogos(model);
-
-            model.addAttribute(
-                    "error",
-                    "No fue posible guardar el horario."
-            );
-
-            return "horarios/formulario";
-        }
+        return "horarios/formulario";
     }
 
-    @PostMapping("/eliminar/{id}")
-    public String eliminar(
-            @PathVariable Long id,
-            RedirectAttributes redirectAttributes
-    ) {
+    try {
 
-        try {
+        boolean nuevo = horario.getIdHorario() == null;
 
-            horarioService.eliminar(id);
+        horarioService.guardar(horario);
 
-            redirectAttributes.addFlashAttribute(
-                    "mensaje",
-                    "Horario eliminado correctamente."
-            );
-
-        } catch (Exception ex) {
-
-            redirectAttributes.addFlashAttribute(
-                    "error",
-                    "No fue posible eliminar el horario."
-            );
-        }
+        redirectAttributes.addFlashAttribute(
+                "mensaje",
+                nuevo
+                        ? "Horario registrado correctamente."
+                        : "Horario actualizado correctamente."
+        );
 
         return "redirect:/horarios";
+
+    } catch (Exception ex) {
+
+        ex.printStackTrace();
+
+        cargarCatalogos(model);
+
+        model.addAttribute(
+                "error",
+                ex.getMessage()
+        );
+
+        return "horarios/formulario";
     }
+}
+
+   @PostMapping("/estado/{id}/{estado}")
+public String cambiarEstado(
+        @PathVariable Long id,
+        @PathVariable Long estado,
+        RedirectAttributes redirectAttributes
+) {
+
+    try {
+
+        horarioService.cambiarEstado(id, estado);
+
+        redirectAttributes.addFlashAttribute(
+                "mensaje",
+                estado == 1
+                        ? "Horario activado correctamente."
+                        : "Horario inactivado correctamente."
+        );
+
+    } catch (Exception ex) {
+
+        redirectAttributes.addFlashAttribute(
+                "error",
+                estado == 1
+                        ? "No fue posible activar el horario."
+                        : "No fue posible inactivar el horario."
+        );
+    }
+
+    return "redirect:/horarios";
+}
 
     private void cargarCatalogos(Model model) {
 
-        model.addAttribute(
-                "canchas",
-                canchaService.listar()
-        );
+    model.addAttribute(
+            "canchas",
+            canchaService.listar()
+    );
 
-        model.addAttribute(
-                "estados",
-                estadoService.listar()
-        );
-
-    }
+}
 
 }

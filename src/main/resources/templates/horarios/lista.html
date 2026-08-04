@@ -77,11 +77,13 @@
                 </p>
             </div>
 
-            <a th:href="@{/horarios/nuevo}"
+            <a th:if="${session.usuario != null and session.usuario.rol == 'ADMIN'}"
+               th:href="@{/horarios/nuevo}"
                class="btn btn-nuevo">
 
                 <i class="fa-solid fa-plus me-2"></i>
                 Nuevo horario
+
             </a>
 
         </div>
@@ -97,7 +99,8 @@
                 Horarios registrados
             </h2>
 
-            <span class="total-registros">
+
+                        <span class="total-registros">
                 <i class="fa-solid fa-database me-1"></i>
                 Total:
                 <strong th:text="${#lists.size(horarios)}">0</strong>
@@ -117,7 +120,12 @@
                         <th>Hora inicio</th>
                         <th>Hora fin</th>
                         <th>Estado</th>
-                        <th class="text-center">Acciones</th>
+
+                        <th th:if="${session.usuario != null and session.usuario.rol == 'ADMIN'}"
+                            class="text-center">
+                            Acciones
+                        </th>
+
                     </tr>
                 </thead>
 
@@ -147,66 +155,100 @@
 
                         <td>
                             <span class="horario-dia">
+
                                 <i class="fa-solid fa-calendar-day"></i>
 
                                 <span th:text="${horario.diaSemana}">
                                     Lunes
                                 </span>
+
                             </span>
                         </td>
 
                         <td>
                             <span class="horario-hora">
+
                                 <i class="fa-regular fa-clock me-2 text-secondary"></i>
 
                                 <span th:text="${horario.horaInicio}">
                                     08:00
                                 </span>
+
                             </span>
                         </td>
 
                         <td>
                             <span class="horario-hora">
+
                                 <i class="fa-regular fa-clock me-2 text-secondary"></i>
 
                                 <span th:text="${horario.horaFin}">
                                     09:00
                                 </span>
+
                             </span>
                         </td>
 
                         <td>
                             <span class="badge-estado">
+
                                 <i class="fa-solid fa-circle-check"></i>
 
                                 <span th:text="${horario.estado}">
                                     Activo
                                 </span>
+
                             </span>
                         </td>
 
-                        <td class="text-center">
+                        <td th:if="${session.usuario != null and session.usuario.rol == 'ADMIN'}"
+                            class="text-center">
 
                             <a th:href="@{/horarios/editar/{id}(id=${horario.idHorario})}"
                                class="btn-accion btn-editar"
                                title="Editar horario">
 
                                 <i class="fa-solid fa-pen"></i>
+
                             </a>
 
-                            <form th:action="@{/horarios/eliminar/{id}(id=${horario.idHorario})}"
-                                  method="post"
-                                  class="d-inline">
+                                                       <div th:if="${horario.idEstado == 1}">
 
-                                <button type="submit"
-                                        class="btn-accion btn-inactivar"
-                                        title="Inactivar horario"
-                                        onclick="return confirm('¿Desea inactivar este horario?')">
+    <form th:action="@{/horarios/estado/{id}/{estado}(id=${horario.idHorario},estado=2)}"
+          method="post"
+          class="d-inline">
 
-                                    <i class="fa-solid fa-ban"></i>
-                                </button>
+        <button type="submit"
+                class="btn-accion btn-inactivar"
+                title="Inactivar horario"
+                onclick="return confirm('¿Desea inactivar este horario?')">
 
-                            </form>
+            <i class="fa-solid fa-ban"></i>
+
+        </button>
+
+    </form>
+
+</div>
+
+<div th:if="${horario.idEstado == 2}">
+
+    <form th:action="@{/horarios/estado/{id}/{estado}(id=${horario.idHorario},estado=1)}"
+          method="post"
+          class="d-inline">
+
+        <button type="submit"
+                class="btn-accion btn-activar"
+                title="Activar horario"
+                onclick="return confirm('¿Desea activar este horario?')">
+
+            <i class="fa-solid fa-check"></i>
+
+        </button>
+
+    </form>
+
+</div>
 
                         </td>
 
@@ -214,7 +256,7 @@
 
                     <tr th:if="${#lists.isEmpty(horarios)}">
 
-                        <td colspan="7"
+                        <td th:colspan="${session.usuario != null and session.usuario.rol == 'ADMIN'} ? 7 : 6"
                             class="sin-registros">
 
                             <i class="fa-solid fa-clock"></i>
@@ -237,6 +279,7 @@
 
         <i class="fa-solid fa-arrow-left"></i>
         Volver al panel principal
+
     </a>
 
 </main>
@@ -244,4 +287,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

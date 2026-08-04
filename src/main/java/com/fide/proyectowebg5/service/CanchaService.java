@@ -33,22 +33,16 @@ public class CanchaService {
 
     public void guardar(Cancha cancha) {
 
-        if (cancha.getIdCancha() == null) {
-            throw new IllegalArgumentException(
-                    "El ID de la cancha es obligatorio."
-            );
-        }
+    if (cancha.getIdCancha() == null) {
 
-        Cancha canchaExistente = buscarPorId(
-                cancha.getIdCancha()
-        );
+        canchaRepository.insertar(cancha);
 
-        if (canchaExistente == null) {
-            canchaRepository.insertar(cancha);
-        } else {
-            canchaRepository.actualizar(cancha);
-        }
+    } else {
+
+        canchaRepository.actualizar(cancha);
+
     }
+}
 
     public void eliminar(Long idCancha) {
         canchaRepository.eliminar(idCancha);

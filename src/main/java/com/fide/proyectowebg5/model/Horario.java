@@ -23,7 +23,6 @@ public class Horario {
     @NotNull(message = "La hora de finalización es obligatoria.")
     private LocalTime horaFin;
 
-    @NotNull(message = "Debe seleccionar un estado.")
     private Long idEstado;
 
     private String estado;

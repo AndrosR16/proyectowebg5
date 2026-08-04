@@ -96,49 +96,41 @@ public class UsuarioRepository {
                                 (Connection connection) -> {
 
                                         CallableStatement procedimiento = connection.prepareCall(
-                                                        "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_INSERT_SP(?, ?, ?, ?, ?, ?, ?, ?)}");
-
-                                        procedimiento.setNull(
-                                                        1,
-                                                        Types.NUMERIC);
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_USUARIO_INSERT_SP(?, ?, ?, ?, ?, ?)}");
 
                                         procedimiento.setString(
-                                                        2,
+                                                        1,
                                                         usuario.getNombre());
 
                                         procedimiento.setString(
-                                                        3,
+                                                        2,
                                                         usuario.getApellidoP());
 
                                         if (usuario.getApellidoM() != null
                                                         && !usuario.getApellidoM().isBlank()) {
 
                                                 procedimiento.setString(
-                                                                4,
+                                                                3,
                                                                 usuario.getApellidoM());
 
                                         } else {
 
                                                 procedimiento.setNull(
-                                                                4,
+                                                                3,
                                                                 Types.VARCHAR);
                                         }
 
                                         procedimiento.setString(
-                                                        5,
+                                                        4,
                                                         usuario.getUsername());
 
                                         procedimiento.setString(
-                                                        6,
+                                                        5,
                                                         usuario.getContrasena());
 
                                         procedimiento.setString(
-                                                        7,
+                                                        6,
                                                         usuario.getRol());
-
-                                        procedimiento.setLong(
-                                                        8,
-                                                        usuario.getIdEstado());
 
                                         return procedimiento;
                                 });
