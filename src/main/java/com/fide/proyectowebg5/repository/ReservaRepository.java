@@ -17,222 +17,177 @@ import oracle.jdbc.OracleTypes;
 @Repository
 public class ReservaRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+        private final JdbcTemplate jdbcTemplate;
 
-    public ReservaRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+        public ReservaRepository(JdbcTemplate jdbcTemplate) {
+                this.jdbcTemplate = jdbcTemplate;
+        }
 
-    public List<Reserva> listar() {
+        public List<Reserva> listar() {
 
-        return jdbcTemplate.execute(
-                (Connection connection) -> {
+                return jdbcTemplate.execute(
+                                (Connection connection) -> {
 
-                    CallableStatement procedimiento =
-                            connection.prepareCall(
-                                    "{call FIDE_PROYECTO_PCK.FIDE_RESERVA_LISTAR_SP(?)}"
-                            );
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_RESERVA_LISTAR_SP(?)}");
 
-                    procedimiento.registerOutParameter(
-                            1,
-                            OracleTypes.CURSOR
-                    );
+                                        procedimiento.registerOutParameter(
+                                                        1,
+                                                        OracleTypes.CURSOR);
 
-                    return procedimiento;
-                },
-                (CallableStatement procedimiento) -> {
+                                        return procedimiento;
+                                },
+                                (CallableStatement procedimiento) -> {
 
-                    List<Reserva> reservas = new ArrayList<>();
+                                        List<Reserva> reservas = new ArrayList<>();
 
-                    procedimiento.execute();
+                                        procedimiento.execute();
 
-                    try (ResultSet resultado =
-                                 (ResultSet) procedimiento.getObject(1)) {
+                                        try (ResultSet resultado = (ResultSet) procedimiento.getObject(1)) {
 
-                        while (resultado.next()) {
+                                                while (resultado.next()) {
 
-                            Reserva reserva = new Reserva();
+                                                        Reserva reserva = new Reserva();
 
-                            reserva.setIdReserva(
-                                    resultado.getLong("ID_RESERVA")
-                            );
+                                                        reserva.setIdReserva(
+                                                                        resultado.getLong("ID_RESERVA"));
 
-                            reserva.setIdUsuario(
-                                    resultado.getLong("ID_USUARIO")
-                            );
+                                                        reserva.setIdUsuario(
+                                                                        resultado.getLong("ID_USUARIO"));
 
-                            reserva.setNombreUsuario(
-                                    resultado.getString("NOMBRE_USUARIO")
-                            );
+                                                        reserva.setNombreUsuario(
+                                                                        resultado.getString("NOMBRE_USUARIO"));
 
-                            reserva.setIdHorario(
-                                    resultado.getLong("ID_HORARIO")
-                            );
+                                                        reserva.setIdHorario(
+                                                                        resultado.getLong("ID_HORARIO"));
 
-                            reserva.setNombreCancha(
-                                    resultado.getString("NOMBRE_CANCHA")
-                            );
+                                                        reserva.setNombreCancha(
+                                                                        resultado.getString("NOMBRE_CANCHA"));
 
-                            reserva.setDescripcionHorario(
-                                    resultado.getString("DESCRIPCION_HORARIO")
-                            );
+                                                        reserva.setDescripcionHorario(
+                                                                        resultado.getString("DESCRIPCION_HORARIO"));
 
-                            reserva.setFechaReserva(
-                                    resultado.getDate("FECHA_RESERVA").toLocalDate()
-                            );
+                                                        reserva.setFechaReserva(
+                                                                        resultado.getDate("FECHA_RESERVA")
+                                                                                        .toLocalDate());
 
-                            reserva.setIdEstado(
-                                    resultado.getLong("ID_ESTADO")
-                            );
+                                                        reserva.setIdEstado(
+                                                                        resultado.getLong("ID_ESTADO"));
 
-                            reserva.setNombreEstado(
-                                    resultado.getString("NOMBRE_ESTADO")
-                            );
+                                                        reserva.setNombreEstado(
+                                                                        resultado.getString("NOMBRE_ESTADO"));
 
-                            reservas.add(reserva);
-                        }
-                    }
+                                                        reservas.add(reserva);
+                                                }
+                                        }
 
-                    return reservas;
-                }
-        );
-    }
+                                        return reservas;
+                                });
+        }
 
-public List<Reserva> listarPorUsuario(Long idUsuario) {
+        public List<Reserva> listarPorUsuario(Long idUsuario) {
 
-    return listar()
-            .stream()
-            .filter(reserva ->
-                    reserva.getIdUsuario().equals(idUsuario))
-            .toList();
-}
+                return listar()
+                                .stream()
+                                .filter(reserva -> reserva.getIdUsuario().equals(idUsuario))
+                                .toList();
+        }
 
+        public Reserva buscarPorId(Long id) {
 
+                return listar()
+                                .stream()
+                                .filter(reserva -> reserva.getIdReserva().equals(id))
+                                .findFirst()
+                                .orElse(null);
+        }
 
-public Reserva buscarPorId(Long id) {
+        public List<Reserva> proximasReservasUsuario(Long idUsuario) {
 
-    return listar()
-            .stream()
-            .filter(reserva ->
-                    reserva.getIdReserva().equals(id))
-            .findFirst()
-            .orElse(null);
-}
+                return listar()
+                                .stream()
+                                .filter(reserva -> reserva.getIdUsuario().equals(idUsuario)
+                                                &&
+                                                !reserva.getFechaReserva().isBefore(LocalDate.now()))
+                                .toList();
 
-public List<Reserva> proximasReservasUsuario(Long idUsuario){
+        }
 
-    return listar()
-            .stream()
-            .filter(reserva ->
-                    reserva.getIdUsuario().equals(idUsuario)
-                    &&
-                    !reserva.getFechaReserva().isBefore(LocalDate.now())
-            )
-            .toList();
+        public void insertar(Reserva reserva) {
 
-}
+                jdbcTemplate.update(
+                                (Connection connection) -> {
 
-    public void insertar(Reserva reserva) {
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_RESERVA_INSERT_SP(?,?,?)}");
 
-        jdbcTemplate.update(
-                (Connection connection) -> {
+                                        procedimiento.setLong(
+                                                        1,
+                                                        reserva.getIdUsuario());
 
-                    CallableStatement procedimiento =
-                            connection.prepareCall(
-                                    "{call FIDE_PROYECTO_PCK.FIDE_RESERVA_INSERT_SP(?,?,?,?,?)}"
-                            );
+                                        procedimiento.setLong(
+                                                        2,
+                                                        reserva.getIdHorario());
 
-                    procedimiento.setLong(
-                            1,
-                            reserva.getIdReserva()
-                    );
+                                        procedimiento.setDate(
+                                                        3,
+                                                        java.sql.Date.valueOf(
+                                                                        reserva.getFechaReserva()));
 
-                    procedimiento.setLong(
-                            2,
-                            reserva.getIdUsuario()
-                    );
+                                        return procedimiento;
+                                });
+        }
 
-                    procedimiento.setLong(
-                            3,
-                            reserva.getIdHorario()
-                    );
+        public void actualizar(Reserva reserva) {
 
-                    procedimiento.setDate(
-                            4,
-                            java.sql.Date.valueOf(
-                                    reserva.getFechaReserva()
-                            )
-                    );
+                jdbcTemplate.update(
+                                (Connection connection) -> {
 
-                    procedimiento.setLong(
-                            5,
-                            reserva.getIdEstado()
-                    );
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_RESERVA_UPDATE_SP(?,?,?,?,?)}");
 
-                    return procedimiento;
-                }
-        );
-    }
+                                        procedimiento.setLong(
+                                                        1,
+                                                        reserva.getIdReserva());
 
-    public void actualizar(Reserva reserva) {
+                                        procedimiento.setLong(
+                                                        2,
+                                                        reserva.getIdUsuario());
 
-        jdbcTemplate.update(
-                (Connection connection) -> {
+                                        procedimiento.setLong(
+                                                        3,
+                                                        reserva.getIdHorario());
 
-                    CallableStatement procedimiento =
-                            connection.prepareCall(
-                                    "{call FIDE_PROYECTO_PCK.FIDE_RESERVA_UPDATE_SP(?,?,?,?,?)}"
-                            );
+                                        procedimiento.setDate(
+                                                        4,
+                                                        java.sql.Date.valueOf(
+                                                                        reserva.getFechaReserva()));
 
-                    procedimiento.setLong(
-                            1,
-                            reserva.getIdReserva()
-                    );
+                                        procedimiento.setLong(
+                                                        5,
+                                                        reserva.getIdEstado());
 
-                    procedimiento.setLong(
-                            2,
-                            reserva.getIdUsuario()
-                    );
+                                        return procedimiento;
+                                });
+        }
 
-                    procedimiento.setLong(
-                            3,
-                            reserva.getIdHorario()
-                    );
+        public void eliminar(Long id) {
 
-                    procedimiento.setDate(
-                            4,
-                            java.sql.Date.valueOf(
-                                    reserva.getFechaReserva()
-                            )
-                    );
+                jdbcTemplate.update(
+                                (Connection connection) -> {
 
-                    procedimiento.setLong(
-                            5,
-                            reserva.getIdEstado()
-                    );
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_RESERVA_DELETE_SP(?,?)}");
 
-                    return procedimiento;
-                }
-        );
-    }
+                                        procedimiento.setLong(
+                                                        1,
+                                                        id);
 
-    public void eliminar(Long id) {
+                                        procedimiento.setLong(
+                                                        2,
+                                                        2L);
 
-        jdbcTemplate.update(
-                (Connection connection) -> {
-
-                    CallableStatement procedimiento =
-                            connection.prepareCall(
-                                    "{call FIDE_PROYECTO_PCK.FIDE_RESERVA_DELETE_SP(?)}"
-                            );
-
-                    procedimiento.setLong(
-                            1,
-                            id
-                    );
-
-                    return procedimiento;
-                }
-        );
-    }
+                                        return procedimiento;
+                                });
+        }
 }

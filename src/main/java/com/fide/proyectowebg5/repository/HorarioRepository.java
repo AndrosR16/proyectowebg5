@@ -103,26 +103,43 @@ public class HorarioRepository {
 
     }
 
-    public void insertar(Horario horario) {
+   public void insertar(Horario horario) {
 
-        jdbcTemplate.update(
-                connection -> {
+    jdbcTemplate.update(
+            connection -> {
 
-                    CallableStatement procedimiento = connection.prepareCall(
-                            "{call FIDE_PROYECTO_PCK.FIDE_HORARIO_INSERT_SP(?,?,?,?,?,?)}"
-                    );
+                CallableStatement procedimiento = connection.prepareCall(
+                        "{call FIDE_PROYECTO_PCK.FIDE_HORARIO_INSERT_SP(?,?,?,?)}"
+                );
 
-                    procedimiento.setLong(1, horario.getIdHorario());
-                    procedimiento.setLong(2, horario.getIdCancha());
-                    procedimiento.setString(3, horario.getDiaSemana());
-                    procedimiento.setTime(4, java.sql.Time.valueOf(horario.getHoraInicio()));
-                    procedimiento.setTime(5, java.sql.Time.valueOf(horario.getHoraFin()));
-                    procedimiento.setLong(6, horario.getIdEstado());
+                procedimiento.setLong(
+                        1,
+                        horario.getIdCancha()
+                );
 
-                    return procedimiento;
-                }
-        );
-    }
+                procedimiento.setString(
+                        2,
+                        horario.getDiaSemana()
+                );
+
+                procedimiento.setTime(
+                        3,
+                        java.sql.Time.valueOf(
+                                horario.getHoraInicio()
+                        )
+                );
+
+                procedimiento.setTime(
+                        4,
+                        java.sql.Time.valueOf(
+                                horario.getHoraFin()
+                        )
+                );
+
+                return procedimiento;
+            }
+    );
+}
 
     public void actualizar(Horario horario) {
 
@@ -145,20 +162,28 @@ public class HorarioRepository {
         );
     }
 
-    public void eliminar(Long id) {
+    public void cambiarEstado(Long id, Long idEstado) {
 
-        jdbcTemplate.update(
-                connection -> {
+    jdbcTemplate.update(
+            connection -> {
 
-                    CallableStatement procedimiento = connection.prepareCall(
-                            "{call FIDE_PROYECTO_PCK.FIDE_HORARIO_DELETE_SP(?)}"
-                    );
+                CallableStatement procedimiento = connection.prepareCall(
+                        "{call FIDE_PROYECTO_PCK.FIDE_HORARIO_DELETE_SP(?,?)}"
+                );
 
-                    procedimiento.setLong(1, id);
+                procedimiento.setLong(
+                        1,
+                        id
+                );
 
-                    return procedimiento;
-                }
-        );
-    }
+                procedimiento.setLong(
+                        2,
+                        idEstado
+                );
+
+                return procedimiento;
+            }
+    );
+}
 
 }

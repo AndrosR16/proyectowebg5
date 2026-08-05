@@ -169,108 +169,54 @@ public class CanchaController {
 
 
 
-    @PostMapping("/guardar")
-    public String guardar(
-            @Valid Cancha cancha,
-            BindingResult bindingResult,
-            Model model,
-            RedirectAttributes redirectAttributes,
-            HttpSession session
-    ) {
+   @PostMapping("/guardar")
+public String guardar(
+        @Valid Cancha cancha,
+        BindingResult bindingResult,
+        Model model,
+        RedirectAttributes redirectAttributes,
+        HttpSession session
+) {
 
-
-
-        if(!esAdmin(session)){
-            return "redirect:/canchas";
-        }
-
-
-
-
-        if (cancha.getIdCancha() == null) {
-
-
-            bindingResult.rejectValue(
-                    "idCancha",
-                    "idCancha.obligatorio",
-                    "El ID de la cancha es obligatorio."
-            );
-        }
-
-
-
-
-        if (bindingResult.hasErrors()) {
-
-
-            cargarCatalogos(model);
-
-
-            return "canchas/formulario";
-        }
-
-
-
-
-
-
-        try {
-
-
-            boolean esNueva =
-                    canchaService.buscarPorId(
-                            cancha.getIdCancha()
-                    ) == null;
-
-
-
-
-            canchaService.guardar(cancha);
-
-
-
-
-            if (esNueva) {
-
-
-                redirectAttributes.addFlashAttribute(
-                        "mensaje",
-                        "La cancha fue registrada correctamente."
-                );
-
-
-            } else {
-
-
-                redirectAttributes.addFlashAttribute(
-                        "mensaje",
-                        "La cancha fue actualizada correctamente."
-                );
-            }
-
-
-
-            return "redirect:/canchas";
-
-
-
-
-
-        } catch (Exception e) {
-
-
-            cargarCatalogos(model);
-
-
-            model.addAttribute(
-                    "error",
-                    "No fue posible guardar la cancha. Verifique los datos ingresados."
-            );
-
-
-            return "canchas/formulario";
-        }
+    if (!esAdmin(session)) {
+        return "redirect:/canchas";
     }
+
+    if (bindingResult.hasErrors()) {
+
+        cargarCatalogos(model);
+
+        return "canchas/formulario";
+    }
+
+    try {
+
+        boolean esNueva = cancha.getIdCancha() == null;
+
+        canchaService.guardar(cancha);
+
+        if (esNueva) {
+
+            redirectAttributes.addFlashAttribute(
+                    "mensaje",
+                    "La cancha fue registrada correctamente."
+            );
+
+        } else {
+
+            redirectAttributes.addFlashAttribute(
+                    "mensaje",
+                    "La cancha fue actualizada correctamente."
+            );
+        }
+
+        return "redirect:/canchas";
+
+    } catch (Exception e) {
+
+    throw e;
+}
+}
 
 
 

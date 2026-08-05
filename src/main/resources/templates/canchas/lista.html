@@ -71,11 +71,13 @@
                 </p>
             </div>
 
-            <a th:if="${session.usuario.rol == 'ADMIN'}"
+            <a th:if="${session.usuario != null and session.usuario.rol == 'ADMIN'}"
                th:href="@{/canchas/nueva}"
                class="btn btn-nuevo">
+
                 <i class="fa-solid fa-plus me-2"></i>
                 Nueva cancha
+
             </a>
 
         </div>
@@ -111,9 +113,14 @@
                         <th>Precio por hora</th>
                         <th>Superficie</th>
                         <th>Estado</th>
-                        <th th:if="${session.usuario.rol == 'ADMIN'}" class="text-center">
+
+                        <th th:if="${session.usuario != null and session.usuario.rol == 'ADMIN'}"
+                            class="text-center">
+
                             Acciones
+
                         </th>
+
                     </tr>
                 </thead>
 
@@ -121,118 +128,118 @@
 
                     <tr th:each="cancha : ${canchas}">
 
-                        <td>
-                            <span class="text-secondary">
-                                #<span th:text="${cancha.idCancha}">1</span>
-                            </span>
-                        </td>
+    <td>
+        <span class="text-secondary">
+            #<span th:text="${cancha.idCancha}">1</span>
+        </span>
+    </td>
 
-                        <td>
-                            <div class="d-flex align-items-center gap-3">
+    <td>
+        <div class="d-flex align-items-center gap-3">
 
-                                <div class="cancha-icono">
-                                    <i class="fa-solid fa-futbol"></i>
-                                </div>
+            <div class="cancha-icono">
+                <i class="fa-solid fa-futbol"></i>
+            </div>
 
-                                <div class="cancha-nombre">
-                                    <strong th:text="${cancha.nombreCancha}">
-                                        Cancha
-                                    </strong>
+            <div class="cancha-nombre">
+                <strong th:text="${cancha.nombreCancha}">
+                    Cancha
+                </strong>
 
-                                    <span>
-                                        Instalación deportiva
-                                    </span>
-                                </div>
-
-                            </div>
-                        </td>
-
-                        <td>
-                            <i class="fa-solid fa-users me-2 text-secondary"></i>
-                            <span th:text="${cancha.capacidad}">0</span>
-                        </td>
-
-                        <td>
-                            <span class="precio">
-                                ₡<span th:text="${cancha.precioHora}">0</span>
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge-secundario">
-                                <i class="fa-solid fa-layer-group"></i>
-                                <span th:text="${cancha.superficie}">
-                                    Superficie
-                                </span>
-                            </span>
-                        </td>
-
-                        <td>
-                            <span class="badge-estado">
-                                <i class="fa-solid fa-circle-check"></i>
-                                <span th:text="${cancha.estado}">
-                                    Activo
-                                </span>
-                            </span>
-                        </td>
-
-                        <td class="text-center">
-
-                        <td class="text-center">
-
-                            <td th:if="${session.usuario.rol == 'ADMIN'}" class="text-center">
-                            
-                                <a th:href="@{/canchas/editar/{id}(id=${cancha.idCancha})}" class="btn-accion btn-editar" title="Editar cancha">
-                            
-                                    <i class="fa-solid fa-pen"></i>
-                            
-                                </a>
-                            
-                            
-                                <form th:action="@{/canchas/eliminar/{id}(id=${cancha.idCancha})}" method="post" class="d-inline">
-                            
-                            
-                                    <button type="submit" class="btn-accion btn-inactivar" title="Inactivar cancha"
-                                        onclick="return confirm('¿Desea inactivar esta cancha?')">
-                            
-                                        <i class="fa-solid fa-ban"></i>
-                            
-                                    </button>
-                            
-                            
-                                </form>
-                            
-                            </td>
-
-                    </tr>
-
-                    <tr th:if="${#lists.isEmpty(canchas)}">
-
-                        <td colspan="7"
-                            class="sin-registros">
-
-                            <i class="fa-solid fa-futbol"></i>
-                            No hay canchas registradas.
-
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
+                <span>
+                    Instalación deportiva
+                </span>
+            </div>
 
         </div>
+    </td>
 
-    </section>
+    <td>
+        <i class="fa-solid fa-users me-2 text-secondary"></i>
+        <span th:text="${cancha.capacidad}">0</span>
+    </td>
 
-    <a th:href="@{/}"
-       class="volver-dashboard">
+    <td>
+        <span class="precio">
+            ₡<span th:text="${cancha.precioHora}">0</span>
+        </span>
+    </td>
 
-        <i class="fa-solid fa-arrow-left"></i>
-        Volver al panel principal
+    <td>
+        <span class="badge-secundario">
+            <i class="fa-solid fa-layer-group"></i>
+            <span th:text="${cancha.superficie}">
+                Superficie
+            </span>
+        </span>
+    </td>
 
-    </a>
+    <td>
+        <span class="badge-estado">
+            <i class="fa-solid fa-circle-check"></i>
+            <span th:text="${cancha.estado}">
+                Activo
+            </span>
+        </span>
+    </td>
+
+    <td th:if="${session.usuario != null and session.usuario.rol == 'ADMIN'}"
+        class="text-center">
+
+        <a th:href="@{/canchas/editar/{id}(id=${cancha.idCancha})}"
+           class="btn-accion btn-editar"
+           title="Editar cancha">
+
+            <i class="fa-solid fa-pen"></i>
+
+        </a>
+
+        <form th:action="@{/canchas/eliminar/{id}(id=${cancha.idCancha})}"
+              method="post"
+              class="d-inline">
+
+            <button type="submit"
+                    class="btn-accion btn-inactivar"
+                    title="Inactivar cancha"
+                    onclick="return confirm('¿Desea inactivar esta cancha?')">
+
+                <i class="fa-solid fa-ban"></i>
+
+            </button>
+
+        </form>
+
+    </td>
+
+</tr>
+
+<tr th:if="${#lists.isEmpty(canchas)}">
+
+    <td colspan="7"
+        class="sin-registros">
+
+        <i class="fa-solid fa-futbol"></i>
+        No hay canchas registradas.
+
+    </td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+<a th:href="@{/}"
+   class="volver-dashboard">
+
+    <i class="fa-solid fa-arrow-left"></i>
+    Volver al panel principal
+
+</a>
 
 </main>
 

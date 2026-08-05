@@ -67,28 +67,9 @@
 
             <div class="row">
 
-                <div class="col-md-6 mb-4">
+                
 
-                    <label for="idHorario" class="form-label">
-                        ID del horario
-                    </label>
-
-                    <input type="number"
-                           id="idHorario"
-                           th:field="*{idHorario}"
-                           class="form-control"
-                           th:classappend="${#fields.hasErrors('idHorario')} ? ' is-invalid' : ''"
-                           min="1"
-                           th:readonly="${horario.idHorario != null}">
-
-                    <div class="invalid-feedback"
-                         th:if="${#fields.hasErrors('idHorario')}"
-                         th:errors="*{idHorario}">
-                    </div>
-
-                </div>
-
-                <div class="col-md-6 mb-4">
+                <div class="col-md-12 mb-4">
 
                     <label for="idCancha" class="form-label">
                         Cancha
@@ -121,7 +102,7 @@
 
             <div class="row">
 
-                <div class="col-md-6 mb-4">
+                <div class="col-md-12 mb-4">
 
                     <label for="diaSemana" class="form-label">
                         Día de la semana
@@ -153,34 +134,7 @@
 
                 </div>
 
-                <div class="col-md-6 mb-4">
-
-                    <label for="idEstado" class="form-label">
-                        Estado
-                    </label>
-
-                    <select id="idEstado"
-                            th:field="*{idEstado}"
-                            class="form-select"
-                            th:classappend="${#fields.hasErrors('idEstado')} ? ' is-invalid' : ''">
-
-                        <option value="">
-                            Seleccione un estado
-                        </option>
-
-                        <option th:each="estado : ${estados}"
-                                th:value="${estado.idEstado}"
-                                th:text="${estado.descripcion}">
-                        </option>
-
-                    </select>
-
-                    <div class="invalid-feedback"
-                         th:if="${#fields.hasErrors('idEstado')}"
-                         th:errors="*{idEstado}">
-                    </div>
-
-                </div>
+                
 
             </div>
 

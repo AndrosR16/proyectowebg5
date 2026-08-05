@@ -25,16 +25,22 @@ public class HorarioService {
 
     public void guardar(Horario horario) {
 
-        if (repository.buscarPorId(horario.getIdHorario()) == null) {
+        if (horario.getIdHorario() == null) {
+
             repository.insertar(horario);
+
         } else {
+
             repository.actualizar(horario);
+
         }
 
     }
 
-    public void eliminar(Long id) {
-        repository.eliminar(id);
-    }
+    public void cambiarEstado(Long id, Long idEstado) {
+
+    repository.cambiarEstado(id, idEstado);
+
+}
 
 }
