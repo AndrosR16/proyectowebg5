@@ -2,9 +2,6 @@ package com.fide.proyectowebg5.model;
 
 import java.time.LocalDate;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 public class Equipo {
 
@@ -12,17 +9,12 @@ public class Equipo {
 
     private String nombreUsuario;
 
-    @NotNull(message = "Debe seleccionar un usuario.")
     private Long idUsuario;
 
-    @NotBlank(message = "El nombre del equipo es obligatorio.")
-    @Size(max = 100, message = "El nombre no puede superar los 100 caracteres.")
     private String nombreEquipo;
 
-    @NotNull(message = "La fecha de creación es obligatoria.")
     private LocalDate fechaCreacion;
 
-    @NotNull(message = "Debe seleccionar un estado.")
     private Long idEstado;
 
     private String estado;
@@ -77,12 +69,12 @@ public class Equipo {
     public void setEstado(String estado) {
         this.estado = estado;
     }
-}
 
-public String getNombreUsuario() {
+    public String getNombreUsuario() {
     return nombreUsuario;
 }
 
 public void setNombreUsuario(String nombreUsuario) {
     this.nombreUsuario = nombreUsuario;
+}
 }

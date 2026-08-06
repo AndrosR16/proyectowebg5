@@ -9,32 +9,32 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.fide.proyectowebg5.model.Equipo;
+import com.fide.proyectowebg5.model.Jugador;
 import com.fide.proyectowebg5.model.Usuario;
-import com.fide.proyectowebg5.service.EquipoService;
 import com.fide.proyectowebg5.service.EstadoService;
-import com.fide.proyectowebg5.service.UsuarioService;
+import com.fide.proyectowebg5.service.JugadorService;
+import com.fide.proyectowebg5.service.PosicionService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
-@RequestMapping("/equipos")
-public class EquipoController {
+@RequestMapping("/jugadores")
+public class JugadorController {
 
-    private final EquipoService equipoService;
+    private final JugadorService jugadorService;
     private final EstadoService estadoService;
-    private final UsuarioService usuarioService;
+    private final PosicionService posicionService;
 
-    public EquipoController(
-            EquipoService equipoService,
+    public JugadorController(
+            JugadorService jugadorService,
             EstadoService estadoService,
-            UsuarioService usuarioService
+            PosicionService posicionService
     ) {
 
-        this.equipoService = equipoService;
+        this.jugadorService = jugadorService;
         this.estadoService = estadoService;
-        this.usuarioService = usuarioService;
+        this.posicionService = posicionService;
     }
 
     private boolean esAdmin(HttpSession session) {
@@ -50,11 +50,11 @@ public class EquipoController {
     public String listar(Model model) {
 
         model.addAttribute(
-                "equipos",
-                equipoService.listar()
+                "jugadores",
+                jugadorService.listar()
         );
 
-        return "equipos/listar";
+        return "jugadores/listar";
     }
 
     @GetMapping("/nuevo")
@@ -64,17 +64,17 @@ public class EquipoController {
     ) {
 
         if (!esAdmin(session)) {
-            return "redirect:/equipos";
+            return "redirect:/jugadores";
         }
 
         model.addAttribute(
-                "equipo",
-                new Equipo()
+                "jugador",
+                new Jugador()
         );
 
         cargarCatalogos(model);
 
-        return "equipos/formulario";
+        return "jugadores/formulario";
     }
 
     @GetMapping("/editar/{id}")
@@ -86,35 +86,35 @@ public class EquipoController {
     ) {
 
         if (!esAdmin(session)) {
-            return "redirect:/equipos";
+            return "redirect:/jugadores";
         }
 
-        Equipo equipo =
-                equipoService.buscarPorId(id);
+        Jugador jugador =
+                jugadorService.buscarPorId(id);
 
-        if (equipo == null) {
+        if (jugador == null) {
 
             redirectAttributes.addFlashAttribute(
                     "error",
-                    "El equipo seleccionado no existe."
+                    "El jugador seleccionado no existe."
             );
 
-            return "redirect:/equipos";
+            return "redirect:/jugadores";
         }
 
         model.addAttribute(
-                "equipo",
-                equipo
+                "jugador",
+                jugador
         );
 
         cargarCatalogos(model);
 
-        return "equipos/formulario";
+        return "jugadores/formulario";
     }
 
     @PostMapping("/guardar")
     public String guardar(
-            @Valid Equipo equipo,
+            @Valid Jugador jugador,
             BindingResult bindingResult,
             Model model,
             RedirectAttributes redirectAttributes,
@@ -122,15 +122,15 @@ public class EquipoController {
     ) {
 
         if (!esAdmin(session)) {
-            return "redirect:/equipos";
+            return "redirect:/jugadores";
         }
 
-        if (equipo.getIdEquipo() == null) {
+        if (jugador.getIdJugador() == null) {
 
             bindingResult.rejectValue(
-                    "idEquipo",
-                    "idEquipo.obligatorio",
-                    "El ID del equipo es obligatorio."
+                    "idJugador",
+                    "idJugador.obligatorio",
+                    "El ID del jugador es obligatorio."
             );
         }
 
@@ -138,30 +138,30 @@ public class EquipoController {
 
             cargarCatalogos(model);
 
-            return "equipos/formulario";
+            return "jugadores/formulario";
         }
 
         try {
 
             boolean esNuevo =
-                    equipoService.buscarPorId(
-                            equipo.getIdEquipo()
+                    jugadorService.buscarPorId(
+                            jugador.getIdJugador()
                     ) == null;
 
             if (esNuevo) {
-                equipoService.insertar(equipo);
+                jugadorService.insertar(jugador);
             } else {
-                equipoService.actualizar(equipo);
+                jugadorService.actualizar(jugador);
             }
 
             redirectAttributes.addFlashAttribute(
                     "mensaje",
                     esNuevo
-                            ? "Equipo registrado correctamente."
-                            : "Equipo actualizado correctamente."
+                            ? "Jugador registrado correctamente."
+                            : "Jugador actualizado correctamente."
             );
 
-            return "redirect:/equipos";
+            return "redirect:/jugadores";
 
         } catch (Exception e) {
 
@@ -169,10 +169,10 @@ public class EquipoController {
 
             model.addAttribute(
                     "error",
-                    "No fue posible guardar el equipo."
+                    "No fue posible guardar el jugador."
             );
 
-            return "equipos/formulario";
+            return "jugadores/formulario";
         }
     }
 
@@ -184,42 +184,42 @@ public class EquipoController {
     ) {
 
         if (!esAdmin(session)) {
-            return "redirect:/equipos";
+            return "redirect:/jugadores";
         }
 
         try {
 
-            equipoService.eliminar(
+            jugadorService.eliminar(
                     id,
                     2L
             );
 
             redirectAttributes.addFlashAttribute(
                     "mensaje",
-                    "Equipo inactivado correctamente."
+                    "Jugador inactivado correctamente."
             );
 
         } catch (Exception e) {
 
             redirectAttributes.addFlashAttribute(
                     "error",
-                    "No fue posible inactivar el equipo."
+                    "No fue posible inactivar el jugador."
             );
         }
 
-        return "redirect:/equipos";
+        return "redirect:/jugadores";
     }
 
     private void cargarCatalogos(Model model) {
 
         model.addAttribute(
-                "estados",
-                estadoService.listar()
+                "posiciones",
+                posicionService.listar()
         );
 
         model.addAttribute(
-                "usuarios",
-                usuarioService.listar()
+                "estados",
+                estadoService.listar()
         );
     }
 

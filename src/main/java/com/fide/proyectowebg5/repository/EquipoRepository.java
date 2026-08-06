@@ -17,227 +17,202 @@ import oracle.jdbc.OracleTypes;
 @Repository
 public class EquipoRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+        private final JdbcTemplate jdbcTemplate;
 
-    public EquipoRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+        public EquipoRepository(JdbcTemplate jdbcTemplate) {
+                this.jdbcTemplate = jdbcTemplate;
+        }
 
-    public List<Equipo> listar() {
+        public List<Equipo> listar() {
 
-        return jdbcTemplate.execute(
-                (Connection connection) -> {
+                return jdbcTemplate.execute(
+                                (Connection connection) -> {
 
-                    CallableStatement procedimiento = connection.prepareCall(
-                            "{call FIDE_PROYECTO_PCK.FIDE_EQUIPO_LISTAR_SP(?)}"
-                    );
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_EQUIPO_LISTAR_SP(?)}");
 
-                    procedimiento.registerOutParameter(
-                            1,
-                            OracleTypes.CURSOR
-                    );
+                                        procedimiento.registerOutParameter(
+                                                        1,
+                                                        OracleTypes.CURSOR);
 
-                    return procedimiento;
-                },
-                (CallableStatement procedimiento) -> {
+                                        return procedimiento;
+                                },
+                                (CallableStatement procedimiento) -> {
 
-                    List<Equipo> equipos = new ArrayList<>();
+                                        List<Equipo> equipos = new ArrayList<>();
 
-                    procedimiento.execute();
+                                        procedimiento.execute();
 
-                    try (ResultSet resultado =
-                                 (ResultSet) procedimiento.getObject(1)) {
+                                        try (ResultSet resultado = (ResultSet) procedimiento.getObject(1)) {
 
-                        while (resultado.next()) {
+                                                while (resultado.next()) {
 
-                            Equipo equipo = new Equipo();
+                                                        Equipo equipo = new Equipo();
 
-                            equipo.setIdEquipo(
-                                    resultado.getLong("ID_EQUIPO")
-                            );
+                                                        equipo.setIdEquipo(
+                                                                        resultado.getLong("ID_EQUIPO"));
 
-                            equipo.setNombreEquipo(
-                                    resultado.getString("NOMBRE_EQUIPO")
-                            );
+                                                        equipo.setNombreEquipo(
+                                                                        resultado.getString("NOMBRE_EQUIPO"));
 
-                            equipo.setFechaCreacion(
-                                    resultado.getDate("FECHA_CREACION").toLocalDate()
-                            );
+                                                        equipo.setFechaCreacion(
+                                                                        resultado.getDate("FECHA_CREACION")
+                                                                                        .toLocalDate());
 
-                            equipo.setNombreUsuario(
-                                    resultado.getString("NOMBRE") + " "
-                                    + resultado.getString("APELLIDO_P") + " "
-                                    + resultado.getString("APELLIDO_M")
-                            );
+                                                        equipo.setIdUsuario(
+                                                                        resultado.getLong("ID_USUARIO"));
 
-                            equipos.add(equipo);
-                        }
-                    }
+                                                        equipo.setNombreUsuario(
+                                                                        resultado.getString("NOMBRE_USUARIO"));
 
-                    return equipos;
-                }
-        );
-    }
+                                                        equipo.setIdEstado(
+                                                                        resultado.getLong("ID_ESTADO"));
+                                                                        
+                                                        equipo.setEstado(
+                                                                        resultado.getString("ESTADO"));
 
-    public Equipo buscarPorId(Long idEquipo) {
+                                                        equipos.add(equipo);
+                                                }
+                                        }
 
-        return jdbcTemplate.execute(
-                (Connection connection) -> {
+                                        return equipos;
+                                });
+        }
 
-                    CallableStatement procedimiento = connection.prepareCall(
-                            "{call FIDE_PROYECTO_PCK.FIDE_EQUIPO_BUSCAR_SP(?,?)}"
-                    );
+        public Equipo buscarPorId(Long idEquipo) {
 
-                    procedimiento.setLong(
-                            1,
-                            idEquipo
-                    );
+                return jdbcTemplate.execute(
+                                (Connection connection) -> {
 
-                    procedimiento.registerOutParameter(
-                            2,
-                            OracleTypes.CURSOR
-                    );
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_EQUIPO_BUSCAR_SP(?,?)}");
 
-                    return procedimiento;
-                },
-                (CallableStatement procedimiento) -> {
+                                        procedimiento.setLong(
+                                                        1,
+                                                        idEquipo);
 
-                    procedimiento.execute();
+                                        procedimiento.registerOutParameter(
+                                                        2,
+                                                        OracleTypes.CURSOR);
 
-                    try (ResultSet resultado =
-                                 (ResultSet) procedimiento.getObject(2)) {
+                                        return procedimiento;
+                                },
+                                (CallableStatement procedimiento) -> {
 
-                        if (resultado.next()) {
+                                        procedimiento.execute();
 
-                            Equipo equipo = new Equipo();
+                                        try (ResultSet resultado = (ResultSet) procedimiento.getObject(2)) {
 
-                            equipo.setIdUsuario(
-                                    resultado.getLong("ID_USUARIO"));
+                                                if (resultado.next()) {
 
-                            equipo.setIdEstado(
-                                    resultado.getLong("ID_ESTADO"));
+                                                        Equipo equipo = new Equipo();
 
-                            equipo.setIdEquipo(
-                                    resultado.getLong("ID_EQUIPO")
-                            );
+                                                        equipo.setIdUsuario(
+                                                                        resultado.getLong("ID_USUARIO"));
 
-                            equipo.setNombreEquipo(
-                                    resultado.getString("NOMBRE_EQUIPO")
-                            );
+                                                        equipo.setIdEstado(
+                                                                        resultado.getLong("ID_ESTADO"));
 
-                            equipo.setFechaCreacion(
-                                    resultado.getDate("FECHA_CREACION").toLocalDate()
-                            );
+                                                        equipo.setIdEquipo(
+                                                                        resultado.getLong("ID_EQUIPO"));
 
-                            return equipo;
-                        }
-                    }
+                                                        equipo.setNombreEquipo(
+                                                                        resultado.getString("NOMBRE_EQUIPO"));
 
-                    return null;
-                }
-        );
-    }
+                                                        equipo.setFechaCreacion(
+                                                                        resultado.getDate("FECHA_CREACION")
+                                                                                        .toLocalDate());
 
-    public void insertar(Equipo equipo) {
+                                                        return equipo;
+                                                }
+                                        }
 
-        jdbcTemplate.update(
-                connection -> {
+                                        return null;
+                                });
+        }
 
-                    CallableStatement procedimiento = connection.prepareCall(
-                            "{call FIDE_PROYECTO_PCK.FIDE_EQUIPO_INSERT_SP(?,?,?,?,?)}"
-                    );
+        public void insertar(Equipo equipo) {
 
-                    procedimiento.setLong(
-                            1,
-                            equipo.getIdEquipo()
-                    );
+                jdbcTemplate.update(
+                                connection -> {
 
-                    procedimiento.setLong(
-                            2,
-                            equipo.getIdUsuario()
-                    );
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_EQUIPO_INSERT_SP(?,?,?,?,?)}");
 
-                    procedimiento.setString(
-                            3,
-                            equipo.getNombreEquipo()
-                    );
+                                        procedimiento.setLong(
+                                                        1,
+                                                        equipo.getIdEquipo());
 
-                    procedimiento.setDate(
-                            4,
-                            Date.valueOf(equipo.getFechaCreacion())
-                    );
+                                        procedimiento.setLong(
+                                                        2,
+                                                        equipo.getIdUsuario());
 
-                    procedimiento.setLong(
-                            5,
-                            equipo.getIdEstado()
-                    );
+                                        procedimiento.setString(
+                                                        3,
+                                                        equipo.getNombreEquipo());
 
-                    return procedimiento;
-                }
-        );
-    }
+                                        procedimiento.setDate(
+                                                        4,
+                                                        Date.valueOf(equipo.getFechaCreacion()));
 
-    public void actualizar(Equipo equipo) {
+                                        procedimiento.setLong(
+                                                        5,
+                                                        equipo.getIdEstado());
 
-        jdbcTemplate.update(
-                connection -> {
+                                        return procedimiento;
+                                });
+        }
 
-                    CallableStatement procedimiento = connection.prepareCall(
-                            "{call FIDE_PROYECTO_PCK.FIDE_EQUIPO_UPDATE_SP(?,?,?,?,?)}"
-                    );
+        public void actualizar(Equipo equipo) {
 
-                    procedimiento.setLong(
-                            1,
-                            equipo.getIdEquipo()
-                    );
+                jdbcTemplate.update(
+                                connection -> {
 
-                    procedimiento.setLong(
-                            2,
-                            equipo.getIdUsuario()
-                    );
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_EQUIPO_UPDATE_SP(?,?,?,?,?)}");
 
-                    procedimiento.setString(
-                            3,
-                            equipo.getNombreEquipo()
-                    );
+                                        procedimiento.setLong(
+                                                        1,
+                                                        equipo.getIdEquipo());
 
-                    procedimiento.setDate(
-                            4,
-                            Date.valueOf(equipo.getFechaCreacion())
-                    );
+                                        procedimiento.setLong(
+                                                        2,
+                                                        equipo.getIdUsuario());
 
-                    procedimiento.setLong(
-                            5,
-                            equipo.getIdEstado()
-                    );
+                                        procedimiento.setString(
+                                                        3,
+                                                        equipo.getNombreEquipo());
 
-                    return procedimiento;
-                }
-        );
-    }
+                                        procedimiento.setDate(
+                                                        4,
+                                                        Date.valueOf(equipo.getFechaCreacion()));
 
-    public void eliminar(Long idEquipo, Long idEstado) {
+                                        procedimiento.setLong(
+                                                        5,
+                                                        equipo.getIdEstado());
 
-        jdbcTemplate.update(
-                connection -> {
+                                        return procedimiento;
+                                });
+        }
 
-                    CallableStatement procedimiento = connection.prepareCall(
-                            "{call FIDE_PROYECTO_PCK.FIDE_EQUIPO_DELETE_SP(?,?)}"
-                    );
+        public void eliminar(Long idEquipo, Long idEstado) {
 
-                    procedimiento.setLong(
-                            1,
-                            idEquipo
-                    );
+                jdbcTemplate.update(
+                                connection -> {
 
-                    procedimiento.setLong(
-                            2,
-                            idEstado
-                    );
+                                        CallableStatement procedimiento = connection.prepareCall(
+                                                        "{call FIDE_PROYECTO_PCK.FIDE_EQUIPO_DELETE_SP(?,?)}");
 
-                    return procedimiento;
-                }
-        );
-    }
+                                        procedimiento.setLong(
+                                                        1,
+                                                        idEquipo);
+
+                                        procedimiento.setLong(
+                                                        2,
+                                                        idEstado);
+
+                                        return procedimiento;
+                                });
+        }
 
 }
