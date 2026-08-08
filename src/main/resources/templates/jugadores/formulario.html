@@ -38,6 +38,7 @@
             <i class="fa-solid fa-person-running me-2"></i>
 
             <span th:text="${jugador.idJugador == null ? 'Nuevo jugador' : 'Editar jugador'}">
+                Nuevo jugador
             </span>
 
         </h1>
@@ -52,6 +53,7 @@
 
     </section>
 
+
     <section class="panel-formulario">
 
         <div class="titulo-seccion">
@@ -62,20 +64,22 @@
 
         </div>
 
+
         <div th:if="${error}"
-             class="alert alert-error"
+             class="alert alert-danger"
              th:text="${error}">
         </div>
+
 
         <form th:action="@{/jugadores/guardar}"
               th:object="${jugador}"
               method="post"
               novalidate>
 
-            <!-- Se mantiene oculto para edición.
-                 En un jugador nuevo queda null y Oracle genera el ID. -->
+            <!-- Se usa para saber si se crea o se edita -->
             <input type="hidden"
                    th:field="*{idJugador}">
+
 
             <div class="row">
 
@@ -87,7 +91,8 @@
 
                     <input type="text"
                            th:field="*{nombre}"
-                           class="form-control">
+                           class="form-control"
+                           th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'">
 
                     <div class="invalid-feedback"
                          th:errors="*{nombre}">
@@ -96,6 +101,7 @@
                 </div>
 
             </div>
+
 
             <div class="row">
 
@@ -107,9 +113,15 @@
 
                     <input type="text"
                            th:field="*{apellidoP}"
-                           class="form-control">
+                           class="form-control"
+                           th:classappend="${#fields.hasErrors('apellidoP')} ? 'is-invalid'">
+
+                    <div class="invalid-feedback"
+                         th:errors="*{apellidoP}">
+                    </div>
 
                 </div>
+
 
                 <div class="col-md-6 mb-4">
 
@@ -119,11 +131,17 @@
 
                     <input type="text"
                            th:field="*{apellidoM}"
-                           class="form-control">
+                           class="form-control"
+                           th:classappend="${#fields.hasErrors('apellidoM')} ? 'is-invalid'">
+
+                    <div class="invalid-feedback"
+                         th:errors="*{apellidoM}">
+                    </div>
 
                 </div>
 
             </div>
+
 
             <div class="row">
 
@@ -135,9 +153,15 @@
 
                     <input type="text"
                            th:field="*{cedula}"
-                           class="form-control">
+                           class="form-control"
+                           th:classappend="${#fields.hasErrors('cedula')} ? 'is-invalid'">
+
+                    <div class="invalid-feedback"
+                         th:errors="*{cedula}">
+                    </div>
 
                 </div>
+
 
                 <div class="col-md-6 mb-4">
 
@@ -147,11 +171,17 @@
 
                     <input type="date"
                            th:field="*{fechaNacimiento}"
-                           class="form-control">
+                           class="form-control"
+                           th:classappend="${#fields.hasErrors('fechaNacimiento')} ? 'is-invalid'">
+
+                    <div class="invalid-feedback"
+                         th:errors="*{fechaNacimiento}">
+                    </div>
 
                 </div>
 
             </div>
+
 
             <div class="row">
 
@@ -163,9 +193,15 @@
 
                     <input type="number"
                            th:field="*{dorsal}"
-                           class="form-control">
+                           class="form-control"
+                           th:classappend="${#fields.hasErrors('dorsal')} ? 'is-invalid'">
+
+                    <div class="invalid-feedback"
+                         th:errors="*{dorsal}">
+                    </div>
 
                 </div>
+
 
                 <div class="col-md-6 mb-4">
 
@@ -174,7 +210,8 @@
                     </label>
 
                     <select th:field="*{idPosicion}"
-                            class="form-select">
+                            class="form-select"
+                            th:classappend="${#fields.hasErrors('idPosicion')} ? 'is-invalid'">
 
                         <option value="">
                             Seleccione una posición
@@ -187,9 +224,14 @@
 
                     </select>
 
+                    <div class="invalid-feedback"
+                         th:errors="*{idPosicion}">
+                    </div>
+
                 </div>
 
             </div>
+
 
             <div class="row">
 
@@ -200,7 +242,8 @@
                     </label>
 
                     <select th:field="*{idEstado}"
-                            class="form-select">
+                            class="form-select"
+                            th:classappend="${#fields.hasErrors('idEstado')} ? 'is-invalid'">
 
                         <option value="">
                             Seleccione un estado
@@ -213,9 +256,14 @@
 
                     </select>
 
+                    <div class="invalid-feedback"
+                         th:errors="*{idEstado}">
+                    </div>
+
                 </div>
 
             </div>
+
 
             <div class="acciones-formulario">
 
@@ -228,12 +276,14 @@
 
                 </a>
 
+
                 <button type="submit"
                         class="btn btn-guardar">
 
                     <i class="fa-solid fa-floppy-disk me-2"></i>
 
                     <span th:text="${jugador.idJugador == null ? 'Guardar jugador' : 'Guardar cambios'}">
+                        Guardar jugador
                     </span>
 
                 </button>

@@ -2,32 +2,41 @@ package com.fide.proyectowebg5.model;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
+
 public class Reserva {
 
     private Long idReserva;
+
+    @NotNull(message = "Debe seleccionar un usuario.")
     private Long idUsuario;
+
+    @NotNull(message = "Debe seleccionar un horario.")
     private Long idHorario;
+
+    @NotNull(message = "La fecha de reserva es obligatoria.")
+    @FutureOrPresent(message = "La fecha de reserva no puede ser anterior a hoy.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaReserva;
+
     private Long idEstado;
+
     private String nombreCancha;
 
     /*
-     * Campos adicionales para mostrar información descriptiva
-     * en la lista de reservas.
+     * Estos campos se usan para mostrar la informacion
+     * de la reserva en los listados.
      */
     private String nombreUsuario;
+
     private String descripcionHorario;
+
     private String nombreEstado;
 
     public Reserva() {
-    }
-
-    public String getNombreCancha() {
-    return nombreCancha;
-    }
-
-    public void setNombreCancha(String nombreCancha) {
-    this.nombreCancha = nombreCancha;
     }
 
     public Long getIdReserva() {
@@ -68,6 +77,14 @@ public class Reserva {
 
     public void setIdEstado(Long idEstado) {
         this.idEstado = idEstado;
+    }
+
+    public String getNombreCancha() {
+        return nombreCancha;
+    }
+
+    public void setNombreCancha(String nombreCancha) {
+        this.nombreCancha = nombreCancha;
     }
 
     public String getNombreUsuario() {

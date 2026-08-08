@@ -1,7 +1,11 @@
 package com.fide.proyectowebg5.controller;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.fide.proyectowebg5.model.Reserva;
 import com.fide.proyectowebg5.model.Usuario;
+import com.fide.proyectowebg5.service.CanchaService;
 import com.fide.proyectowebg5.service.EstadoService;
 import com.fide.proyectowebg5.service.HorarioService;
 import com.fide.proyectowebg5.service.ReservaService;
 import com.fide.proyectowebg5.service.UsuarioService;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/reservas")
@@ -25,17 +31,20 @@ public class ReservaController {
     private final UsuarioService usuarioService;
     private final HorarioService horarioService;
     private final EstadoService estadoService;
+    private final CanchaService canchaService;
 
     public ReservaController(
             ReservaService reservaService,
             UsuarioService usuarioService,
             HorarioService horarioService,
-            EstadoService estadoService) {
+            EstadoService estadoService,
+            CanchaService canchaService) {
 
         this.reservaService = reservaService;
         this.usuarioService = usuarioService;
         this.horarioService = horarioService;
         this.estadoService = estadoService;
+        this.canchaService = canchaService;
     }
 
     private boolean esAdmin(HttpSession session) {
@@ -110,7 +119,8 @@ public class ReservaController {
 
     @PostMapping("/guardar")
     public String guardar(
-            @ModelAttribute Reserva reserva,
+            @Valid @ModelAttribute Reserva reserva,
+            BindingResult bindingResult,
             Model model,
             HttpSession session) {
 
@@ -129,6 +139,13 @@ public class ReservaController {
             );
         }
 
+        if (bindingResult.hasErrors()) {
+
+            cargarCatalogos(model);
+
+            return "reservas/formulario";
+        }
+
         try {
 
             reservaService.insertar(reserva);
@@ -139,7 +156,6 @@ public class ReservaController {
 
             cargarCatalogos(model);
 
-            // Si el horario ya esta reservado se muestra el mensaje en el formulario
             if (e.getMessage() != null &&
                     e.getMessage().contains("ORA-20001")) {
 
@@ -182,19 +198,33 @@ public class ReservaController {
                 reserva
         );
 
-        cargarCatalogos(model);
+        cargarCatalogos(
+                model,
+                reserva.getIdHorario()
+        );
 
         return "reservas/formulario";
     }
 
     @PostMapping("/actualizar")
     public String actualizar(
-            @ModelAttribute Reserva reserva,
+            @Valid @ModelAttribute Reserva reserva,
+            BindingResult bindingResult,
             Model model,
             HttpSession session) {
 
         if (!esAdmin(session)) {
             return "redirect:/reservas";
+        }
+
+        if (bindingResult.hasErrors()) {
+
+            cargarCatalogos(
+                    model,
+                    reserva.getIdHorario()
+            );
+
+            return "reservas/formulario";
         }
 
         try {
@@ -205,9 +235,11 @@ public class ReservaController {
 
         } catch (Exception e) {
 
-            cargarCatalogos(model);
+            cargarCatalogos(
+                    model,
+                    reserva.getIdHorario()
+            );
 
-            // No permite mover una reserva a un horario que ya esta ocupado
             if (e.getMessage() != null &&
                     e.getMessage().contains("ORA-20001")) {
 
@@ -244,14 +276,45 @@ public class ReservaController {
 
     private void cargarCatalogos(Model model) {
 
+        cargarCatalogos(model, null);
+    }
+
+    private void cargarCatalogos(
+            Model model,
+            Long idHorarioActual) {
+
         model.addAttribute(
                 "usuarios",
                 usuarioService.listar()
         );
 
+        // Solo se toman las canchas disponibles
+        Set<Long> canchasDisponibles =
+                canchaService.listar()
+                        .stream()
+                        .filter(cancha ->
+                                Long.valueOf(6L).equals(cancha.getIdEstado()))
+                        .map(cancha ->
+                                cancha.getIdCancha())
+                        .collect(Collectors.toSet());
+
+        /*
+         * Al crear solo aparecen horarios de canchas disponibles.
+         * Al editar tambien se mantiene visible el horario actual
+         * aunque la cancha haya pasado a mantenimiento.
+         */
         model.addAttribute(
                 "horarios",
                 horarioService.listar()
+                        .stream()
+                        .filter(horario ->
+                                canchasDisponibles.contains(
+                                        horario.getIdCancha())
+                                ||
+                                (idHorarioActual != null &&
+                                 idHorarioActual.equals(
+                                         horario.getIdHorario())))
+                        .toList()
         );
 
         model.addAttribute(

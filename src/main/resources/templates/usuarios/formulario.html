@@ -2,10 +2,13 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title th:text="${titulo}">Formulario de usuario</title>
+    <title th:text="${titulo}">
+        Formulario de usuario
+    </title>
 
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -17,11 +20,13 @@
     <link rel="stylesheet" th:href="@{/css/offcanvas.css}">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
     <link rel="stylesheet" th:href="@{/css/modulos.css}">
+
 </head>
 
 <body>
 
 <div th:replace="~{fragments/navbar :: navbar}"></div>
+
 <div th:replace="~{fragments/menu :: menu}"></div>
 
 <main class="pagina-formulario">
@@ -46,6 +51,7 @@
 
     </section>
 
+
     <section class="panel-formulario">
 
         <div class="titulo-seccion">
@@ -57,9 +63,12 @@
               th:action="${usuario.idUsuario == null}
                     ? @{/usuarios/guardar}
                     : @{/usuarios/actualizar}"
-              method="post">
+              method="post"
+              novalidate>
 
-            <input type="hidden" th:field="*{idUsuario}">
+            <input type="hidden"
+                   th:field="*{idUsuario}">
+
 
             <div class="row">
 
@@ -73,10 +82,15 @@
                            id="nombre"
                            th:field="*{nombre}"
                            class="form-control"
-                           maxlength="100"
-                           required>
+                           th:classappend="${#fields.hasErrors('nombre')} ? 'is-invalid'"
+                           maxlength="100">
+
+                    <div class="invalid-feedback"
+                         th:errors="*{nombre}">
+                    </div>
 
                 </div>
+
 
                 <div class="col-md-6 mb-4">
 
@@ -88,12 +102,17 @@
                            id="apellidoP"
                            th:field="*{apellidoP}"
                            class="form-control"
-                           maxlength="100"
-                           required>
+                           th:classappend="${#fields.hasErrors('apellidoP')} ? 'is-invalid'"
+                           maxlength="100">
+
+                    <div class="invalid-feedback"
+                         th:errors="*{apellidoP}">
+                    </div>
 
                 </div>
 
             </div>
+
 
             <div class="row">
 
@@ -107,9 +126,15 @@
                            id="apellidoM"
                            th:field="*{apellidoM}"
                            class="form-control"
+                           th:classappend="${#fields.hasErrors('apellidoM')} ? 'is-invalid'"
                            maxlength="100">
 
+                    <div class="invalid-feedback"
+                         th:errors="*{apellidoM}">
+                    </div>
+
                 </div>
+
 
                 <div class="col-md-6 mb-4">
 
@@ -121,12 +146,17 @@
                            id="username"
                            th:field="*{username}"
                            class="form-control"
-                           maxlength="100"
-                           required>
+                           th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'"
+                           maxlength="100">
+
+                    <div class="invalid-feedback"
+                         th:errors="*{username}">
+                    </div>
 
                 </div>
 
             </div>
+
 
             <div class="row">
 
@@ -140,8 +170,12 @@
                            id="contrasena"
                            th:field="*{contrasena}"
                            class="form-control"
-                           maxlength="100"
-                           th:required="${usuario.idUsuario == null}">
+                           th:classappend="${#fields.hasErrors('contrasena')} ? 'is-invalid'"
+                           maxlength="255">
+
+                    <div class="invalid-feedback"
+                         th:errors="*{contrasena}">
+                    </div>
 
                     <div class="form-text"
                          th:if="${usuario.idUsuario != null}">
@@ -149,6 +183,7 @@
                     </div>
 
                 </div>
+
 
                 <div class="col-md-6 mb-4">
 
@@ -159,31 +194,33 @@
                     <select id="rol"
                             th:field="*{rol}"
                             class="form-select"
-                            required>
+                            th:classappend="${#fields.hasErrors('rol')} ? 'is-invalid'">
 
                         <option value="">
                             Seleccione un rol
                         </option>
 
-                        <option value="Administrador">
+                        <option value="ADMIN">
                             Administrador
                         </option>
 
-                        <option value="Cliente">
+                        <option value="CLIENTE">
                             Cliente
                         </option>
 
-                        <option value="Empleado">
-                            Empleado
-                        </option>
-
                     </select>
+
+                    <div class="invalid-feedback"
+                         th:errors="*{rol}">
+                    </div>
 
                 </div>
 
             </div>
 
-            <div class="row" th:if="${usuario.idUsuario != null}">
+
+            <div class="row"
+                 th:if="${usuario.idUsuario != null}">
 
                 <div class="col-md-6 mb-4">
 
@@ -193,7 +230,8 @@
 
                     <select id="idEstado"
                             th:field="*{idEstado}"
-                            class="form-select">
+                            class="form-select"
+                            th:classappend="${#fields.hasErrors('idEstado')} ? 'is-invalid'">
 
                         <option value="">
                             Seleccione un estado
@@ -202,14 +240,18 @@
                         <option th:each="estado : ${estados}"
                                 th:value="${estado.idEstado}"
                                 th:text="${estado.descripcion}">
-                            Activo
                         </option>
 
                     </select>
 
+                    <div class="invalid-feedback"
+                         th:errors="*{idEstado}">
+                    </div>
+
                 </div>
 
             </div>
+
 
             <div class="acciones-formulario">
 
@@ -218,6 +260,7 @@
 
                     <i class="fa-solid fa-xmark me-2"></i>
                     Cancelar
+
                 </a>
 
                 <button type="submit"
@@ -244,4 +287,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

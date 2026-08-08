@@ -16,147 +16,182 @@ import oracle.jdbc.OracleTypes;
 @Repository
 public class CanchaRepository {
 
-        private final JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
-        public CanchaRepository(JdbcTemplate jdbcTemplate) {
-                this.jdbcTemplate = jdbcTemplate;
-        }
+    public CanchaRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
-        public List<Cancha> listar() {
+    public List<Cancha> listar() {
 
-                return jdbcTemplate.execute(
-                                (Connection connection) -> {
+        return jdbcTemplate.execute(
+                (Connection connection) -> {
 
-                                        CallableStatement procedimiento = connection.prepareCall(
-                                                        "{call FIDE_PROYECTO_PCK.FIDE_CANCHA_LISTAR_SP(?)}");
+                    CallableStatement procedimiento = connection.prepareCall(
+                            "{call FIDE_PROYECTO_PCK.FIDE_CANCHA_LISTAR_SP(?)}"
+                    );
 
-                                        procedimiento.registerOutParameter(
-                                                        1,
-                                                        OracleTypes.CURSOR);
+                    procedimiento.registerOutParameter(
+                            1,
+                            OracleTypes.CURSOR
+                    );
 
-                                        return procedimiento;
-                                },
-                                (CallableStatement procedimiento) -> {
+                    return procedimiento;
+                },
+                (CallableStatement procedimiento) -> {
 
-                                        List<Cancha> canchas = new ArrayList<>();
+                    List<Cancha> canchas = new ArrayList<>();
 
-                                        procedimiento.execute();
+                    procedimiento.execute();
 
-                                        try (ResultSet resultado = (ResultSet) procedimiento.getObject(1)) {
+                    try (ResultSet resultado =
+                                 (ResultSet) procedimiento.getObject(1)) {
 
-                                                while (resultado.next()) {
+                        while (resultado.next()) {
 
-                                                        Cancha cancha = new Cancha();
+                            Cancha cancha = new Cancha();
 
-                                                        cancha.setIdCancha(
-                                                                        resultado.getLong("ID_CANCHA"));
+                            cancha.setIdCancha(
+                                    resultado.getLong("ID_CANCHA")
+                            );
 
-                                                        cancha.setNombreCancha(
-                                                                        resultado.getString("NOMBRE_CANCHA"));
+                            cancha.setNombreCancha(
+                                    resultado.getString("NOMBRE_CANCHA")
+                            );
 
-                                                        cancha.setCapacidad(
-                                                                        resultado.getInt("CAPACIDAD"));
+                            cancha.setCapacidad(
+                                    resultado.getInt("CAPACIDAD")
+                            );
 
-                                                        cancha.setPrecioHora(
-                                                                        resultado.getBigDecimal("PRECIO_HORA"));
+                            cancha.setPrecioHora(
+                                    resultado.getBigDecimal("PRECIO_HORA")
+                            );
 
-                                                        cancha.setIdSuperficie(
-                                                                        resultado.getLong("ID_SUPERFICIE"));
+                            cancha.setIdSuperficie(
+                                    resultado.getLong("ID_SUPERFICIE")
+                            );
 
-                                                        cancha.setSuperficie(
-                                                                        resultado.getString("SUPERFICIE"));
+                            cancha.setSuperficie(
+                                    resultado.getString("SUPERFICIE")
+                            );
 
-                                                        cancha.setIdEstado(
-                                                                        resultado.getLong("ID_ESTADO"));
+                            cancha.setIdEstado(
+                                    resultado.getLong("ID_ESTADO")
+                            );
 
-                                                        cancha.setEstado(
-                                                                        resultado.getString("ESTADO"));
+                            cancha.setEstado(
+                                    resultado.getString("ESTADO")
+                            );
 
-                                                        canchas.add(cancha);
-                                                }
-                                        }
+                            canchas.add(cancha);
+                        }
+                    }
 
-                                        return canchas;
-                                });
-        }
+                    return canchas;
+                }
+        );
+    }
 
-        public void insertar(Cancha cancha) {
+    public void insertar(Cancha cancha) {
 
-                jdbcTemplate.update(
-                                connection -> {
+        jdbcTemplate.update(
+                connection -> {
 
-                                        CallableStatement procedimiento = connection.prepareCall(
-                                                        "{call FIDE_PROYECTO_PCK.FIDE_CANCHA_INSERT_SP(?,?,?,?)}");
+                    CallableStatement procedimiento = connection.prepareCall(
+                            "{call FIDE_PROYECTO_PCK.FIDE_CANCHA_INSERT_SP(?,?,?,?)}"
+                    );
 
-                                        procedimiento.setString(
-                                                        1,
-                                                        cancha.getNombreCancha());
+                    procedimiento.setString(
+                            1,
+                            cancha.getNombreCancha()
+                    );
 
-                                        procedimiento.setInt(
-                                                        2,
-                                                        cancha.getCapacidad());
+                    procedimiento.setInt(
+                            2,
+                            cancha.getCapacidad()
+                    );
 
-                                        procedimiento.setBigDecimal(
-                                                        3,
-                                                        cancha.getPrecioHora());
+                    procedimiento.setBigDecimal(
+                            3,
+                            cancha.getPrecioHora()
+                    );
 
-                                        procedimiento.setLong(
-                                                        4,
-                                                        cancha.getIdSuperficie());
+                    procedimiento.setLong(
+                            4,
+                            cancha.getIdSuperficie()
+                    );
 
-                                        return procedimiento;
-                                });
-        }
+                    return procedimiento;
+                }
+        );
+    }
 
-        public void actualizar(Cancha cancha) {
+    public void actualizar(Cancha cancha) {
 
-                jdbcTemplate.update(
-                                connection -> {
+        jdbcTemplate.update(
+                connection -> {
 
-                                        CallableStatement procedimiento = connection.prepareCall(
-                                                        "{call FIDE_PROYECTO_PCK.FIDE_CANCHA_UPDATE_SP(?,?,?,?,?,?)}");
+                    CallableStatement procedimiento = connection.prepareCall(
+                            "{call FIDE_PROYECTO_PCK.FIDE_CANCHA_UPDATE_SP(?,?,?,?,?,?)}"
+                    );
 
-                                        procedimiento.setLong(
-                                                        1,
-                                                        cancha.getIdCancha());
+                    procedimiento.setLong(
+                            1,
+                            cancha.getIdCancha()
+                    );
 
-                                        procedimiento.setString(
-                                                        2,
-                                                        cancha.getNombreCancha());
+                    procedimiento.setString(
+                            2,
+                            cancha.getNombreCancha()
+                    );
 
-                                        procedimiento.setInt(
-                                                        3,
-                                                        cancha.getCapacidad());
+                    procedimiento.setInt(
+                            3,
+                            cancha.getCapacidad()
+                    );
 
-                                        procedimiento.setBigDecimal(
-                                                        4,
-                                                        cancha.getPrecioHora());
+                    procedimiento.setBigDecimal(
+                            4,
+                            cancha.getPrecioHora()
+                    );
 
-                                        procedimiento.setLong(
-                                                        5,
-                                                        cancha.getIdSuperficie());
+                    procedimiento.setLong(
+                            5,
+                            cancha.getIdSuperficie()
+                    );
 
-                                        procedimiento.setLong(
-                                                        6,
-                                                        cancha.getIdEstado());
+                    procedimiento.setLong(
+                            6,
+                            cancha.getIdEstado()
+                    );
 
-                                        return procedimiento;
-                                });
-        }
+                    return procedimiento;
+                }
+        );
+    }
 
-        public void eliminar(Long idCancha) {
+    public void eliminar(Long idCancha) {
 
-                jdbcTemplate.update(
-                                connection -> {
+        jdbcTemplate.update(
+                connection -> {
 
-                                        CallableStatement procedimiento = connection.prepareCall(
-                                                        "{call FIDE_PROYECTO_PCK.FIDE_CANCHA_DELETE_SP(?)}");
+                    CallableStatement procedimiento = connection.prepareCall(
+                            "{call FIDE_PROYECTO_PCK.FIDE_CANCHA_DELETE_SP(?,?)}"
+                    );
 
-                                        procedimiento.setLong(
-                                                        1,
-                                                        idCancha);
+                    procedimiento.setLong(
+                            1,
+                            idCancha
+                    );
 
-                                        return procedimiento;
-                                });
-        }
+                    // Estado 7 = Mantenimiento
+                    procedimiento.setLong(
+                            2,
+                            7L
+                    );
+
+                    return procedimiento;
+                }
+        );
+    }
 }
