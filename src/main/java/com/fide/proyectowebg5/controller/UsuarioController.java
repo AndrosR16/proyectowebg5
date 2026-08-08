@@ -90,7 +90,7 @@ public class UsuarioController {
 
 
         usuario.setIdEstado(1L);
-        usuario.setRol("USUARIO");
+        usuario.setRol("CLIENTE");
 
 
 

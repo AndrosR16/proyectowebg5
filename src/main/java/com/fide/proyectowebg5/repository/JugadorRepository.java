@@ -154,26 +154,28 @@ public class JugadorRepository {
 
         public void insertar(Jugador jugador) {
 
-                jdbcTemplate.update(
+    jdbcTemplate.update(
+            connection -> {
 
-                                connection -> {
+                CallableStatement procedimiento = connection.prepareCall(
+                        "{call FIDE_PROYECTO_PCK.FIDE_JUGADOR_INSERT_SP(?,?,?,?,?,?,?)}"
+                );
 
-                                        CallableStatement procedimiento = connection.prepareCall(
-                                                        "{call FIDE_PROYECTO_PCK.FIDE_JUGADOR_INSERT_SP(?,?,?,?,?,?,?,?,?)}");
+                procedimiento.setLong(1, jugador.getIdPosicion());
+                procedimiento.setString(2, jugador.getNombre());
+                procedimiento.setString(3, jugador.getApellidoP());
+                procedimiento.setString(4, jugador.getApellidoM());
+                procedimiento.setString(5, jugador.getCedula());
+                procedimiento.setDate(
+                        6,
+                        Date.valueOf(jugador.getFechaNacimiento())
+                );
+                procedimiento.setInt(7, jugador.getDorsal());
 
-                                        procedimiento.setLong(1, jugador.getIdJugador());
-                                        procedimiento.setLong(2, jugador.getIdPosicion());
-                                        procedimiento.setString(3, jugador.getNombre());
-                                        procedimiento.setString(4, jugador.getApellidoP());
-                                        procedimiento.setString(5, jugador.getApellidoM());
-                                        procedimiento.setString(6, jugador.getCedula());
-                                        procedimiento.setDate(7, Date.valueOf(jugador.getFechaNacimiento()));
-                                        procedimiento.setInt(8, jugador.getDorsal());
-                                        procedimiento.setLong(9, jugador.getIdEstado());
-
-                                        return procedimiento;
-                                });
-        }
+                return procedimiento;
+            }
+    );
+}
 
         public void actualizar(Jugador jugador) {
 

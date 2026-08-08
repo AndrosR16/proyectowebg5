@@ -2,6 +2,8 @@ package com.fide.proyectowebg5.model;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 public class Jugador {
 
@@ -19,6 +21,7 @@ public class Jugador {
 
     private String cedula;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaNacimiento;
 
     private Integer dorsal;

@@ -42,8 +42,8 @@ public class JugadorController {
         Usuario usuario =
                 (Usuario) session.getAttribute("usuario");
 
-        return usuario != null &&
-                usuario.getRol().equals("ADMIN");
+        return usuario != null
+                && "ADMIN".equals(usuario.getRol());
     }
 
     @GetMapping
@@ -67,9 +67,11 @@ public class JugadorController {
             return "redirect:/jugadores";
         }
 
+        Jugador jugador = new Jugador();
+
         model.addAttribute(
                 "jugador",
-                new Jugador()
+                jugador
         );
 
         cargarCatalogos(model);
@@ -125,15 +127,6 @@ public class JugadorController {
             return "redirect:/jugadores";
         }
 
-        if (jugador.getIdJugador() == null) {
-
-            bindingResult.rejectValue(
-                    "idJugador",
-                    "idJugador.obligatorio",
-                    "El ID del jugador es obligatorio."
-            );
-        }
-
         if (bindingResult.hasErrors()) {
 
             cargarCatalogos(model);
@@ -144,13 +137,14 @@ public class JugadorController {
         try {
 
             boolean esNuevo =
-                    jugadorService.buscarPorId(
-                            jugador.getIdJugador()
-                    ) == null;
+                    jugador.getIdJugador() == null;
 
             if (esNuevo) {
+
                 jugadorService.insertar(jugador);
+
             } else {
+
                 jugadorService.actualizar(jugador);
             }
 
@@ -222,5 +216,4 @@ public class JugadorController {
                 estadoService.listar()
         );
     }
-
 }

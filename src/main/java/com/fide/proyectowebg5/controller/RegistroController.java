@@ -1,10 +1,11 @@
 package com.fide.proyectowebg5.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.ui.Model;
+
 import com.fide.proyectowebg5.model.Usuario;
 import com.fide.proyectowebg5.service.UsuarioService;
 
@@ -57,7 +58,7 @@ public class RegistroController {
         usuario.setContrasena(contrasena);
 
         // Valores automáticos
-        usuario.setRol("USUARIO");
+        usuario.setRol("CLIENTE");
         usuario.setIdEstado(1L);
 
         usuarioService.guardar(usuario);

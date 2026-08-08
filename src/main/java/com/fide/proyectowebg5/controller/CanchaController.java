@@ -1,5 +1,7 @@
 package com.fide.proyectowebg5.controller;
 
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,100 +20,68 @@ import com.fide.proyectowebg5.service.SuperficieCanchaService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
-
 @Controller
 @RequestMapping("/canchas")
 public class CanchaController {
 
-
     private final CanchaService canchaService;
     private final EstadoService estadoService;
     private final SuperficieCanchaService superficieService;
-
-
 
     public CanchaController(
             CanchaService canchaService,
             EstadoService estadoService,
             SuperficieCanchaService superficieService
     ) {
-
         this.canchaService = canchaService;
         this.estadoService = estadoService;
         this.superficieService = superficieService;
     }
 
-
-
-
-
-    private boolean esAdmin(HttpSession session){
-
+    private boolean esAdmin(HttpSession session) {
 
         Usuario usuario =
                 (Usuario) session.getAttribute("usuario");
 
-
         return usuario != null &&
-                usuario.getRol().equals("ADMIN");
+                "ADMIN".equals(usuario.getRol());
     }
-
-
-
-
-
 
     @GetMapping
     public String listar(Model model) {
-
 
         model.addAttribute(
                 "canchas",
                 canchaService.listar()
         );
 
-
         return "canchas/lista";
     }
-
-
-
-
-
-
-
 
     @GetMapping("/nueva")
     public String mostrarFormulario(
             Model model,
-            HttpSession session) {
+            HttpSession session
+    ) {
 
-
-
-        if(!esAdmin(session)){
+        if (!esAdmin(session)) {
             return "redirect:/canchas";
         }
 
+        Cancha cancha = new Cancha();
 
+        // Las canchas nuevas se registran como disponibles
+        cancha.setIdEstado(6L);
 
         model.addAttribute(
                 "cancha",
-                new Cancha()
+                cancha
         );
-
 
         cargarCatalogos(model);
 
-
         return "canchas/formulario";
     }
-
-
-
-
-
-
-
 
     @GetMapping("/editar/{id}")
     public String editar(
@@ -121,110 +91,86 @@ public class CanchaController {
             HttpSession session
     ) {
 
-
-
-        if(!esAdmin(session)){
+        if (!esAdmin(session)) {
             return "redirect:/canchas";
         }
-
-
 
         Cancha cancha =
                 canchaService.buscarPorId(id);
 
-
-
         if (cancha == null) {
-
 
             redirectAttributes.addFlashAttribute(
                     "error",
                     "La cancha seleccionada no existe."
             );
 
-
             return "redirect:/canchas";
         }
-
-
 
         model.addAttribute(
                 "cancha",
                 cancha
         );
 
-
-        cargarCatalogos(model);
-
-
-
-        return "canchas/formulario";
-    }
-
-
-
-
-
-
-
-
-
-   @PostMapping("/guardar")
-public String guardar(
-        @Valid Cancha cancha,
-        BindingResult bindingResult,
-        Model model,
-        RedirectAttributes redirectAttributes,
-        HttpSession session
-) {
-
-    if (!esAdmin(session)) {
-        return "redirect:/canchas";
-    }
-
-    if (bindingResult.hasErrors()) {
-
         cargarCatalogos(model);
 
         return "canchas/formulario";
     }
 
-    try {
+    @PostMapping("/guardar")
+    public String guardar(
+            @Valid Cancha cancha,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes,
+            HttpSession session
+    ) {
 
-        boolean esNueva = cancha.getIdCancha() == null;
-
-        canchaService.guardar(cancha);
-
-        if (esNueva) {
-
-            redirectAttributes.addFlashAttribute(
-                    "mensaje",
-                    "La cancha fue registrada correctamente."
-            );
-
-        } else {
-
-            redirectAttributes.addFlashAttribute(
-                    "mensaje",
-                    "La cancha fue actualizada correctamente."
-            );
+        if (!esAdmin(session)) {
+            return "redirect:/canchas";
         }
 
-        return "redirect:/canchas";
+        if (bindingResult.hasErrors()) {
 
-    } catch (Exception e) {
+            cargarCatalogos(model);
 
-    throw e;
-}
-}
+            return "canchas/formulario";
+        }
 
+        try {
 
+            boolean esNueva =
+                    cancha.getIdCancha() == null;
 
+            // Si es nueva se guarda como disponible
+            if (esNueva) {
+                cancha.setIdEstado(6L);
+            }
 
+            canchaService.guardar(cancha);
 
+            redirectAttributes.addFlashAttribute(
+                    "mensaje",
+                    esNueva
+                            ? "La cancha fue registrada correctamente."
+                            : "La cancha fue actualizada correctamente."
+            );
 
+            return "redirect:/canchas";
 
+        } catch (Exception e) {
 
+            cargarCatalogos(model);
+
+            model.addAttribute(
+                    "error",
+                    "No fue posible guardar la cancha."
+            );
+
+            return "canchas/formulario";
+        }
+    }
 
     @PostMapping("/eliminar/{id}")
     public String eliminar(
@@ -233,31 +179,20 @@ public String guardar(
             HttpSession session
     ) {
 
-
-
-        if(!esAdmin(session)){
+        if (!esAdmin(session)) {
             return "redirect:/canchas";
         }
 
-
-
-
         try {
 
-
             canchaService.eliminar(id);
-
-
 
             redirectAttributes.addFlashAttribute(
                     "mensaje",
                     "La cancha fue inactivada correctamente."
             );
 
-
-
         } catch (Exception e) {
-
 
             redirectAttributes.addFlashAttribute(
                     "error",
@@ -265,33 +200,25 @@ public String guardar(
             );
         }
 
-
-
-
         return "redirect:/canchas";
     }
 
-
-
-
-
-
-
     private void cargarCatalogos(Model model) {
 
-
-
+        // En canchas solo se muestran Disponible y Ocupada
         model.addAttribute(
                 "estados",
                 estadoService.listar()
+                        .stream()
+                        .filter(estado ->
+                                Long.valueOf(6L).equals(estado.getIdEstado()) ||
+                                Long.valueOf(7L).equals(estado.getIdEstado()))
+                        .collect(Collectors.toList())
         );
-
-
 
         model.addAttribute(
                 "superficies",
                 superficieService.listar()
         );
     }
-
 }
